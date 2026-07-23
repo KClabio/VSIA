@@ -29,6 +29,7 @@ Trang web đào tạo giáo viên STEM Việt Nam. Có trang chủ giới thiệ
 3. Đăng nhập lại bằng tài khoản đó — menu sẽ hiện link **Quản trị**, vào `/admin` để:
    - Tạo/sửa/xoá khoá học, upload ảnh đại diện + tài liệu đính kèm (`/admin/khoa-hoc`)
    - Upload ảnh/video cho mục "Hình ảnh hoạt động" ở trang chủ (`/admin/thu-vien`)
+   - Cấp/thu hồi quyền admin cho tài khoản khác ngay trên web, không cần chạy lại script (`/admin/nguoi-dung`)
 
 File upload được lưu trong `public/uploads/{images,videos,documents}` (không commit vào git, chỉ giữ cấu trúc thư mục qua `.gitkeep`).
 

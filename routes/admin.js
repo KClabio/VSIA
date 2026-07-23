@@ -5,6 +5,7 @@ const path = require('path');
 
 const Course = require('../models/Course');
 const Media = require('../models/Media');
+const User = require('../models/User');
 const { requireAuth, requireAdmin } = require('../middleware/auth');
 const { uploadImage, uploadVideo, uploadCourseFiles } = require('../middleware/upload');
 
@@ -163,6 +164,30 @@ router.post('/thu-vien/:id/xoa', async (req, res) => {
   const media = await Media.findByIdAndDelete(req.params.id);
   if (media) unlinkUploaded(media.filePath);
   res.redirect('/admin/thu-vien');
+});
+
+// --- Người dùng ---
+
+router.get('/nguoi-dung', async (req, res) => {
+  const users = await User.find().select('-passwordHash').sort({ createdAt: -1 }).lean();
+  res.render('admin/users', { users, error: null });
+});
+
+router.post('/nguoi-dung/:id/vai-tro', async (req, res) => {
+  const { role } = req.body;
+
+  if (!['admin', 'giaovien'].includes(role)) {
+    const users = await User.find().select('-passwordHash').sort({ createdAt: -1 }).lean();
+    return res.render('admin/users', { users, error: 'Vai trò không hợp lệ.' });
+  }
+
+  if (req.params.id === String(req.user._id)) {
+    const users = await User.find().select('-passwordHash').sort({ createdAt: -1 }).lean();
+    return res.render('admin/users', { users, error: 'Không thể tự đổi vai trò của chính mình.' });
+  }
+
+  await User.findByIdAndUpdate(req.params.id, { role });
+  res.redirect('/admin/nguoi-dung');
 });
 
 module.exports = router;
