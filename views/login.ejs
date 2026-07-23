@@ -1,0 +1,25 @@
+<%- include('partials/header', { title: 'Đăng nhập - VSIA' }) %>
+
+<section class="section auth-section">
+  <div class="container auth-container">
+    <form class="auth-form" method="POST" action="/dang-nhap">
+      <h1>Đăng nhập</h1>
+      <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+
+      <input type="hidden" name="redirectTo" value="<%= redirectTo %>">
+
+      <label>Email
+        <input type="email" name="email" required autofocus>
+      </label>
+      <label>Mật khẩu
+        <input type="password" name="password" required>
+      </label>
+
+      <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+
+      <p class="auth-switch">Chưa có tài khoản? <a href="/dang-ky">Đăng ký ngay</a></p>
+    </form>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

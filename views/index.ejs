@@ -1,0 +1,45 @@
+<%- include('partials/header', { title: 'VSIA - Đào tạo giáo viên STEM Việt Nam' }) %>
+
+<section class="hero">
+  <div class="container hero-inner">
+    <span class="hero-badge">CHƯƠNG TRÌNH ĐÀO TẠO GIÁO VIÊN STEM</span>
+    <h1>KIẾN TẠO NGUỒN NHÂN LỰC<br><span class="highlight">STEM VIỆT NAM</span></h1>
+    <p>Nền tảng kết nối chuyên gia và giáo viên trong các chương trình bồi dưỡng, đào tạo giáo dục STEM.</p>
+    <a href="/khoa-hoc" class="btn btn-hero">Xem khoá học</a>
+  </div>
+</section>
+
+<section class="section" id="chuong-trinh">
+  <div class="container">
+    <h2 class="section-title">CHƯƠNG TRÌNH ĐÀO TẠO</h2>
+    <p class="section-subtitle">Các khoá đào tạo giáo viên STEM do VSIA tổ chức, dành cho giáo viên các cấp trên toàn quốc.</p>
+
+    <% if (featuredCourses.length === 0) { %>
+      <p class="empty-state">Chưa có khoá học nào. Chạy <code>node seed.js</code> để thêm dữ liệu mẫu.</p>
+    <% } else { %>
+      <div class="course-grid">
+        <% featuredCourses.forEach(course => { %>
+          <%- include('partials/course-card', { course }) %>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <div class="section-cta">
+      <a href="/khoa-hoc" class="btn btn-primary">Xem tất cả</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">HÌNH ẢNH HOẠT ĐỘNG</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item gallery-large"></div>
+      <div class="gallery-item"></div>
+      <div class="gallery-item"></div>
+      <div class="gallery-item gallery-wide">Tập huấn giáo viên</div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

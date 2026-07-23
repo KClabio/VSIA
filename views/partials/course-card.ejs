@@ -1,0 +1,14 @@
+<a href="/khoa-hoc/<%= course._id %>" class="course-card">
+  <div class="course-thumb" style="background: linear-gradient(135deg, hsl(<%= (course.title.length * 37) % 360 %>, 65%, 45%), hsl(<%= (course.title.length * 37 + 60) % 360 %>, 65%, 35%));">
+    <span><%= course.category %></span>
+  </div>
+  <div class="course-body">
+    <h3><%= course.title %></h3>
+    <p class="course-provider"><%= course.provider %></p>
+    <p class="course-rating">
+      <% for (let i = 1; i <= 5; i++) { %><%= i <= Math.round(course.rating) ? '★' : '☆' %><% } %>
+      <span>(<%= course.rating %> đánh giá)</span>
+    </p>
+    <p class="course-price"><%= course.isFree ? 'Miễn phí' : course.price.toLocaleString('vi-VN') + ' đ' %></p>
+  </div>
+</a>

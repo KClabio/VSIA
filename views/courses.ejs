@@ -1,0 +1,19 @@
+<%- include('partials/header', { title: 'Khoá học - VSIA' }) %>
+
+<section class="section">
+  <div class="container">
+    <h1 class="page-title">Khoá học đào tạo STEM</h1>
+
+    <% if (courses.length === 0) { %>
+      <p class="empty-state">Chưa có khoá học nào. Chạy <code>node seed.js</code> để thêm dữ liệu mẫu.</p>
+    <% } else { %>
+      <div class="course-grid">
+        <% courses.forEach(course => { %>
+          <%- include('partials/course-card', { course }) %>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

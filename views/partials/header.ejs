@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'VSIA - Đào tạo giáo viên STEM' %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        <span class="logo-mark">V</span>
+        <span class="logo-text">VSIA</span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Mở menu">☰</button>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="/">Trang chủ</a>
+        <a href="/khoa-hoc">Khoá học</a>
+        <a href="/#chuong-trinh">Về chương trình</a>
+        <a href="/#lien-he">Liên hệ</a>
+      </nav>
+
+      <div class="auth-actions">
+        <% if (user) { %>
+          <span class="hello-user">Xin chào, <%= user.name %></span>
+          <a href="/ho-so" class="btn btn-ghost">Hồ sơ</a>
+          <form action="/dang-xuat" method="POST" class="inline-form">
+            <button type="submit" class="btn btn-ghost">Đăng xuất</button>
+          </form>
+        <% } else { %>
+          <a href="/dang-nhap" class="btn btn-ghost">Đăng nhập</a>
+          <a href="/dang-ky" class="btn btn-primary">Đăng ký</a>
+        <% } %>
+      </div>
+    </div>
+  </header>
+  <main>
