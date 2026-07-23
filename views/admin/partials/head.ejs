@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle + ' - Quản trị VSIA' : 'Quản trị - VSIA' %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar">
+      <a href="/admin" class="logo admin-sidebar-logo">
+        <span class="logo-mark">V</span>
+        <span class="logo-text">VSIA</span>
+      </a>
+      <nav class="admin-sidebar-nav">
+        <a href="/admin" class="<%= active === 'dashboard' ? 'active' : '' %>">
+          <span class="admin-nav-icon">▦</span> Dashboard
+        </a>
+        <a href="/admin/khoa-hoc" class="<%= active === 'khoa-hoc' ? 'active' : '' %>">
+          <span class="admin-nav-icon">📚</span> Khoá học
+        </a>
+        <a href="/admin/thu-vien" class="<%= active === 'thu-vien' ? 'active' : '' %>">
+          <span class="admin-nav-icon">🖼</span> Thư viện ảnh/video
+        </a>
+        <a href="/admin/nguoi-dung" class="<%= active === 'nguoi-dung' ? 'active' : '' %>">
+          <span class="admin-nav-icon">👥</span> Người dùng
+        </a>
+      </nav>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <button class="admin-sidebar-toggle" id="sidebarToggle" aria-label="Mở menu">☰</button>
+        <h1 class="admin-topbar-title" id="adminTopbarTitle"><%= pageTitle %></h1>
+        <%- include('../../partials/user-menu', { menuContext: 'admin' }) %>
+      </header>
+      <main class="admin-content" id="adminContent">

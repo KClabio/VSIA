@@ -1,50 +1,50 @@
-<%- include('../partials/header', { title: 'Quản lý người dùng - VSIA' }) %>
+<%- include('partials/head', { pageTitle: 'Quản lý người dùng', active: 'nguoi-dung' }) %>
 
-<section class="section">
-  <div class="container">
-    <h1 class="page-title">Quản lý người dùng</h1>
+<h1 class="page-title">Quản lý người dùng</h1>
 
-    <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+<% if (error) { %><p class="form-error"><%= error %></p><% } %>
 
-    <div class="admin-table-wrap">
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>Họ tên</th>
-            <th>Email</th>
-            <th>Vai trò</th>
-            <th>Ngày tham gia</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% users.forEach(u => { %>
-            <tr>
-              <td><%= u.name %></td>
-              <td><%= u.email %></td>
-              <td><%= u.role === 'admin' ? 'Quản trị viên' : 'Giáo viên' %></td>
-              <td><%= new Date(u.createdAt).toLocaleDateString('vi-VN') %></td>
-              <td class="admin-table-actions">
-                <% if (String(u._id) === String(user._id)) { %>
-                  <span class="empty-state">(Tài khoản của bạn)</span>
-                <% } else if (u.role === 'admin') { %>
-                  <form action="/admin/nguoi-dung/<%= u._id %>/vai-tro" method="POST" class="inline-form" onsubmit="return confirm('Bỏ quyền quản trị của tài khoản này?');">
-                    <input type="hidden" name="role" value="giaovien">
-                    <button type="submit" class="btn btn-ghost btn-danger">Bỏ quyền admin</button>
-                  </form>
-                <% } else { %>
-                  <form action="/admin/nguoi-dung/<%= u._id %>/vai-tro" method="POST" class="inline-form" onsubmit="return confirm('Cấp quyền quản trị cho tài khoản này?');">
-                    <input type="hidden" name="role" value="admin">
-                    <button type="submit" class="btn btn-ghost">Cấp quyền admin</button>
-                  </form>
-                <% } %>
-              </td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Họ tên</th>
+        <th>Email</th>
+        <th>Vai trò</th>
+        <th>Ngày tham gia</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(u => { %>
+        <tr>
+          <td><%= u.name %></td>
+          <td><%= u.email %></td>
+          <td>
+            <span class="role-badge <%= u.role === 'admin' ? 'role-badge-admin' : '' %>">
+              <%= u.role === 'admin' ? 'Quản trị viên' : 'Giáo viên' %>
+            </span>
+          </td>
+          <td><%= new Date(u.createdAt).toLocaleDateString('vi-VN') %></td>
+          <td class="admin-table-actions">
+            <% if (String(u._id) === String(user._id)) { %>
+              <span class="empty-state">(Tài khoản của bạn)</span>
+            <% } else if (u.role === 'admin') { %>
+              <form action="/admin/nguoi-dung/<%= u._id %>/vai-tro" method="POST" class="inline-form" onsubmit="return confirm('Bỏ quyền quản trị của tài khoản này?');">
+                <input type="hidden" name="role" value="giaovien">
+                <button type="submit" class="btn btn-icon btn-danger">Bỏ quyền admin</button>
+              </form>
+            <% } else { %>
+              <form action="/admin/nguoi-dung/<%= u._id %>/vai-tro" method="POST" class="inline-form" onsubmit="return confirm('Cấp quyền quản trị cho tài khoản này?');">
+                <input type="hidden" name="role" value="admin">
+                <button type="submit" class="btn btn-icon">Cấp quyền admin</button>
+              </form>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
 
-<%- include('../partials/footer') %>
+<%- include('partials/foot') %>

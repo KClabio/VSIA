@@ -1,20 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
 
 const Course = require('../models/Course');
 const Media = require('../models/Media');
 const User = require('../models/User');
 const { requireAuth, requireAdmin } = require('../middleware/auth');
 const { uploadImage, uploadVideo, uploadCourseFiles } = require('../middleware/upload');
+const { computeStats, addClient, removeClient, broadcastStats } = require('../lib/stats');
+const { unlinkUploaded } = require('../lib/files');
 
 router.use(requireAuth, requireAdmin);
-
-function unlinkUploaded(relativePath) {
-  if (!relativePath) return;
-  fs.unlink(path.join(__dirname, '..', 'public', relativePath), () => {});
-}
 
 function courseFieldsFromBody(body) {
   const isFree = body.isFree === 'on';
@@ -29,25 +24,40 @@ function courseFieldsFromBody(body) {
   };
 }
 
-router.get('/', (req, res) => {
-  res.render('admin/dashboard');
+router.get('/', async (req, res) => {
+  const stats = await computeStats();
+  res.render('admin/dashboard', { active: 'dashboard', stats });
+});
+
+router.get('/stats-stream', async (req, res) => {
+  res.set({
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    Connection: 'keep-alive',
+  });
+  res.flushHeaders();
+
+  addClient(res);
+  res.write(`data: ${JSON.stringify(await computeStats())}\n\n`);
+
+  req.on('close', () => removeClient(res));
 });
 
 // --- Khoá học ---
 
 router.get('/khoa-hoc', async (req, res) => {
   const courses = await Course.find().sort({ createdAt: -1 }).lean();
-  res.render('admin/courses', { courses });
+  res.render('admin/courses', { courses, active: 'khoa-hoc' });
 });
 
 router.get('/khoa-hoc/moi', (req, res) => {
-  res.render('admin/course-form', { course: null, error: null });
+  res.render('admin/course-form', { course: null, error: null, active: 'khoa-hoc' });
 });
 
 router.post('/khoa-hoc/moi', (req, res) => {
   uploadCourseFiles(req, res, async (err) => {
     if (err) {
-      return res.render('admin/course-form', { course: null, error: err.message });
+      return res.render('admin/course-form', { course: null, error: err.message, active: 'khoa-hoc' });
     }
 
     const image = req.files?.image?.[0] ? `/uploads/images/${req.files.image[0].filename}` : null;
@@ -57,6 +67,7 @@ router.post('/khoa-hoc/moi', (req, res) => {
     }));
 
     await Course.create({ ...courseFieldsFromBody(req.body), image, materials });
+    await broadcastStats();
     res.redirect('/admin/khoa-hoc');
   });
 });
@@ -91,6 +102,7 @@ router.post('/khoa-hoc/:id/sua', (req, res) => {
     }
 
     await course.save();
+    await broadcastStats();
     res.redirect('/admin/khoa-hoc');
   });
 });
@@ -101,6 +113,7 @@ router.post('/khoa-hoc/:id/xoa', async (req, res) => {
     unlinkUploaded(course.image);
     course.materials.forEach((m) => unlinkUploaded(m.filePath));
   }
+  await broadcastStats();
   res.redirect('/admin/khoa-hoc');
 });
 
@@ -112,6 +125,7 @@ router.post('/khoa-hoc/:id/tai-lieu/:materialId/xoa', async (req, res) => {
       unlinkUploaded(material.filePath);
       material.deleteOne();
       await course.save();
+      await broadcastStats();
     }
   }
   res.redirect(`/admin/khoa-hoc/${req.params.id}/sua`);
@@ -138,6 +152,7 @@ router.post('/thu-vien/anh', (req, res) => {
       type: 'image',
       filePath: `/uploads/images/${req.file.filename}`,
     });
+    await broadcastStats();
     res.redirect('/admin/thu-vien');
   });
 });
@@ -156,6 +171,7 @@ router.post('/thu-vien/video', (req, res) => {
       type: 'video',
       filePath: `/uploads/videos/${req.file.filename}`,
     });
+    await broadcastStats();
     res.redirect('/admin/thu-vien');
   });
 });
@@ -163,6 +179,7 @@ router.post('/thu-vien/video', (req, res) => {
 router.post('/thu-vien/:id/xoa', async (req, res) => {
   const media = await Media.findByIdAndDelete(req.params.id);
   if (media) unlinkUploaded(media.filePath);
+  await broadcastStats();
   res.redirect('/admin/thu-vien');
 });
 
@@ -187,6 +204,7 @@ router.post('/nguoi-dung/:id/vai-tro', async (req, res) => {
   }
 
   await User.findByIdAndUpdate(req.params.id, { role });
+  await broadcastStats();
   res.redirect('/admin/nguoi-dung');
 });
 

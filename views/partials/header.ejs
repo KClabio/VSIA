@@ -21,18 +21,11 @@
         <a href="/khoa-hoc">Khoá học</a>
         <a href="/#chuong-trinh">Về chương trình</a>
         <a href="/#lien-he">Liên hệ</a>
-        <% if (user && user.role === 'admin') { %>
-          <a href="/admin">Quản trị</a>
-        <% } %>
       </nav>
 
       <div class="auth-actions">
         <% if (user) { %>
-          <span class="hello-user">Xin chào, <%= user.name %></span>
-          <a href="/ho-so" class="btn btn-ghost">Hồ sơ</a>
-          <form action="/dang-xuat" method="POST" class="inline-form">
-            <button type="submit" class="btn btn-ghost">Đăng xuất</button>
-          </form>
+          <%- include('user-menu', { user, menuContext: 'public' }) %>
         <% } else { %>
           <a href="/dang-nhap" class="btn btn-ghost">Đăng nhập</a>
           <a href="/dang-ky" class="btn btn-primary">Đăng ký</a>

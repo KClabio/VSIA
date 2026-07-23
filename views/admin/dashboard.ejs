@@ -1,23 +1,80 @@
-<%- include('../partials/header', { title: 'Quản trị - VSIA' }) %>
+<%- include('partials/head', { pageTitle: 'Dashboard', active: 'dashboard' }) %>
 
-<section class="section">
-  <div class="container">
-    <h1 class="page-title">Trang quản trị</h1>
-    <div class="admin-dashboard-grid">
-      <a href="/admin/khoa-hoc" class="admin-tile">
-        <h3>Quản lý khoá học</h3>
-        <p>Tạo, sửa, xoá khoá học và tài liệu đính kèm.</p>
-      </a>
-      <a href="/admin/thu-vien" class="admin-tile">
-        <h3>Thư viện ảnh/video</h3>
-        <p>Quản lý ảnh, video hiển thị ở mục "Hình ảnh hoạt động" trang chủ.</p>
-      </a>
-      <a href="/admin/nguoi-dung" class="admin-tile">
-        <h3>Quản lý người dùng</h3>
-        <p>Cấp hoặc thu hồi quyền quản trị cho tài khoản khác.</p>
-      </a>
-    </div>
+<div class="admin-page-head">
+  <span class="live-indicator" id="liveIndicator"><span class="live-dot"></span> Trực tiếp</span>
+</div>
+
+<div class="admin-stats-grid">
+  <div class="admin-stat-card">
+    <span class="admin-stat-label">Tổng khoá học</span>
+    <span class="admin-stat-value" data-stat="courseCount"><%= stats.courseCount %></span>
   </div>
-</section>
+  <div class="admin-stat-card">
+    <span class="admin-stat-label">Giáo viên</span>
+    <span class="admin-stat-value" data-stat="teacherCount"><%= stats.teacherCount %></span>
+  </div>
+  <div class="admin-stat-card">
+    <span class="admin-stat-label">Quản trị viên</span>
+    <span class="admin-stat-value" data-stat="adminCount"><%= stats.adminCount %></span>
+  </div>
+  <div class="admin-stat-card">
+    <span class="admin-stat-label">Ảnh/video thư viện</span>
+    <span class="admin-stat-value" data-stat="mediaCount"><%= stats.mediaCount %></span>
+  </div>
+  <div class="admin-stat-card">
+    <span class="admin-stat-label">Tài liệu đính kèm</span>
+    <span class="admin-stat-value" data-stat="materialCount"><%= stats.materialCount %></span>
+  </div>
+  <div class="admin-stat-card">
+    <span class="admin-stat-label">Đánh giá trung bình</span>
+    <span class="admin-stat-value" data-stat="avgRating"><%= stats.avgRating %></span><span class="admin-stat-value">/5</span>
+  </div>
+</div>
 
-<%- include('../partials/footer') %>
+<h2 class="admin-section-heading">Truy cập nhanh</h2>
+<div class="admin-dashboard-grid">
+  <a href="/admin/khoa-hoc" class="admin-tile">
+    <h3>Quản lý khoá học</h3>
+    <p>Tạo, sửa, xoá khoá học và tài liệu đính kèm.</p>
+  </a>
+  <a href="/admin/thu-vien" class="admin-tile">
+    <h3>Thư viện ảnh/video</h3>
+    <p>Quản lý ảnh, video hiển thị ở mục "Hình ảnh hoạt động" trang chủ.</p>
+  </a>
+  <a href="/admin/nguoi-dung" class="admin-tile">
+    <h3>Quản lý người dùng</h3>
+    <p>Cấp hoặc thu hồi quyền quản trị cho tài khoản khác.</p>
+  </a>
+</div>
+
+<script>
+  (function () {
+    if (window.__adminSSE) window.__adminSSE.close();
+
+    var indicator = document.getElementById('liveIndicator');
+    var source = new EventSource('/admin/stats-stream');
+    window.__adminSSE = source;
+
+    source.onopen = function () {
+      indicator.classList.remove('live-indicator-off');
+    };
+
+    source.onerror = function () {
+      indicator.classList.add('live-indicator-off');
+    };
+
+    source.onmessage = function (event) {
+      var stats = JSON.parse(event.data);
+      Object.keys(stats).forEach(function (key) {
+        var el = document.querySelector('[data-stat="' + key + '"]');
+        if (!el || el.textContent === String(stats[key])) return;
+        el.textContent = stats[key];
+        el.classList.remove('stat-flash');
+        void el.offsetWidth;
+        el.classList.add('stat-flash');
+      });
+    };
+  })();
+</script>
+
+<%- include('partials/foot') %>

@@ -1,0 +1,32 @@
+<div class="user-menu">
+  <button type="button" class="user-menu-trigger" aria-haspopup="true" aria-expanded="false">
+    <span class="user-avatar"><% if (user.avatar) { %><img src="<%= user.avatar %>" alt=""><% } else { %><%= user.name.charAt(0).toUpperCase() %><% } %></span>
+    <span class="user-menu-name"><%= user.name %></span>
+    <span class="user-menu-caret">▾</span>
+  </button>
+
+  <div class="user-dropdown">
+    <div class="user-dropdown-head">
+      <span class="user-avatar user-avatar-lg"><% if (user.avatar) { %><img src="<%= user.avatar %>" alt=""><% } else { %><%= user.name.charAt(0).toUpperCase() %><% } %></span>
+      <div>
+        <p class="user-dropdown-name"><%= user.name %></p>
+        <p class="user-dropdown-email"><%= user.email %></p>
+      </div>
+    </div>
+    <div class="user-dropdown-divider"></div>
+
+    <a href="/ho-so" class="user-dropdown-item">Hồ sơ cá nhân</a>
+
+    <% if (typeof menuContext !== 'undefined' && menuContext === 'admin') { %>
+      <a href="/" class="user-dropdown-item">Về trang chủ</a>
+    <% } else if (user.role === 'admin') { %>
+      <a href="/admin" class="user-dropdown-item">Dashboard</a>
+      <a href="/admin/nguoi-dung" class="user-dropdown-item">Cấp quyền quản trị viên</a>
+    <% } %>
+
+    <div class="user-dropdown-divider"></div>
+    <form action="/dang-xuat" method="POST">
+      <button type="submit" class="user-dropdown-item user-dropdown-item-danger">Đăng xuất</button>
+    </form>
+  </div>
+</div>

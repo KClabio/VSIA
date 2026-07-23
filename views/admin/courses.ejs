@@ -1,47 +1,43 @@
-<%- include('../partials/header', { title: 'Quản lý khoá học - VSIA' }) %>
+<%- include('partials/head', { pageTitle: 'Quản lý khoá học', active: 'khoa-hoc' }) %>
 
-<section class="section">
-  <div class="container">
-    <div class="admin-page-head">
-      <h1 class="page-title">Quản lý khoá học</h1>
-      <a href="/admin/khoa-hoc/moi" class="btn btn-primary">+ Thêm khoá học</a>
-    </div>
+<div class="admin-page-head">
+  <h1 class="page-title">Quản lý khoá học</h1>
+  <a href="/admin/khoa-hoc/moi" class="btn btn-primary">+ Thêm khoá học</a>
+</div>
 
-    <% if (courses.length === 0) { %>
-      <p class="empty-state">Chưa có khoá học nào.</p>
-    <% } else { %>
-      <div class="admin-table-wrap">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Tiêu đề</th>
-              <th>Danh mục</th>
-              <th>Giá</th>
-              <th>Tài liệu</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% courses.forEach(course => { %>
-              <tr>
-                <td><%= course.title %></td>
-                <td><%= course.category %></td>
-                <td><%= course.isFree ? 'Miễn phí' : course.price.toLocaleString('vi-VN') + ' đ' %></td>
-                <td><%= (course.materials || []).length %> file</td>
-                <td class="admin-table-actions">
-                  <a href="/khoa-hoc/<%= course._id %>" class="btn btn-ghost">Xem</a>
-                  <a href="/admin/khoa-hoc/<%= course._id %>/sua" class="btn btn-ghost">Sửa</a>
-                  <form action="/admin/khoa-hoc/<%= course._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá khoá học này?');">
-                    <button type="submit" class="btn btn-ghost btn-danger">Xoá</button>
-                  </form>
-                </td>
-              </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </div>
-    <% } %>
+<% if (courses.length === 0) { %>
+  <p class="empty-state">Chưa có khoá học nào.</p>
+<% } else { %>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Tiêu đề</th>
+          <th>Danh mục</th>
+          <th>Giá</th>
+          <th>Tài liệu</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% courses.forEach(course => { %>
+          <tr>
+            <td><%= course.title %></td>
+            <td><%= course.category %></td>
+            <td><%= course.isFree ? 'Miễn phí' : course.price.toLocaleString('vi-VN') + ' đ' %></td>
+            <td><%= (course.materials || []).length %> file</td>
+            <td class="admin-table-actions">
+              <a href="/khoa-hoc/<%= course._id %>" class="btn btn-icon" title="Xem trên trang công khai">👁 Xem</a>
+              <a href="/admin/khoa-hoc/<%= course._id %>/sua" class="btn btn-icon" title="Sửa khoá học">✏️ Sửa</a>
+              <form action="/admin/khoa-hoc/<%= course._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá khoá học này?');">
+                <button type="submit" class="btn btn-icon btn-danger" title="Xoá khoá học">🗑 Xoá</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
   </div>
-</section>
+<% } %>
 
-<%- include('../partials/footer') %>
+<%- include('partials/foot') %>

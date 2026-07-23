@@ -1,19 +1,104 @@
 <%- include('partials/header', { title: 'Hồ sơ - VSIA' }) %>
 
+<section class="profile-banner">
+  <div class="container profile-banner-inner">
+    <div class="profile-banner-avatar">
+      <% if (user.avatar) { %>
+        <img src="<%= user.avatar %>" alt="">
+      <% } else { %>
+        <span><%= user.name.charAt(0).toUpperCase() %></span>
+      <% } %>
+    </div>
+    <div>
+      <span class="role-badge <%= user.role === 'admin' ? 'role-badge-admin' : '' %> profile-role-badge">
+        <%= user.role === 'admin' ? 'Quản trị viên' : 'Giáo viên' %>
+      </span>
+      <h1><%= user.name %></h1>
+      <p><%= user.email %></p>
+    </div>
+  </div>
+</section>
+
 <section class="section auth-section">
-  <div class="container auth-container">
-    <div class="profile-card">
-      <h1>Hồ sơ của tôi</h1>
-      <dl class="profile-info">
-        <dt>Họ tên</dt>
-        <dd><%= user.name %></dd>
-        <dt>Email</dt>
-        <dd><%= user.email %></dd>
-        <dt>Vai trò</dt>
-        <dd><%= user.role === 'admin' ? 'Quản trị viên' : 'Giáo viên' %></dd>
-        <dt>Ngày tham gia</dt>
-        <dd><%= new Date(user.createdAt).toLocaleDateString('vi-VN') %></dd>
-      </dl>
+  <div class="container profile-grid">
+    <div class="profile-col">
+      <div class="profile-card-box">
+        <h2>Thông tin cá nhân</h2>
+        <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+        <% if (success) { %><p class="form-success">Đã cập nhật thông tin.</p><% } %>
+
+        <form method="POST" action="/ho-so" enctype="multipart/form-data" class="admin-form profile-form">
+          <label>Họ tên
+            <input type="text" name="name" value="<%= user.name %>" required>
+          </label>
+          <label>Email
+            <input type="email" value="<%= user.email %>" disabled>
+          </label>
+          <label>Số điện thoại
+            <input type="text" name="phone" value="<%= user.phone || '' %>" placeholder="Chưa cập nhật">
+          </label>
+          <label>Giới thiệu bản thân
+            <textarea name="bio" rows="3" placeholder="Vài dòng giới thiệu về bạn..."><%= user.bio || '' %></textarea>
+          </label>
+          <label>Ảnh đại diện <% if (user.avatar) { %>(chọn file mới để thay)<% } %>
+            <input type="file" name="avatar" accept="image/png,image/jpeg,image/webp,image/gif">
+          </label>
+
+          <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        </form>
+      </div>
+
+      <div class="profile-card-box">
+        <p class="profile-joined">Ngày tham gia: <%= new Date(user.createdAt).toLocaleDateString('vi-VN') %></p>
+        <form action="/dang-xuat" method="POST">
+          <button type="submit" class="btn btn-ghost btn-danger btn-block">Đăng xuất</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="profile-col">
+      <% if (stats) { %>
+        <div class="profile-card-box">
+          <h2>Thống kê hệ thống</h2>
+          <div class="admin-stats-grid profile-stats-grid">
+            <div class="admin-stat-card">
+              <span class="admin-stat-label">Tổng khoá học</span>
+              <span class="admin-stat-value"><%= stats.courseCount %></span>
+            </div>
+            <div class="admin-stat-card">
+              <span class="admin-stat-label">Giáo viên</span>
+              <span class="admin-stat-value"><%= stats.teacherCount %></span>
+            </div>
+            <div class="admin-stat-card">
+              <span class="admin-stat-label">Quản trị viên</span>
+              <span class="admin-stat-value"><%= stats.adminCount %></span>
+            </div>
+            <div class="admin-stat-card">
+              <span class="admin-stat-label">Ảnh/video thư viện</span>
+              <span class="admin-stat-value"><%= stats.mediaCount %></span>
+            </div>
+          </div>
+        </div>
+      <% } %>
+
+      <div class="profile-card-box">
+        <h2>Đổi mật khẩu</h2>
+        <% if (passwordError) { %><p class="form-error"><%= passwordError %></p><% } %>
+        <% if (passwordSuccess) { %><p class="form-success">Đã đổi mật khẩu.</p><% } %>
+
+        <form method="POST" action="/ho-so/mat-khau" class="admin-form profile-form">
+          <label>Mật khẩu hiện tại
+            <input type="password" name="currentPassword" required>
+          </label>
+          <label>Mật khẩu mới
+            <input type="password" name="newPassword" required minlength="6">
+          </label>
+          <label>Xác nhận mật khẩu mới
+            <input type="password" name="confirmNewPassword" required minlength="6">
+          </label>
+          <button type="submit" class="btn btn-primary">Đổi mật khẩu</button>
+        </form>
+      </div>
     </div>
   </div>
 </section>

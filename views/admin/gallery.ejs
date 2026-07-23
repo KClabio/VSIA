@@ -1,56 +1,52 @@
-<%- include('../partials/header', { title: 'Thư viện ảnh/video - VSIA' }) %>
+<%- include('partials/head', { pageTitle: 'Thư viện ảnh/video', active: 'thu-vien' }) %>
 
-<section class="section">
-  <div class="container">
-    <h1 class="page-title">Thư viện ảnh/video</h1>
-    <p class="section-subtitle" style="margin-bottom:30px;">Ảnh/video mới nhất sẽ hiển thị ở mục "Hình ảnh hoạt động" trên trang chủ.</p>
+<h1 class="page-title">Thư viện ảnh/video</h1>
+<p class="section-subtitle" style="margin-bottom:30px; text-align:left;">Ảnh/video mới nhất sẽ hiển thị ở mục "Hình ảnh hoạt động" trên trang chủ.</p>
 
-    <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+<% if (error) { %><p class="form-error"><%= error %></p><% } %>
 
-    <div class="admin-form-row admin-upload-forms">
-      <form method="POST" action="/admin/thu-vien/anh" enctype="multipart/form-data" class="admin-form admin-upload-form">
-        <h3>Tải ảnh lên</h3>
-        <label>Tiêu đề
-          <input type="text" name="title" placeholder="Vd: Tập huấn giáo viên">
-        </label>
-        <label>Chọn ảnh
-          <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif" required>
-        </label>
-        <button type="submit" class="btn btn-primary">Tải ảnh</button>
-      </form>
+<div class="admin-form-row admin-upload-forms">
+  <form method="POST" action="/admin/thu-vien/anh" enctype="multipart/form-data" class="admin-form admin-upload-form">
+    <h3>Tải ảnh lên</h3>
+    <label>Tiêu đề
+      <input type="text" name="title" placeholder="Vd: Tập huấn giáo viên">
+    </label>
+    <label>Chọn ảnh
+      <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif" required>
+    </label>
+    <button type="submit" class="btn btn-primary">Tải ảnh</button>
+  </form>
 
-      <form method="POST" action="/admin/thu-vien/video" enctype="multipart/form-data" class="admin-form admin-upload-form">
-        <h3>Tải video lên</h3>
-        <label>Tiêu đề
-          <input type="text" name="title" placeholder="Vd: Robotics trong lớp học">
-        </label>
-        <label>Chọn video
-          <input type="file" name="video" accept="video/mp4,video/webm,video/ogg" required>
-        </label>
-        <button type="submit" class="btn btn-primary">Tải video</button>
-      </form>
-    </div>
+  <form method="POST" action="/admin/thu-vien/video" enctype="multipart/form-data" class="admin-form admin-upload-form">
+    <h3>Tải video lên</h3>
+    <label>Tiêu đề
+      <input type="text" name="title" placeholder="Vd: Robotics trong lớp học">
+    </label>
+    <label>Chọn video
+      <input type="file" name="video" accept="video/mp4,video/webm,video/ogg" required>
+    </label>
+    <button type="submit" class="btn btn-primary">Tải video</button>
+  </form>
+</div>
 
-    <% if (mediaItems.length === 0) { %>
-      <p class="empty-state">Chưa có ảnh/video nào.</p>
-    <% } else { %>
-      <div class="admin-media-grid">
-        <% mediaItems.forEach(item => { %>
-          <div class="admin-media-card">
-            <% if (item.type === 'image') { %>
-              <img src="<%= item.filePath %>" alt="<%= item.title %>">
-            <% } else { %>
-              <video src="<%= item.filePath %>" controls></video>
-            <% } %>
-            <p><%= item.title %></p>
-            <form action="/admin/thu-vien/<%= item._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá mục này?');">
-              <button type="submit" class="btn btn-ghost btn-danger">Xoá</button>
-            </form>
-          </div>
-        <% }) %>
+<% if (mediaItems.length === 0) { %>
+  <p class="empty-state">Chưa có ảnh/video nào.</p>
+<% } else { %>
+  <div class="admin-media-grid">
+    <% mediaItems.forEach(item => { %>
+      <div class="admin-media-card">
+        <% if (item.type === 'image') { %>
+          <img src="<%= item.filePath %>" alt="<%= item.title %>">
+        <% } else { %>
+          <video src="<%= item.filePath %>" controls></video>
+        <% } %>
+        <p><%= item.title %></p>
+        <form action="/admin/thu-vien/<%= item._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá mục này?');">
+          <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá</button>
+        </form>
       </div>
-    <% } %>
+    <% }) %>
   </div>
-</section>
+<% } %>
 
-<%- include('../partials/footer') %>
+<%- include('partials/foot') %>
