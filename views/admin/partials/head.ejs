@@ -9,10 +9,7 @@
 <body>
   <div class="admin-shell">
     <aside class="admin-sidebar" id="adminSidebar">
-      <a href="/admin" class="logo admin-sidebar-logo">
-        <span class="logo-mark">V</span>
-        <span class="logo-text">VSIA</span>
-      </a>
+      <a href="/admin" class="logo admin-sidebar-logo"><%- include('../../partials/logo') %></a>
       <nav class="admin-sidebar-nav">
         <a href="/admin" class="<%= active === 'dashboard' ? 'active' : '' %>">
           <span class="admin-nav-icon">▦</span> Dashboard

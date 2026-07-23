@@ -9,6 +9,10 @@ router.get('/', async (req, res) => {
   res.render('index', { featuredCourses, galleryItems });
 });
 
+router.get('/giai-phap', (req, res) => {
+  res.render('solution');
+});
+
 router.get('/tu-van-phong-lab', (req, res) => {
   res.render('lab-consulting');
 });

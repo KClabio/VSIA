@@ -47,21 +47,34 @@ a { text-decoration: none; color: inherit; }
   align-items: center;
   gap: 8px;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 32px;
   color: var(--navy);
   margin-right: auto;
 }
 
-.logo-mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--green), var(--navy));
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
+.logo-vsia {
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  font-size: 1.2em;
+}
+.logo-vsia .lv { color: #3b82f6; }
+.logo-vsia .ls { color: #fb923c; }
+.logo-vsia .la { color: #22c55e; }
+.logo-vsia .li {
+  position: relative;
+  color: #fb923c;
+}
+.logo-vsia .li::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fbbf24;
+  box-shadow: 0 0 5px 1px rgba(251, 191, 36, 0.8);
 }
 
 .main-nav {
@@ -402,6 +415,8 @@ a { text-decoration: none; color: inherit; }
 .info-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(15, 42, 92, 0.12); }
 .info-card h3 { color: var(--navy); margin: 0 0 8px; font-size: 17px; }
 .info-card p { color: var(--muted); margin: 0; font-size: 14px; }
+.info-card p a { color: var(--navy); font-weight: 600; white-space: nowrap; }
+.info-card p a:hover { text-decoration: underline; }
 
 .steps-grid {
   display: grid;
@@ -430,6 +445,52 @@ a { text-decoration: none; color: inherit; }
 }
 .step-card h3 { color: var(--navy); margin: 0 0 8px; font-size: 16px; }
 .step-card p { color: var(--muted); margin: 0; font-size: 14px; }
+
+/* People / partners (solution page) */
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.person-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+.person-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--green), var(--navy));
+  color: #fff;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+.person-card h3 { color: var(--navy); margin: 0 0 6px; font-size: 15px; }
+.person-card p { color: var(--muted); margin: 0; font-size: 13px; }
+
+.partner-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+.partner-badge {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--navy);
+}
 
 /* Auth forms */
 .auth-section { background: var(--bg-alt); }
