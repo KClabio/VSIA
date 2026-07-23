@@ -2,12 +2,13 @@
 
 <section class="profile-banner">
   <div class="container profile-banner-inner">
-    <div class="profile-banner-avatar">
-      <% if (user.avatar) { %>
-        <img src="<%= user.avatar %>" alt="">
-      <% } else { %>
-        <span><%= user.name.charAt(0).toUpperCase() %></span>
-      <% } %>
+    <div class="profile-banner-avatar" id="avatarPreviewWrap">
+      <div class="profile-avatar-circle">
+        <img src="<%= user.avatar || '' %>" alt="" id="avatarPreviewImg" <%= user.avatar ? '' : 'style="display:none;"' %>>
+        <span id="avatarInitial" <%= user.avatar ? 'style="display:none;"' : '' %>><%= user.name.charAt(0).toUpperCase() %></span>
+      </div>
+      <button type="button" class="avatar-upload-btn" id="avatarUploadBtn" aria-label="Đổi ảnh đại diện">📷</button>
+      <input type="file" name="avatar" id="avatarFileInput" form="profileForm" accept="image/png,image/jpeg,image/webp,image/gif" class="visually-hidden">
     </div>
     <div>
       <span class="role-badge <%= user.role === 'admin' ? 'role-badge-admin' : '' %> profile-role-badge">
@@ -27,7 +28,7 @@
         <% if (error) { %><p class="form-error"><%= error %></p><% } %>
         <% if (success) { %><p class="form-success">Đã cập nhật thông tin.</p><% } %>
 
-        <form method="POST" action="/ho-so" enctype="multipart/form-data" class="admin-form profile-form">
+        <form method="POST" action="/ho-so" enctype="multipart/form-data" class="admin-form profile-form" id="profileForm">
           <label>Họ tên
             <input type="text" name="name" value="<%= user.name %>" required>
           </label>
@@ -40,9 +41,7 @@
           <label>Giới thiệu bản thân
             <textarea name="bio" rows="3" placeholder="Vài dòng giới thiệu về bạn..."><%= user.bio || '' %></textarea>
           </label>
-          <label>Ảnh đại diện <% if (user.avatar) { %>(chọn file mới để thay)<% } %>
-            <input type="file" name="avatar" accept="image/png,image/jpeg,image/webp,image/gif">
-          </label>
+          <p class="profile-form-hint">Bấm vào biểu tượng máy ảnh trên ảnh đại diện phía trên để đổi ảnh.</p>
 
           <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
         </form>
@@ -102,5 +101,21 @@
     </div>
   </div>
 </section>
+
+<script>
+  document.getElementById('avatarUploadBtn').addEventListener('click', function () {
+    document.getElementById('avatarFileInput').click();
+  });
+
+  document.getElementById('avatarFileInput').addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+
+    var img = document.getElementById('avatarPreviewImg');
+    img.src = URL.createObjectURL(file);
+    img.style.display = '';
+    document.getElementById('avatarInitial').style.display = 'none';
+  });
+</script>
 
 <%- include('partials/footer') %>

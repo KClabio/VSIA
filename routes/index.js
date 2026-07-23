@@ -9,6 +9,14 @@ router.get('/', async (req, res) => {
   res.render('index', { featuredCourses, galleryItems });
 });
 
+router.get('/tu-van-phong-lab', (req, res) => {
+  res.render('lab-consulting');
+});
+
+router.get('/ngay-hoi-cuoc-thi', (req, res) => {
+  res.render('stem-events');
+});
+
 router.get('/khoa-hoc', async (req, res) => {
   const courses = await Course.find().sort({ createdAt: -1 }).lean();
   res.render('courses', { courses });
