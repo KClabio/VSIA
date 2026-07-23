@@ -1,7 +1,11 @@
 <a href="/khoa-hoc/<%= course._id %>" class="course-card">
-  <div class="course-thumb" style="background: linear-gradient(135deg, hsl(<%= (course.title.length * 37) % 360 %>, 65%, 45%), hsl(<%= (course.title.length * 37 + 60) % 360 %>, 65%, 35%));">
-    <span><%= course.category %></span>
-  </div>
+  <% if (course.image) { %>
+    <div class="course-thumb course-thumb-image" style="background-image: url('<%= course.image %>');"></div>
+  <% } else { %>
+    <div class="course-thumb" style="background: linear-gradient(135deg, hsl(<%= (course.title.length * 37) % 360 %>, 65%, 45%), hsl(<%= (course.title.length * 37 + 60) % 360 %>, 65%, 35%));">
+      <span><%= course.category %></span>
+    </div>
+  <% } %>
   <div class="course-body">
     <h3><%= course.title %></h3>
     <p class="course-provider"><%= course.provider %></p>

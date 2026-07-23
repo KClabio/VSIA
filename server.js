@@ -8,6 +8,7 @@ const connectDB = require('./config/db');
 const { loadUser } = require('./middleware/auth');
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,6 +31,7 @@ app.use(loadUser);
 
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
+app.use('/admin', adminRoutes);
 
 app.use((req, res) => {
   res.status(404).render('404');

@@ -21,6 +21,9 @@
         <a href="/khoa-hoc">Khoá học</a>
         <a href="/#chuong-trinh">Về chương trình</a>
         <a href="/#lien-he">Liên hệ</a>
+        <% if (user && user.role === 'admin') { %>
+          <a href="/admin">Quản trị</a>
+        <% } %>
       </nav>
 
       <div class="auth-actions">

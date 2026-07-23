@@ -2,9 +2,13 @@
 
 <section class="section">
   <div class="container course-detail">
-    <div class="course-detail-thumb" style="background: linear-gradient(135deg, hsl(<%= (course.title.length * 37) % 360 %>, 65%, 45%), hsl(<%= (course.title.length * 37 + 60) % 360 %>, 65%, 35%));">
-      <span><%= course.category %></span>
-    </div>
+    <% if (course.image) { %>
+      <div class="course-detail-thumb course-thumb-image" style="background-image: url('<%= course.image %>');"></div>
+    <% } else { %>
+      <div class="course-detail-thumb" style="background: linear-gradient(135deg, hsl(<%= (course.title.length * 37) % 360 %>, 65%, 45%), hsl(<%= (course.title.length * 37 + 60) % 360 %>, 65%, 35%));">
+        <span><%= course.category %></span>
+      </div>
+    <% } %>
 
     <div class="course-detail-body">
       <h1><%= course.title %></h1>
@@ -15,6 +19,17 @@
       </p>
       <p class="course-price"><%= course.isFree ? 'Miễn phí' : course.price.toLocaleString('vi-VN') + ' đ' %></p>
       <p class="course-description"><%= course.description %></p>
+
+      <% if (course.materials && course.materials.length > 0) { %>
+        <div class="course-materials">
+          <h3>Tài liệu khoá học</h3>
+          <ul>
+            <% course.materials.forEach(m => { %>
+              <li><a href="<%= m.filePath %>" target="_blank" rel="noopener">📄 <%= m.name %></a></li>
+            <% }) %>
+          </ul>
+        </div>
+      <% } %>
 
       <% if (user) { %>
         <button class="btn btn-primary" disabled>Đăng ký học (sắp ra mắt)</button>

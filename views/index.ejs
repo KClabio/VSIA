@@ -33,12 +33,24 @@
 <section class="section section-alt">
   <div class="container">
     <h2 class="section-title">HÌNH ẢNH HOẠT ĐỘNG</h2>
-    <div class="gallery-grid">
-      <div class="gallery-item gallery-large"></div>
-      <div class="gallery-item"></div>
-      <div class="gallery-item"></div>
-      <div class="gallery-item gallery-wide">Tập huấn giáo viên</div>
-    </div>
+
+    <% if (galleryItems.length === 0) { %>
+      <p class="empty-state">Chưa có ảnh/video, thêm ở trang quản trị (<code>/admin/thu-vien</code>).</p>
+    <% } else { %>
+      <div class="gallery-grid">
+        <% const galleryClasses = ['gallery-large', '', '', 'gallery-wide']; %>
+        <% galleryItems.forEach((item, i) => { %>
+          <div class="gallery-item <%= galleryClasses[i] || '' %>">
+            <% if (item.type === 'image') { %>
+              <img src="<%= item.filePath %>" alt="<%= item.title %>">
+            <% } else { %>
+              <video src="<%= item.filePath %>" muted loop autoplay playsinline></video>
+            <% } %>
+            <span><%= item.title %></span>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
   </div>
 </section>
 

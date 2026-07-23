@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Course = require('../models/Course');
+const Media = require('../models/Media');
 
 router.get('/', async (req, res) => {
   const featuredCourses = await Course.find().sort({ createdAt: -1 }).limit(3).lean();
-  res.render('index', { featuredCourses });
+  const galleryItems = await Media.find().sort({ createdAt: -1 }).limit(4).lean();
+  res.render('index', { featuredCourses, galleryItems });
 });
 
 router.get('/khoa-hoc', async (req, res) => {
