@@ -14,6 +14,16 @@ const courseSchema = new mongoose.Schema({
     filePath: { type: String, required: true },
     uploadedAt: { type: Date, default: Date.now },
   }],
+  modules: [{
+    title: { type: String, required: true, trim: true },
+    lessons: [{
+      title: { type: String, required: true, trim: true },
+      type: { type: String, enum: ['video', 'document', 'quiz'], default: 'video' },
+      videoUrl: { type: String, default: null },
+      videoFile: { type: String, default: null },
+      content: { type: String, default: '' },
+    }],
+  }],
 }, { timestamps: true });
 
 module.exports = mongoose.model('Course', courseSchema);

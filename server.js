@@ -10,6 +10,7 @@ const { loadSiteSettings } = require('./lib/settings');
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
+const learningRoutes = require('./routes/learning');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -33,6 +34,7 @@ app.use(loadSiteSettings);
 
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
+app.use('/', learningRoutes);
 app.use('/admin', adminRoutes);
 
 app.use((req, res) => {

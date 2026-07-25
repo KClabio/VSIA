@@ -5,6 +5,7 @@ const Media = require('../models/Media');
 const Article = require('../models/Article');
 const TeamMember = require('../models/TeamMember');
 const Partner = require('../models/Partner');
+const Enrollment = require('../models/Enrollment');
 const { getPageContent } = require('../lib/pageContent');
 
 router.get('/', async (req, res) => {
@@ -48,7 +49,10 @@ router.get('/khoa-hoc/:id', async (req, res) => {
   if (!course) {
     return res.status(404).render('404');
   }
-  res.render('course-detail', { course });
+  const enrollment = req.user
+    ? await Enrollment.findOne({ user: req.user._id, course: course._id }).lean()
+    : null;
+  res.render('course-detail', { course, enrollment });
 });
 
 router.get('/tin-tuc', async (req, res) => {

@@ -34,8 +34,12 @@
         </div>
       <% } %>
 
-      <% if (user) { %>
-        <button class="btn btn-primary" disabled>Đăng ký học (sắp ra mắt)</button>
+      <% if (user && enrollment) { %>
+        <a href="/hoc/<%= course._id %>" class="btn btn-primary">Tiếp tục học →</a>
+      <% } else if (user) { %>
+        <form method="POST" action="/khoa-hoc/<%= course._id %>/dang-ky">
+          <button type="submit" class="btn btn-primary">Đăng ký học</button>
+        </form>
       <% } else { %>
         <a href="/dang-nhap?redirect=<%= encodeURIComponent('/khoa-hoc/' + course._id) %>" class="btn btn-primary">Đăng nhập để đăng ký học</a>
       <% } %>

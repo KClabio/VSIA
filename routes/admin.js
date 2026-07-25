@@ -137,6 +137,121 @@ router.post('/khoa-hoc/:id/tai-lieu/:materialId/xoa', async (req, res) => {
   res.redirect(`/admin/khoa-hoc/${req.params.id}/sua`);
 });
 
+// --- Nội dung khoá học (chương/bài học) ---
+
+async function renderCourseContent(res, courseId, error) {
+  const course = await Course.findById(courseId).lean().catch(() => null);
+  if (!course) return res.status(404).render('404');
+  res.render('admin/course-content', { course, error, active: 'khoa-hoc' });
+}
+
+router.get('/khoa-hoc/:id/noi-dung', async (req, res) => {
+  await renderCourseContent(res, req.params.id, null);
+});
+
+router.post('/khoa-hoc/:id/noi-dung/chuong', async (req, res) => {
+  const course = await Course.findById(req.params.id);
+  if (!course) return res.status(404).render('404');
+
+  if (!req.body.title || !req.body.title.trim()) {
+    return renderCourseContent(res, req.params.id, 'Vui lòng nhập tên chương.');
+  }
+
+  course.modules.push({ title: req.body.title.trim(), lessons: [] });
+  await course.save();
+  res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
+});
+
+router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/sua', async (req, res) => {
+  const course = await Course.findById(req.params.id);
+  if (!course) return res.status(404).render('404');
+
+  const mod = course.modules.id(req.params.moduleId);
+  if (mod && req.body.title && req.body.title.trim()) {
+    mod.title = req.body.title.trim();
+    await course.save();
+  }
+  res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
+});
+
+router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/xoa', async (req, res) => {
+  const course = await Course.findById(req.params.id);
+  if (course) {
+    const mod = course.modules.id(req.params.moduleId);
+    if (mod) {
+      mod.lessons.forEach((l) => unlinkUploaded(l.videoFile));
+      mod.deleteOne();
+      await course.save();
+    }
+  }
+  res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
+});
+
+router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai', (req, res) => {
+  uploadVideo.single('videoFile')(req, res, async (err) => {
+    if (err) return renderCourseContent(res, req.params.id, friendlyUploadError(err));
+
+    const course = await Course.findById(req.params.id);
+    if (!course) return res.status(404).render('404');
+
+    const mod = course.modules.id(req.params.moduleId);
+    if (!mod) return renderCourseContent(res, req.params.id, 'Không tìm thấy chương.');
+
+    if (!req.body.title || !req.body.title.trim()) {
+      if (req.file) unlinkUploaded(`/uploads/videos/${req.file.filename}`);
+      return renderCourseContent(res, req.params.id, 'Vui lòng nhập tên bài học.');
+    }
+
+    mod.lessons.push({
+      title: req.body.title.trim(),
+      type: req.body.type || 'video',
+      videoUrl: req.body.videoUrl ? req.body.videoUrl.trim() : null,
+      videoFile: req.file ? `/uploads/videos/${req.file.filename}` : null,
+      content: req.body.content || '',
+    });
+    await course.save();
+    res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
+  });
+});
+
+router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/sua', (req, res) => {
+  uploadVideo.single('videoFile')(req, res, async (err) => {
+    if (err) return renderCourseContent(res, req.params.id, friendlyUploadError(err));
+
+    const course = await Course.findById(req.params.id);
+    if (!course) return res.status(404).render('404');
+
+    const mod = course.modules.id(req.params.moduleId);
+    const lesson = mod && mod.lessons.id(req.params.lessonId);
+    if (!lesson) return renderCourseContent(res, req.params.id, 'Không tìm thấy bài học.');
+
+    lesson.title = req.body.title ? req.body.title.trim() : lesson.title;
+    lesson.type = req.body.type || lesson.type;
+    lesson.videoUrl = req.body.videoUrl ? req.body.videoUrl.trim() : null;
+    lesson.content = req.body.content || '';
+    if (req.file) {
+      unlinkUploaded(lesson.videoFile);
+      lesson.videoFile = `/uploads/videos/${req.file.filename}`;
+    }
+    await course.save();
+    res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
+  });
+});
+
+router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/xoa', async (req, res) => {
+  const course = await Course.findById(req.params.id);
+  if (course) {
+    const mod = course.modules.id(req.params.moduleId);
+    const lesson = mod && mod.lessons.id(req.params.lessonId);
+    if (lesson) {
+      unlinkUploaded(lesson.videoFile);
+      lesson.deleteOne();
+      await course.save();
+    }
+  }
+  res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
+});
+
 // --- Thư viện ảnh/video ---
 
 router.get('/thu-vien', async (req, res) => {

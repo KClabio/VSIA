@@ -1,0 +1,69 @@
+<%- include('partials/header', { title: course.title + ' - Học - VSIA' }) %>
+
+<section class="section player-section">
+  <div class="container player-layout">
+    <aside class="player-sidebar">
+      <a href="/khoa-hoc/<%= course._id %>" class="player-back">← <%= course.title %></a>
+
+      <div class="player-progress">
+        <div class="player-progress-track"><div class="player-progress-fill" style="width:<%= stats.percent %>%;"></div></div>
+        <span><%= stats.done %>/<%= stats.total %> bài · <%= stats.percent %>%</span>
+      </div>
+
+      <% if (!course.modules || course.modules.length === 0) { %>
+        <p class="empty-state" style="text-align:left;">Khoá học chưa có nội dung.</p>
+      <% } %>
+
+      <% (course.modules || []).forEach(mod => { %>
+        <div class="player-module">
+          <h4><%= mod.title %></h4>
+          <% mod.lessons.forEach(lesson => {
+            const isDone = enrollment.completedLessons.includes(String(lesson._id));
+            const isActive = currentLesson && String(currentLesson._id) === String(lesson._id);
+          %>
+            <a href="/hoc/<%= course._id %>?bai=<%= lesson._id %>" class="player-lesson <%= isActive ? 'active' : '' %> <%= isDone ? 'done' : '' %>">
+              <span class="player-lesson-icon"><%= lesson.type === 'video' ? '▶' : (lesson.type === 'document' ? '📄' : '📝') %></span>
+              <span class="player-lesson-title"><%= lesson.title %></span>
+              <% if (isDone) { %><span class="player-lesson-check">✓</span><% } %>
+            </a>
+          <% }) %>
+        </div>
+      <% }) %>
+    </aside>
+
+    <div class="player-main">
+      <% if (!currentLesson) { %>
+        <p class="empty-state">Khoá học chưa có bài học nào. Vui lòng quay lại sau.</p>
+      <% } else {
+        const isDone = enrollment.completedLessons.includes(String(currentLesson._id));
+      %>
+        <h1 class="player-lesson-heading"><%= currentLesson.title %></h1>
+
+        <% if (currentLesson.type === 'video' && currentEmbedUrl) { %>
+          <div class="player-video-wrap">
+            <iframe src="<%= currentEmbedUrl %>" title="<%= currentLesson.title %>" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        <% } else if (currentLesson.type === 'video' && currentLesson.videoFile) { %>
+          <div class="player-video-wrap">
+            <video src="<%= currentLesson.videoFile %>" controls></video>
+          </div>
+        <% } else if (currentLesson.type === 'video') { %>
+          <p class="empty-state" style="text-align:left;">Bài học này chưa có video, quay lại sau nhé.</p>
+        <% } %>
+
+        <% if (currentLesson.content) { %>
+          <div class="player-lesson-content"><%= currentLesson.content %></div>
+        <% } %>
+
+        <form method="POST" action="/hoc/<%= course._id %>/bai/<%= currentLesson._id %>/toggle" class="player-lesson-actions">
+          <input type="hidden" name="bai" value="<%= currentLesson._id %>">
+          <button type="submit" class="btn <%= isDone ? 'btn-ghost' : 'btn-primary' %>">
+            <%= isDone ? '↺ Bỏ đánh dấu hoàn thành' : '✓ Đánh dấu hoàn thành' %>
+          </button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

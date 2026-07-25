@@ -52,8 +52,6 @@
 .site-header .tag { color: var(--steel); }
 .site-header.nav-transparent .wm { color: #fff; }
 .site-header.nav-transparent .tag { color: #d0efdb; }
-.footer-brand .wm { color: #fff; }
-.footer-brand .tag { color: #6f86a6; }
 .admin-sidebar-logo .wm { color: #fff; }
 
 .admin-sidebar-logo .tag { color: #9db8a8; }
@@ -451,12 +449,16 @@
 }
 
 /* ============ FOOTER (restyle) ============ */
-.site-footer { background: #071426; color: #8ba0bd; padding: 64px 0 0; border-top: none; }
-.footer-inner { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 44px; padding-bottom: 38px; border-bottom: 1px solid rgba(255, 255, 255, .08); }
-.footer-brand p { font-size: .92rem; margin-top: 16px; max-width: 36ch; }
-.footer-col h4 { color: #fff; font-weight: 700; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 16px; }
-.footer-col a, .footer-col span { display: block; font-size: .92rem; margin-bottom: 10px; color: #8ba0bd; transition: color .2s; }
-.footer-col a:hover { color: #fff; }
+.site-footer { background: linear-gradient(180deg, #e7f4ec 0%, #d7ecdf 100%); color: var(--muted); padding: 64px 0 0; border-top: none; }
+.footer-inner { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 44px; padding-bottom: 38px; border-bottom: 1px solid rgba(11, 58, 34, .12); }
+.footer-brand p { font-size: .92rem; margin-top: 16px; max-width: 36ch; color: var(--muted); }
+.footer-col h4 { color: var(--navy); font-weight: 700; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 16px; }
+.footer-col a, .footer-col span { display: block; font-size: .92rem; margin-bottom: 10px; color: var(--muted); transition: color .2s; }
+.footer-col a:hover { color: var(--blue); }
+.footer-brand .logo { margin-bottom: 4px; }
+.footer-brand .site-logo-img { height: 64px; }
+.footer-brand .wm { color: var(--navy); font-size: 1.6rem; }
+.footer-brand .tag { color: var(--steel); }
 .footer-bottom { border-top: none; padding: 24px 0 28px; font-size: .84rem; }
 .footer-bottom-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; text-align: left; }
 

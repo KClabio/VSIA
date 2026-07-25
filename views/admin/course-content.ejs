@@ -1,0 +1,124 @@
+<%- include('partials/head', { pageTitle: 'Nội dung: ' + course.title, active: 'khoa-hoc' }) %>
+
+<div class="admin-page-head">
+  <h1 class="page-title">Nội dung khoá học: <%= course.title %></h1>
+  <a href="/admin/khoa-hoc" class="btn btn-ghost">← Danh sách khoá học</a>
+</div>
+<p class="section-subtitle" style="margin-bottom:24px; text-align:left;">Chia khoá học thành các chương, mỗi chương gồm nhiều bài học (video YouTube, video tải lên, tài liệu hoặc bài tập).</p>
+
+<% if (error) { %><p class="form-error"><%= error %></p><% } %>
+
+<div class="admin-form" style="margin-bottom:24px;">
+  <h3 style="margin-top:0;">Thêm chương mới</h3>
+  <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/noi-dung/chuong" class="admin-form-row">
+    <label style="flex:1;">Tên chương
+      <input type="text" name="title" placeholder="Vd: Chương 1: Nhập môn STEM" required>
+    </label>
+    <div class="admin-form-actions" style="align-self:flex-end;">
+      <button type="submit" class="btn btn-primary">+ Thêm chương</button>
+    </div>
+  </form>
+</div>
+
+<% if (!course.modules || course.modules.length === 0) { %>
+  <p class="empty-state">Chưa có chương nào. Thêm chương ở form phía trên.</p>
+<% } else { %>
+  <div style="max-width:900px;">
+    <% course.modules.forEach((mod, mi) => { %>
+      <details class="settings-page-block" <%= mi === 0 ? 'open' : '' %>>
+        <summary><%= mod.title %> <span class="admin-count-badge" style="margin-left:10px;"><%= mod.lessons.length %> bài</span></summary>
+        <div class="settings-page-form">
+
+          <details class="settings-sub-block">
+            <summary>✏️ Sửa tên / 🗑 Xoá chương</summary>
+            <div class="settings-sub-form">
+              <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/noi-dung/chuong/<%= mod._id %>/sua" class="admin-form-row" style="margin-bottom:14px;">
+                <input type="text" name="title" value="<%= mod.title %>" style="flex:1;" required>
+                <button type="submit" class="btn btn-primary">Lưu tên</button>
+              </form>
+              <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/noi-dung/chuong/<%= mod._id %>/xoa" class="inline-form" onsubmit="return confirm('Xoá cả chương này và toàn bộ bài học bên trong?');">
+                <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá chương này</button>
+              </form>
+            </div>
+          </details>
+
+          <% if (mod.lessons.length > 0) { %>
+            <div class="admin-lesson-list">
+              <% mod.lessons.forEach(lesson => { %>
+                <details class="settings-sub-block">
+                  <summary>
+                    <span class="admin-lesson-type-icon"><%= lesson.type === 'video' ? '▶️' : (lesson.type === 'document' ? '📄' : '📝') %></span>
+                    <%= lesson.title %>
+                  </summary>
+                  <div class="settings-sub-form">
+                    <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/noi-dung/chuong/<%= mod._id %>/bai/<%= lesson._id %>/sua" enctype="multipart/form-data">
+                      <label>Tên bài học
+                        <input type="text" name="title" value="<%= lesson.title %>" required>
+                      </label>
+                      <label>Loại bài học
+                        <select name="type">
+                          <option value="video" <%= lesson.type === 'video' ? 'selected' : '' %>>Video</option>
+                          <option value="document" <%= lesson.type === 'document' ? 'selected' : '' %>>Tài liệu</option>
+                          <option value="quiz" <%= lesson.type === 'quiz' ? 'selected' : '' %>>Bài tập</option>
+                        </select>
+                      </label>
+                      <label>Link YouTube (nếu dùng video nhúng)
+                        <input type="text" name="videoUrl" value="<%= lesson.videoUrl || '' %>" placeholder="https://youtube.com/watch?v=...">
+                      </label>
+                      <label>Hoặc tải file video mới lên (bỏ trống nếu giữ nguyên<%= lesson.videoFile ? ' file hiện tại' : '' %>)
+                        <input type="file" name="videoFile" accept="video/mp4,video/webm,video/ogg">
+                      </label>
+                      <% if (lesson.videoFile) { %><p class="admin-form-hint">Đang có file: <%= lesson.videoFile %></p><% } %>
+                      <label>Nội dung / ghi chú (dùng cho tài liệu, bài tập, hoặc mô tả thêm)
+                        <textarea name="content" rows="3"><%= lesson.content || '' %></textarea>
+                      </label>
+                      <div class="admin-form-actions">
+                        <button type="submit" class="btn btn-primary">Lưu bài học</button>
+                      </div>
+                    </form>
+                    <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/noi-dung/chuong/<%= mod._id %>/bai/<%= lesson._id %>/xoa" class="inline-form" onsubmit="return confirm('Xoá bài học này?');" style="margin-top:10px;">
+                      <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá bài học này</button>
+                    </form>
+                  </div>
+                </details>
+              <% }) %>
+            </div>
+          <% } %>
+
+          <details class="settings-sub-block">
+            <summary>+ Thêm bài học vào chương này</summary>
+            <div class="settings-sub-form">
+              <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/noi-dung/chuong/<%= mod._id %>/bai" enctype="multipart/form-data">
+                <label>Tên bài học
+                  <input type="text" name="title" placeholder="Vd: 1.1. Giới thiệu chương" required>
+                </label>
+                <label>Loại bài học
+                  <select name="type">
+                    <option value="video">Video</option>
+                    <option value="document">Tài liệu</option>
+                    <option value="quiz">Bài tập</option>
+                  </select>
+                </label>
+                <label>Link YouTube (nếu dùng video nhúng)
+                  <input type="text" name="videoUrl" placeholder="https://youtube.com/watch?v=...">
+                </label>
+                <label>Hoặc tải file video lên (chọn 1 trong 2 — YouTube hoặc file)
+                  <input type="file" name="videoFile" accept="video/mp4,video/webm,video/ogg">
+                </label>
+                <label>Nội dung / ghi chú (dùng cho tài liệu, bài tập, hoặc mô tả thêm)
+                  <textarea name="content" rows="3" placeholder="Nội dung hiển thị cho học viên..."></textarea>
+                </label>
+                <div class="admin-form-actions">
+                  <button type="submit" class="btn btn-primary">+ Thêm bài học</button>
+                </div>
+              </form>
+            </div>
+          </details>
+
+        </div>
+      </details>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('partials/foot') %>
