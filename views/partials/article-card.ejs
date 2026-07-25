@@ -1,0 +1,26 @@
+<%
+  const palettes = [
+    ['#1a5a2e', '#0a2618'],
+    ['#5b2a8c', '#20103a'],
+    ['#8c3a2a', '#3a140d'],
+    ['#145c37', '#072617'],
+  ];
+  const pal = palettes[article.title.length % palettes.length];
+%>
+<div class="article-card">
+  <a href="/tin-tuc/<%= article._id %>" class="article-thumb-link">
+    <% if (article.image) { %>
+      <div class="article-thumb course-thumb-image" style="background-image: url('<%= article.image %>');"></div>
+    <% } else { %>
+      <div class="article-thumb" style="background: linear-gradient(135deg, <%= pal[0] %>, <%= pal[1] %>);">
+        <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
+      </div>
+    <% } %>
+  </a>
+  <div class="article-body">
+    <span class="article-date"><%= new Date(article.createdAt).toLocaleDateString('vi-VN') %></span>
+    <h3><a href="/tin-tuc/<%= article._id %>"><%= article.title %></a></h3>
+    <p class="article-summary"><%= article.summary %></p>
+    <a href="/tin-tuc/<%= article._id %>" class="article-more">Xem thêm →</a>
+  </div>
+</div>

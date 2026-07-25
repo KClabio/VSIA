@@ -1,1 +1,7 @@
-<span class="logo-vsia"><span class="lv">V</span><span class="ls">S</span><span class="li">i</span><span class="la">A</span></span>
+<span class="logo-text">
+  <% if (typeof siteLogo !== 'undefined' && siteLogo) { %>
+    <img src="<%= siteLogo %>" alt="VSIA" class="site-logo-img">
+  <% } else { %>
+    <span class="wm">VSIA</span><span class="tag">Giáo dục STEM</span>
+  <% } %>
+</span>

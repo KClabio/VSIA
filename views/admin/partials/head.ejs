@@ -4,9 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= typeof pageTitle !== 'undefined' ? pageTitle + ' - Quản trị VSIA' : 'Quản trị - VSIA' %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/theme.css">
 </head>
 <body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46bf7a"/><stop offset="1" stop-color="#1f9e52"/></linearGradient>
+</defs></svg>
+
   <div class="admin-shell">
     <aside class="admin-sidebar" id="adminSidebar">
       <a href="/admin" class="logo admin-sidebar-logo"><%- include('../../partials/logo') %></a>
@@ -20,10 +29,37 @@
         <a href="/admin/thu-vien" class="<%= active === 'thu-vien' ? 'active' : '' %>">
           <span class="admin-nav-icon">🖼</span> Thư viện ảnh/video
         </a>
+        <a href="/admin/bai-viet" class="<%= active === 'bai-viet' ? 'active' : '' %>">
+          <span class="admin-nav-icon">📰</span> Bài viết
+        </a>
+        <a href="/admin/doi-ngu" class="<%= active === 'doi-ngu' ? 'active' : '' %>">
+          <span class="admin-nav-icon">👤</span> Đội ngũ
+        </a>
+        <a href="/admin/doi-tac" class="<%= active === 'doi-tac' ? 'active' : '' %>">
+          <span class="admin-nav-icon">🤝</span> Đối tác
+        </a>
         <a href="/admin/nguoi-dung" class="<%= active === 'nguoi-dung' ? 'active' : '' %>">
           <span class="admin-nav-icon">👥</span> Người dùng
         </a>
+        <div class="admin-nav-group <%= active === 'cai-dat' ? 'open' : '' %>">
+          <a href="/admin/cai-dat" class="<%= active === 'cai-dat' ? 'active' : '' %>">
+            <span class="admin-nav-icon">⚙️</span> Nội dung website
+          </a>
+          <% if (active === 'cai-dat') { %>
+            <div class="admin-nav-submenu">
+              <a href="/admin/cai-dat#logo">🖼️ Logo trang web</a>
+              <a href="/admin/cai-dat#hero-image">🌄 Ảnh nền Hero trang chủ</a>
+              <a href="/admin/cai-dat#solution-image">🧩 Ảnh minh hoạ Giải pháp</a>
+              <a href="/admin/cai-dat#biz-images">📷 Ảnh khu vực Lĩnh vực hoạt động</a>
+              <a href="/admin/cai-dat#page-heroes">📝 Nội dung Hero từng trang</a>
+            </div>
+          <% } %>
+        </div>
       </nav>
+
+      <a href="/" target="_blank" rel="noopener" class="admin-sidebar-home-link">
+        <span class="admin-nav-icon">🏠</span> Trang chủ
+      </a>
     </aside>
 
     <div class="admin-main">

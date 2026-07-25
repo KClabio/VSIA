@@ -1,0 +1,51 @@
+<%- include('partials/head', { pageTitle: 'Ban lãnh đạo & Hội đồng chuyên gia', active: 'doi-ngu' }) %>
+
+<div class="admin-page-head">
+  <h1 class="page-title">Ban lãnh đạo &amp; Hội đồng chuyên gia</h1>
+  <a href="/admin/doi-ngu/moi" class="btn btn-primary">+ Thêm thành viên</a>
+</div>
+<p class="section-subtitle" style="margin-bottom:30px; text-align:left;">Danh sách hiển thị ở mục "Ban lãnh đạo &amp; Hội đồng chuyên gia" trên trang chủ, sắp xếp theo thứ tự tăng dần.</p>
+
+<% if (teamMembers.length === 0) { %>
+  <p class="empty-state">Chưa có thành viên nào.</p>
+<% } else { %>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Ảnh</th>
+          <th>Họ tên</th>
+          <th>Nhóm</th>
+          <th>Chức danh</th>
+          <th>Thứ tự</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% teamMembers.forEach(member => { %>
+          <tr>
+            <td>
+              <% if (member.photo) { %>
+                <img src="<%= member.photo %>" alt="<%= member.name %>" class="admin-avatar-thumb">
+              <% } else { %>
+                —
+              <% } %>
+            </td>
+            <td><%= member.name %></td>
+            <td><%= member.group === 'leadership' ? 'Ban lãnh đạo' : 'Hội đồng chuyên gia' %></td>
+            <td class="admin-table-truncate" title="<%= member.title %>"><%= member.title %></td>
+            <td><%= member.order %></td>
+            <td class="admin-table-actions">
+              <a href="/admin/doi-ngu/<%= member._id %>/sua" class="btn btn-icon" title="Sửa thành viên">✏️ Sửa</a>
+              <form action="/admin/doi-ngu/<%= member._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá thành viên này?');">
+                <button type="submit" class="btn btn-icon btn-danger" title="Xoá thành viên">🗑 Xoá</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('partials/foot') %>

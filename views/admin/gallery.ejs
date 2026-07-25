@@ -1,6 +1,9 @@
 <%- include('partials/head', { pageTitle: 'Thư viện ảnh/video', active: 'thu-vien' }) %>
 
-<h1 class="page-title">Thư viện ảnh/video</h1>
+<div class="admin-page-head">
+  <h1 class="page-title">Thư viện ảnh/video</h1>
+  <span class="admin-count-badge"><%= mediaItems.length %> mục đã thêm</span>
+</div>
 <p class="section-subtitle" style="margin-bottom:30px; text-align:left;">Ảnh/video mới nhất sẽ hiển thị ở mục "Hình ảnh hoạt động" trên trang chủ.</p>
 
 <% if (error) { %><p class="form-error"><%= error %></p><% } %>
@@ -30,7 +33,7 @@
 </div>
 
 <% if (mediaItems.length === 0) { %>
-  <p class="empty-state">Chưa có ảnh/video nào.</p>
+  <p class="empty-state">Chưa có ảnh/video nào. Dùng 2 form phía trên để tải lên.</p>
 <% } else { %>
   <div class="admin-media-grid">
     <% mediaItems.forEach(item => { %>
@@ -41,9 +44,23 @@
           <video src="<%= item.filePath %>" controls></video>
         <% } %>
         <p><%= item.title %></p>
-        <form action="/admin/thu-vien/<%= item._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá mục này?');">
-          <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá</button>
-        </form>
+        <div class="admin-media-card-actions">
+          <details class="admin-media-edit">
+            <summary class="btn btn-icon">✏️ Sửa</summary>
+            <form action="/admin/thu-vien/<%= item._id %>/sua" method="POST" enctype="multipart/form-data" class="admin-media-edit-form">
+              <label>Tiêu đề
+                <input type="text" name="title" value="<%= item.title %>" required>
+              </label>
+              <label>Thay <%= item.type === 'image' ? 'ảnh' : 'video' %> (bỏ trống nếu chỉ đổi tiêu đề)
+                <input type="file" name="file" accept="<%= item.type === 'image' ? 'image/png,image/jpeg,image/webp,image/gif' : 'video/mp4,video/webm,video/ogg' %>">
+              </label>
+              <button type="submit" class="btn btn-primary btn-block">Lưu thay đổi</button>
+            </form>
+          </details>
+          <form action="/admin/thu-vien/<%= item._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá mục này?');">
+            <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá</button>
+          </form>
+        </div>
       </div>
     <% }) %>
   </div>

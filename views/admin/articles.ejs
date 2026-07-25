@@ -1,0 +1,41 @@
+<%- include('partials/head', { pageTitle: 'Quản lý bài viết', active: 'bai-viet' }) %>
+
+<div class="admin-page-head">
+  <h1 class="page-title">Quản lý bài viết</h1>
+  <a href="/admin/bai-viet/moi" class="btn btn-primary">+ Thêm bài viết</a>
+</div>
+
+<% if (articles.length === 0) { %>
+  <p class="empty-state">Chưa có bài viết nào.</p>
+<% } else { %>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Tiêu đề</th>
+          <th>Tóm tắt</th>
+          <th>Ngày đăng</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% articles.forEach(article => { %>
+          <tr>
+            <td class="admin-table-truncate" style="max-width:220px;" title="<%= article.title %>"><%= article.title %></td>
+            <td class="admin-table-truncate" title="<%= article.summary %>"><%= article.summary %></td>
+            <td><%= new Date(article.createdAt).toLocaleDateString('vi-VN') %></td>
+            <td class="admin-table-actions">
+              <a href="/tin-tuc/<%= article._id %>" class="btn btn-icon" title="Xem trên trang công khai">👁 Xem</a>
+              <a href="/admin/bai-viet/<%= article._id %>/sua" class="btn btn-icon" title="Sửa bài viết">✏️ Sửa</a>
+              <form action="/admin/bai-viet/<%= article._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá bài viết này?');">
+                <button type="submit" class="btn btn-icon btn-danger" title="Xoá bài viết">🗑 Xoá</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('partials/foot') %>

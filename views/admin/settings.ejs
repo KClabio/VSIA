@@ -1,0 +1,187 @@
+<%- include('partials/head', { pageTitle: 'Nội dung website', active: 'cai-dat' }) %>
+
+<h1 class="page-title">Nội dung website</h1>
+<p class="section-subtitle" style="margin-bottom:12px; text-align:left;">Bấm vào từng mục để mở ra chỉnh sửa. Không cần sửa code — mọi thay đổi hiện luôn trên trang thật sau khi lưu.</p>
+<p class="admin-scope-note">
+  ℹ️ Mục này quản lý phần <strong>tĩnh</strong> của website (logo, ảnh nền, tiêu đề đầu trang). Nội dung có danh sách riêng — Khoá học, Bài viết, Đội ngũ, Đối tác — sửa trực tiếp ở mục tương ứng bên sidebar.
+</p>
+
+<% if (error) { %><p class="form-error"><%= error %></p><% } %>
+
+<div style="max-width:760px;">
+
+  <details class="settings-page-block" id="logo">
+    <summary>🖼️ Logo trang web</summary>
+    <div class="settings-page-form">
+      <% if (settings.logo) { %>
+        <div class="admin-logo-preview">
+          <img src="<%= settings.logo %>" alt="Logo hiện tại">
+        </div>
+        <form action="/admin/cai-dat/logo/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá logo và quay về logo chữ mặc định?');" style="margin-bottom:20px;">
+          <button type="submit" class="btn btn-ghost">Xoá logo, dùng lại chữ "VSIA"</button>
+        </form>
+      <% } else { %>
+        <p class="empty-state" style="text-align:left; margin-bottom:16px;">Chưa có logo ảnh — đang hiển thị chữ "VSIA" mặc định.</p>
+      <% } %>
+
+      <form method="POST" enctype="multipart/form-data" action="/admin/cai-dat/logo">
+        <label>Chọn file logo mới (nên dùng PNG nền trong suốt, giữ nguyên màu logo)
+          <input type="file" name="logo" accept="image/png,image/jpeg,image/webp,image/gif" required>
+        </label>
+        <div class="admin-form-actions">
+          <button type="submit" class="btn btn-primary"><%= settings.logo ? 'Thay logo' : 'Tải logo lên' %></button>
+        </div>
+      </form>
+    </div>
+  </details>
+
+  <details class="settings-page-block" id="hero-image">
+    <summary>🌄 Ảnh nền Hero trang chủ</summary>
+    <div class="settings-page-form">
+      <p class="section-subtitle" style="margin-bottom:16px; text-align:left;">Ảnh nền cho khối đầu trang chủ (dưới lớp màu tan dần). Chưa có ảnh sẽ dùng nền gradient màu thương hiệu.</p>
+      <% if (settings.heroImage) { %>
+        <div class="admin-logo-preview">
+          <img src="<%= settings.heroImage %>" alt="Ảnh nền Hero" style="max-height:220px;">
+        </div>
+        <form action="/admin/cai-dat/anh-hero/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá ảnh nền này?');" style="margin-bottom:20px;">
+          <button type="submit" class="btn btn-ghost">Xoá ảnh, dùng lại nền gradient</button>
+        </form>
+      <% } else { %>
+        <p class="empty-state" style="text-align:left; margin-bottom:16px;">Chưa có ảnh — đang dùng nền gradient xanh thương hiệu.</p>
+      <% } %>
+
+      <form method="POST" enctype="multipart/form-data" action="/admin/cai-dat/anh-hero">
+        <label>Chọn ảnh nền mới (ảnh rộng, nên tối màu hoặc đủ tương phản để chữ trắng đọc rõ)
+          <input type="file" name="heroImage" accept="image/png,image/jpeg,image/webp,image/gif" required>
+        </label>
+        <div class="admin-form-actions">
+          <button type="submit" class="btn btn-primary"><%= settings.heroImage ? 'Thay ảnh' : 'Tải ảnh lên' %></button>
+        </div>
+      </form>
+    </div>
+  </details>
+
+  <details class="settings-page-block" id="solution-image">
+    <summary>🧩 Ảnh minh hoạ "Giải pháp giáo dục STEM tổng thể"</summary>
+    <div class="settings-page-form">
+      <p class="section-subtitle" style="margin-bottom:16px; text-align:left;">Hiển thị ở trang Giải pháp, cạnh danh sách 4 nội dung giải pháp.</p>
+      <% if (settings.solutionImage) { %>
+        <div class="admin-logo-preview">
+          <img src="<%= settings.solutionImage %>" alt="Ảnh minh hoạ giải pháp" style="max-height:220px;">
+        </div>
+        <form action="/admin/cai-dat/anh-giai-phap/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá ảnh minh hoạ này?');" style="margin-bottom:20px;">
+          <button type="submit" class="btn btn-ghost">Xoá ảnh</button>
+        </form>
+      <% } else { %>
+        <p class="empty-state" style="text-align:left; margin-bottom:16px;">Chưa có ảnh minh hoạ — mục này sẽ để trống trên trang Giải pháp.</p>
+      <% } %>
+
+      <form method="POST" enctype="multipart/form-data" action="/admin/cai-dat/anh-giai-phap">
+        <label>Chọn ảnh mới (vd: ảnh bộ STEM KIT, sản phẩm thực tế)
+          <input type="file" name="solutionImage" accept="image/png,image/jpeg,image/webp,image/gif" required>
+        </label>
+        <div class="admin-form-actions">
+          <button type="submit" class="btn btn-primary"><%= settings.solutionImage ? 'Thay ảnh' : 'Tải ảnh lên' %></button>
+        </div>
+      </form>
+    </div>
+  </details>
+
+  <details class="settings-page-block" id="biz-images">
+    <summary>📷 Ảnh khu vực "Lĩnh vực hoạt động" (trang chủ)</summary>
+    <div class="settings-page-form">
+      <p class="section-subtitle" style="margin-bottom:20px; text-align:left;">4 ảnh minh hoạ cho từng tab: Tư vấn phòng Lab, Đào tạo giáo viên, Ngày hội &amp; Cuộc thi, Robotics AI. Chưa có ảnh sẽ hiện hoạ tiết thay thế.</p>
+
+      <% const bizImages = [
+        { key: 'lab', label: 'Tư vấn phòng Lab', value: settings.bizLabImage },
+        { key: 'teacher', label: 'Đào tạo giáo viên', value: settings.bizTeacherImage },
+        { key: 'events', label: 'Ngày hội & Cuộc thi', value: settings.bizEventsImage },
+        { key: 'robotics', label: 'Robotics AI', value: settings.bizRoboticsImage },
+      ]; %>
+
+      <% bizImages.forEach((img, i) => { %>
+        <details class="settings-sub-block" <%= i === 0 ? 'open' : '' %>>
+          <summary><%= img.label %></summary>
+          <div class="settings-sub-form">
+            <% if (img.value) { %>
+              <div class="admin-logo-preview">
+                <img src="<%= img.value %>" alt="Ảnh <%= img.label %>" style="max-height:180px;">
+              </div>
+              <form action="/admin/cai-dat/anh-linh-vuc/<%= img.key %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá ảnh này?');" style="margin-bottom:16px;">
+                <button type="submit" class="btn btn-ghost">Xoá ảnh</button>
+              </form>
+            <% } else { %>
+              <p class="empty-state" style="text-align:left; margin-bottom:16px;">Chưa có ảnh — đang hiện hoạ tiết thay thế.</p>
+            <% } %>
+            <form method="POST" enctype="multipart/form-data" action="/admin/cai-dat/anh-linh-vuc/<%= img.key %>">
+              <label>Chọn ảnh mới
+                <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif" required>
+              </label>
+              <div class="admin-form-actions">
+                <button type="submit" class="btn btn-primary"><%= img.value ? 'Thay ảnh' : 'Tải ảnh lên' %></button>
+              </div>
+            </form>
+          </div>
+        </details>
+      <% }) %>
+    </div>
+  </details>
+
+  <details class="settings-page-block" id="page-heroes">
+    <summary>📝 Nội dung đầu trang (Hero) từng trang</summary>
+    <div class="settings-page-form">
+      <p class="section-subtitle" style="margin-bottom:20px; text-align:left;">Chỉnh tiêu đề, mô tả, nút bấm ở đầu mỗi trang.</p>
+
+      <% pages.forEach((page, i) => { %>
+        <details class="settings-sub-block" <%= i === 0 ? 'open' : '' %>>
+          <summary><%= page.label %></summary>
+          <form method="POST" action="/admin/cai-dat/trang/<%= page.key %>" class="settings-sub-form">
+            <label>Badge nhỏ phía trên tiêu đề
+              <input type="text" name="heroBadge" value="<%= page.heroBadge %>">
+            </label>
+            <div class="admin-form-row">
+              <label>Tiêu đề dòng 1
+                <input type="text" name="heroTitleLine1" value="<%= page.heroTitleLine1 %>">
+              </label>
+              <label>Tiêu đề dòng 2 (chữ nhấn màu vàng)
+                <input type="text" name="heroTitleLine2" value="<%= page.heroTitleLine2 %>">
+              </label>
+            </div>
+            <label>Mô tả ngắn
+              <textarea name="heroSubtitle" rows="2"><%= page.heroSubtitle %></textarea>
+            </label>
+            <div class="admin-form-row">
+              <label>Chữ trên nút CTA
+                <input type="text" name="heroCtaText" value="<%= page.heroCtaText %>">
+              </label>
+              <label>Link nút CTA (vd: /khoa-hoc hoặc mailto:...)
+                <input type="text" name="heroCtaLink" value="<%= page.heroCtaLink %>">
+              </label>
+            </div>
+            <div class="admin-form-actions">
+              <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+            </div>
+          </form>
+        </details>
+      <% }) %>
+    </div>
+  </details>
+
+</div>
+
+<script>
+  (function () {
+    function openFromHash() {
+      var id = decodeURIComponent(location.hash.replace('#', ''));
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target || target.tagName !== 'DETAILS') return;
+      target.open = true;
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    openFromHash();
+    window.addEventListener('hashchange', openFromHash);
+  })();
+</script>
+
+<%- include('partials/foot') %>

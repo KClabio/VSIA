@@ -28,13 +28,13 @@ const DOCUMENT_EXTENSIONS = ['.pdf', '.doc', '.docx', '.ppt', '.pptx', '.xls', '
 
 const uploadImage = multer({
   storage: makeStorage('images'),
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 20 * 1024 * 1024 },
   fileFilter: fileFilterFor(IMAGE_EXTENSIONS),
 });
 
 const uploadVideo = multer({
   storage: makeStorage('videos'),
-  limits: { fileSize: 50 * 1024 * 1024 },
+  limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: fileFilterFor(VIDEO_EXTENSIONS),
 });
 
@@ -43,6 +43,13 @@ const uploadDocuments = multer({
   limits: { fileSize: 20 * 1024 * 1024 },
   fileFilter: fileFilterFor(DOCUMENT_EXTENSIONS),
 });
+
+function friendlyUploadError(err) {
+  if (err && err.code === 'LIMIT_FILE_SIZE') {
+    return 'File quá dung lượng cho phép. Ảnh tối đa 20MB, video tối đa 100MB, tài liệu tối đa 20MB.';
+  }
+  return err ? err.message : 'Đã có lỗi xảy ra khi tải file lên.';
+}
 
 const FIELD_CONFIG = {
   image: { subfolder: 'images', extensions: IMAGE_EXTENSIONS },
@@ -75,4 +82,4 @@ const uploadCourseFiles = multer({
   { name: 'materials', maxCount: 10 },
 ]);
 
-module.exports = { uploadImage, uploadVideo, uploadDocuments, uploadCourseFiles };
+module.exports = { uploadImage, uploadVideo, uploadDocuments, uploadCourseFiles, friendlyUploadError };

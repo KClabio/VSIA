@@ -1,11 +1,14 @@
 <%- include('partials/header', { title: 'Ngày hội & Cuộc thi STEM - VSIA' }) %>
 
-<section class="hero">
-  <div class="container hero-inner">
-    <span class="hero-badge">SÂN CHƠI STEM</span>
-    <h1>NGÀY HỘI &amp;<br><span class="highlight">CUỘC THI STEM</span></h1>
-    <p>Tạo sân chơi để học sinh trải nghiệm, giao lưu và thể hiện năng lực sáng tạo qua các hoạt động, cuộc thi STEM.</p>
-    <a href="mailto:taphuan@vsia.edu.vn" class="btn btn-hero">Đăng ký tổ chức tại trường</a>
+<section class="page-hero">
+  <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
+  <div class="wrap page-hero-inner">
+    <span class="eyebrow"><%= hero.heroBadge %></span>
+    <h1><%= hero.heroTitleLine1 %><br><span class="accent"><%= hero.heroTitleLine2 %></span></h1>
+    <p class="sub"><%= hero.heroSubtitle %></p>
+    <div class="page-hero-cta">
+      <a href="<%= hero.heroCtaLink %>" class="btn btn-primary"><%= hero.heroCtaText %> →</a>
+    </div>
   </div>
 </section>
 

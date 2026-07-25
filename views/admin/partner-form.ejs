@@ -1,0 +1,36 @@
+<%- include('partials/head', { pageTitle: partner ? 'Sửa đối tác' : 'Thêm đối tác mới', active: 'doi-tac' }) %>
+
+<h1 class="page-title"><%= partner ? 'Sửa đối tác' : 'Thêm đối tác mới' %></h1>
+
+<% if (error) { %><p class="form-error"><%= error %></p><% } %>
+
+<form method="POST" enctype="multipart/form-data"
+      action="<%= partner ? '/admin/doi-tac/' + partner._id + '/sua' : '/admin/doi-tac/moi' %>"
+      class="admin-form">
+
+  <label>Tên đối tác
+    <input type="text" name="name" placeholder="Vd: Petrovietnam" value="<%= partner ? partner.name : '' %>" required>
+  </label>
+
+  <label>Mô tả ngắn (tuỳ chọn)
+    <input type="text" name="tagline" placeholder="Vd: Đối tác chiến lược từ 2025" value="<%= partner && partner.tagline ? partner.tagline : '' %>">
+  </label>
+
+  <label>Thứ tự hiển thị (số nhỏ hơn hiển thị trước)
+    <input type="number" name="order" value="<%= partner ? partner.order : 0 %>">
+  </label>
+
+  <label>Logo <% if (partner && partner.logo) { %>(đang có, chọn file mới để thay)<% } else { %>(không chọn sẽ hiển thị nền màu thay thế)<% } %>
+    <input type="file" name="logo" accept="image/png,image/jpeg,image/webp,image/gif">
+  </label>
+  <% if (partner && partner.logo) { %>
+    <img src="<%= partner.logo %>" alt="" class="admin-preview-image">
+  <% } %>
+
+  <div class="admin-form-actions">
+    <a href="/admin/doi-tac" class="btn btn-ghost">Huỷ</a>
+    <button type="submit" class="btn btn-primary"><%= partner ? 'Lưu thay đổi' : 'Thêm đối tác' %></button>
+  </div>
+</form>
+
+<%- include('partials/foot') %>

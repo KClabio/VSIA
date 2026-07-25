@@ -1,0 +1,26 @@
+<%
+  const nameParts = member.name.trim().split(/\s+/);
+  const initials = (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase();
+  const slide = typeof locals.slide !== 'undefined' && locals.slide;
+%>
+<div class="expert-card <%= slide ? 'profile-card-slide' : '' %>">
+  <div class="expert-av">
+    <% if (member.photo) { %>
+      <img src="<%= member.photo %>" alt="<%= member.name %>">
+    <% } else { %>
+      <%= initials %>
+    <% } %>
+  </div>
+  <% if (member.highlight) { %><div class="deg"><%= member.highlight %></div><% } %>
+  <h4><%= member.name %></h4>
+  <% if (member.achievements && member.achievements.length > 0) { %>
+    <ul class="aff-list">
+      <li><span class="check-icon">✓</span><span><%= member.title %></span></li>
+      <% member.achievements.forEach(item => { %>
+        <li><span class="check-icon">✓</span><span><%= item %></span></li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <div class="aff"><%= member.title %></div>
+  <% } %>
+</div>

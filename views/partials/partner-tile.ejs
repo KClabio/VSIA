@@ -1,0 +1,14 @@
+<%
+  const fallbackColors = [
+    ['#1f9e52', '#145c37'], ['#0b3a22', '#145c37'], ['#16803f', '#0b3a22'],
+    ['#1f8a4a', '#072617'], ['#145c37', '#072617'], ['#d8a13a', '#8a6318'],
+  ];
+  const pal = fallbackColors[name.length % fallbackColors.length];
+%>
+<div class="plogo" title="<%= name %>">
+  <% if (logo) { %>
+    <img class="plogo-img" src="<%= logo %>" alt="<%= name %>" loading="lazy">
+  <% } else { %>
+    <span class="dot-fallback" style="background: linear-gradient(135deg, <%= pal[0] %>, <%= pal[1] %>);"><%= name %></span>
+  <% } %>
+</div>

@@ -1,0 +1,55 @@
+<%- include('partials/head', { pageTitle: member ? 'Sửa thành viên' : 'Thêm thành viên mới', active: 'doi-ngu' }) %>
+
+<h1 class="page-title"><%= member ? 'Sửa thành viên' : 'Thêm thành viên mới' %></h1>
+
+<% if (error) { %><p class="form-error"><%= error %></p><% } %>
+
+<form method="POST" enctype="multipart/form-data"
+      action="<%= member ? '/admin/doi-ngu/' + member._id + '/sua' : '/admin/doi-ngu/moi' %>"
+      class="admin-form">
+
+  <label>Họ tên (kèm học hàm/học vị nếu có)
+    <input type="text" name="name" placeholder="Vd: TS. Đặng Văn Sơn" value="<%= member ? member.name : '' %>" required>
+  </label>
+
+  <label>Chức danh / mô tả
+    <input type="text" name="title" placeholder="Vd: Giảng viên Trường ĐH Khoa học Tự nhiên, ĐH Quốc gia HN" value="<%= member ? member.title : '' %>" required>
+  </label>
+
+  <label>Nhóm hiển thị
+    <select name="group">
+      <option value="expert" <%= (!member || member.group !== 'leadership') ? 'selected' : '' %>>Hội đồng chuyên gia</option>
+      <option value="leadership" <%= (member && member.group === 'leadership') ? 'selected' : '' %>>Ban lãnh đạo</option>
+    </select>
+  </label>
+
+  <label>Mô tả ngắn (tuỳ chọn, dùng cho thẻ giới thiệu Ban lãnh đạo)
+    <textarea name="bio" rows="3" placeholder="Vd: Dẫn dắt hoạt động vận hành và triển khai các chương trình giáo dục STEM của VSIA tới địa phương và nhà trường."><%= member && member.bio ? member.bio : '' %></textarea>
+  </label>
+
+  <label>Badge nổi bật (tuỳ chọn, vd: học hàm/học vị hoặc chứng chỉ tiêu biểu)
+    <input type="text" name="highlight" placeholder="Vd: PGS.TS Hoá học" value="<%= member && member.highlight ? member.highlight : '' %>">
+  </label>
+
+  <label>Thành tích / kinh nghiệm nổi bật (tuỳ chọn, mỗi dòng 1 mục — dùng cho thẻ Hội đồng chuyên gia)
+    <textarea name="achievements" rows="4" placeholder="Vd:&#10;Giảng viên Trường ĐH Khoa học Tự nhiên, ĐH Quốc gia HN&#10;Chủ nhiệm 5+ đề tài nghiên cứu cấp Bộ"><%= member && member.achievements ? member.achievements.join('\n') : '' %></textarea>
+  </label>
+
+  <label>Thứ tự hiển thị (số nhỏ hơn hiển thị trước)
+    <input type="number" name="order" value="<%= member ? member.order : 0 %>">
+  </label>
+
+  <label>Ảnh chân dung <% if (member && member.photo) { %>(đang có, chọn file mới để thay)<% } else { %>(không chọn sẽ hiển thị avatar chữ cái đầu)<% } %>
+    <input type="file" name="photo" accept="image/png,image/jpeg,image/webp,image/gif">
+  </label>
+  <% if (member && member.photo) { %>
+    <img src="<%= member.photo %>" alt="" class="admin-preview-image admin-preview-avatar">
+  <% } %>
+
+  <div class="admin-form-actions">
+    <a href="/admin/doi-ngu" class="btn btn-ghost">Huỷ</a>
+    <button type="submit" class="btn btn-primary"><%= member ? 'Lưu thay đổi' : 'Thêm thành viên' %></button>
+  </div>
+</form>
+
+<%- include('partials/foot') %>

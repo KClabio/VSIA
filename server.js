@@ -6,6 +6,7 @@ const path = require('path');
 
 const connectDB = require('./config/db');
 const { loadUser } = require('./middleware/auth');
+const { loadSiteSettings } = require('./lib/settings');
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
@@ -28,6 +29,7 @@ app.use(session({
 }));
 
 app.use(loadUser);
+app.use(loadSiteSettings);
 
 app.use('/', indexRoutes);
 app.use('/', authRoutes);

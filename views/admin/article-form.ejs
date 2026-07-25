@@ -1,0 +1,40 @@
+<%- include('partials/head', { pageTitle: article ? 'Sửa bài viết' : 'Thêm bài viết mới', active: 'bai-viet' }) %>
+
+<h1 class="page-title"><%= article ? 'Sửa bài viết' : 'Thêm bài viết mới' %></h1>
+
+<% if (error) { %><p class="form-error"><%= error %></p><% } %>
+
+<form method="POST" enctype="multipart/form-data"
+      action="<%= article ? '/admin/bai-viet/' + article._id + '/sua' : '/admin/bai-viet/moi' %>"
+      class="admin-form">
+
+  <label>Tiêu đề
+    <input type="text" name="title" value="<%= article ? article.title : '' %>" required>
+  </label>
+
+  <label>Tóm tắt (hiển thị ở trang chủ)
+    <textarea name="summary" rows="2" required><%= article ? article.summary : '' %></textarea>
+  </label>
+
+  <label>Nội dung chi tiết
+    <textarea name="content" rows="10" required><%= article ? article.content : '' %></textarea>
+  </label>
+
+  <label>Link bài viết gốc (tuỳ chọn, vd: dán link từ báo/Google News)
+    <input type="url" name="sourceUrl" placeholder="https://..." value="<%= article && article.sourceUrl ? article.sourceUrl : '' %>">
+  </label>
+
+  <label>Ảnh đại diện <% if (article && article.image) { %>(đang có, chọn file mới để thay)<% } %>
+    <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif" <%= article ? '' : 'required' %>>
+  </label>
+  <% if (article && article.image) { %>
+    <img src="<%= article.image %>" alt="" class="admin-preview-image">
+  <% } %>
+
+  <div class="admin-form-actions">
+    <a href="/admin/bai-viet" class="btn btn-ghost">Huỷ</a>
+    <button type="submit" class="btn btn-primary"><%= article ? 'Lưu thay đổi' : 'Tạo bài viết' %></button>
+  </div>
+</form>
+
+<%- include('partials/foot') %>

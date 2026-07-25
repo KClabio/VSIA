@@ -1,0 +1,22 @@
+<%- include('partials/header', { title: 'Tin tức - VSIA' }) %>
+
+<section class="section">
+  <div class="container">
+    <div class="center">
+      <span class="eyebrow">VSIA</span>
+      <h1 class="page-title" style="margin-top:16px;">Tin tức &amp; Bài viết</h1>
+    </div>
+
+    <% if (articles.length === 0) { %>
+      <p class="empty-state">Chưa có bài viết nào.</p>
+    <% } else { %>
+      <div class="article-grid">
+        <% articles.forEach(article => { %>
+          <%- include('partials/article-card', { article }) %>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

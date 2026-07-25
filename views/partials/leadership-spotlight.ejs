@@ -1,0 +1,26 @@
+<%
+  const nameParts = member.name.trim().split(/\s+/);
+  const initials = (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase();
+%>
+<div class="leader">
+  <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
+  <div class="leader-av">
+    <% if (member.photo) { %>
+      <img src="<%= member.photo %>" alt="<%= member.name %>">
+    <% } else { %>
+      <%= initials %>
+    <% } %>
+  </div>
+  <div class="leader-info">
+    <span class="role">Ban lãnh đạo</span>
+    <h3><%= member.name %></h3>
+    <div class="pos"><%= member.title %></div>
+    <% if (member.bio) { %>
+      <p class="quote"><%= member.bio %></p>
+    <% } else if (member.achievements && member.achievements.length > 0) { %>
+      <ul class="quote-list">
+        <% member.achievements.forEach(item => { %><li><%= item %></li><% }) %>
+      </ul>
+    <% } %>
+  </div>
+</div>

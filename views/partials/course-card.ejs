@@ -1,18 +1,15 @@
 <a href="/khoa-hoc/<%= course._id %>" class="course-card">
-  <% if (course.image) { %>
-    <div class="course-thumb course-thumb-image" style="background-image: url('<%= course.image %>');"></div>
-  <% } else { %>
-    <div class="course-thumb" style="background: linear-gradient(135deg, hsl(<%= (course.title.length * 37) % 360 %>, 65%, 45%), hsl(<%= (course.title.length * 37 + 60) % 360 %>, 65%, 35%));">
-      <span><%= course.category %></span>
-    </div>
-  <% } %>
+  <div class="course-thumb <%= course.image ? 'course-thumb-image' : '' %>" <% if (course.image) { %>style="background-image: url('<%= course.image %>');"<% } else { %>style="background: linear-gradient(135deg, hsl(<%= 140 + (course.title.length % 20) %>, 45%, <%= 22 + (course.title.length % 10) %>%), #072617);"<% } %>>
+    <% if (!course.image) { %>
+      <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
+    <% } %>
+    <span class="course-cat"><%= course.category %></span>
+  </div>
   <div class="course-body">
     <h3><%= course.title %></h3>
-    <p class="course-provider"><%= course.provider %></p>
-    <p class="course-rating">
-      <% for (let i = 1; i <= 5; i++) { %><%= i <= Math.round(course.rating) ? '★' : '☆' %><% } %>
-      <span>(<%= course.rating %> đánh giá)</span>
-    </p>
-    <p class="course-price"><%= course.isFree ? 'Miễn phí' : course.price.toLocaleString('vi-VN') + ' đ' %></p>
+    <div class="course-meta-row">
+      <span class="course-provider"><%= course.provider %></span>
+      <span class="course-price <%= course.isFree ? 'is-free' : '' %>"><%= course.isFree ? 'Miễn phí' : course.price.toLocaleString('vi-VN') + ' đ' %></span>
+    </div>
   </div>
 </a>

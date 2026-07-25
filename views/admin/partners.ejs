@@ -1,0 +1,49 @@
+<%- include('partials/head', { pageTitle: 'Đối tác đồng hành', active: 'doi-tac' }) %>
+
+<div class="admin-page-head">
+  <h1 class="page-title">Đối tác đồng hành</h1>
+  <a href="/admin/doi-tac/moi" class="btn btn-primary">+ Thêm đối tác</a>
+</div>
+<p class="section-subtitle" style="margin-bottom:30px; text-align:left;">Danh sách hiển thị ở mục "Đối tác đồng hành" trên trang chủ, sắp xếp theo thứ tự tăng dần.</p>
+
+<% if (partners.length === 0) { %>
+  <p class="empty-state">Chưa có đối tác nào.</p>
+<% } else { %>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Logo</th>
+          <th>Tên đối tác</th>
+          <th>Mô tả ngắn</th>
+          <th>Thứ tự</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% partners.forEach(partner => { %>
+          <tr>
+            <td>
+              <% if (partner.logo) { %>
+                <img src="<%= partner.logo %>" alt="<%= partner.name %>" class="admin-avatar-thumb">
+              <% } else { %>
+                —
+              <% } %>
+            </td>
+            <td><%= partner.name %></td>
+            <td><%= partner.tagline || '—' %></td>
+            <td><%= partner.order %></td>
+            <td class="admin-table-actions">
+              <a href="/admin/doi-tac/<%= partner._id %>/sua" class="btn btn-icon" title="Sửa đối tác">✏️ Sửa</a>
+              <form action="/admin/doi-tac/<%= partner._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá đối tác này?');">
+                <button type="submit" class="btn btn-icon btn-danger" title="Xoá đối tác">🗑 Xoá</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('partials/foot') %>

@@ -1,5 +1,12 @@
   </main>
 
+  <div class="brand-marquee" aria-hidden="true">
+    <div class="brand-marquee-track">
+      <span>VSIA STEM</span><span>VSIA STEM</span><span>VSIA STEM</span><span>VSIA STEM</span><span>VSIA STEM</span><span>VSIA STEM</span><span>VSIA STEM</span><span>VSIA STEM</span>
+      <span>VSIA STEM</span><span>VSIA STEM</span><span>VSIA STEM</span><span>VSIA STEM</span><span>VSIA STEM</span><span>VSIA STEM</span><span>VSIA STEM</span><span>VSIA STEM</span>
+    </div>
+  </div>
+
   <footer class="site-footer" id="lien-he">
     <div class="container footer-inner">
       <div class="footer-brand">
@@ -11,6 +18,7 @@
         <h4>Liên kết nhanh</h4>
         <a href="/">Trang chủ</a>
         <a href="/khoa-hoc">Khoá học</a>
+        <a href="/hinh-anh">Hình ảnh hoạt động</a>
         <a href="/tu-van-phong-lab">Tư vấn phòng Lab</a>
         <a href="/ngay-hoi-cuoc-thi">Ngày hội &amp; Cuộc thi</a>
         <a href="/giai-phap">Giải pháp</a>
@@ -18,13 +26,22 @@
 
       <div class="footer-col">
         <h4>Liên hệ</h4>
-        <p>Email: <a href="mailto:taphuan@vsia.edu.vn">taphuan@vsia.edu.vn</a></p>
+        <a href="mailto:taphuan@vsia.edu.vn">taphuan@vsia.edu.vn</a>
+        <span>Hà Nội, Việt Nam</span>
       </div>
     </div>
     <div class="footer-bottom">
-      <div class="container">&copy; <%= new Date().getFullYear() %> VSIA. All rights reserved.</div>
+      <div class="container footer-bottom-inner">
+        <span>&copy; <%= new Date().getFullYear() %> VSIA. All rights reserved.</span>
+        <span>Kiến tạo nguồn nhân lực STEM Việt Nam.</span>
+      </div>
     </div>
   </footer>
+
+  <div class="float-actions">
+    <button type="button" class="float-btn float-btn-top" id="backToTop" title="Về đầu trang" aria-label="Về đầu trang">↑</button>
+    <a href="mailto:taphuan@vsia.edu.vn" class="float-btn float-btn-email" title="Gửi email tư vấn" aria-label="Gửi email tư vấn">✉</a>
+  </div>
 
   <script src="/js/main.js"></script>
 </body>

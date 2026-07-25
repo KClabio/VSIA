@@ -1,24 +1,37 @@
 <%- include('partials/header', { title: 'Đăng nhập - VSIA' }) %>
 
-<section class="section auth-section">
-  <div class="container auth-container">
-    <form class="auth-form" method="POST" action="/dang-nhap">
-      <h1>Đăng nhập</h1>
-      <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+<section class="auth-section-new">
+  <div class="wrap">
+    <div class="auth-shell">
+      <div class="auth-visual">
+        <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
+        <div class="auth-visual-content">
+          <span class="eyebrow" style="color:#7fd8a2;">Chào mừng trở lại</span>
+          <h2>Kiến tạo nguồn nhân lực STEM Việt Nam</h2>
+          <p>Đăng nhập để tiếp tục theo dõi khoá học, tài liệu và các chương trình bồi dưỡng STEM cùng VSIA.</p>
+        </div>
+      </div>
+      <div class="auth-form-side">
+        <h1>Đăng nhập</h1>
+        <p class="lead-new">Nhập email và mật khẩu tài khoản của bạn.</p>
+        <% if (error) { %><p class="form-error"><%= error %></p><% } %>
 
-      <input type="hidden" name="redirectTo" value="<%= redirectTo %>">
+        <form method="POST" action="/dang-nhap">
+          <input type="hidden" name="redirectTo" value="<%= redirectTo %>">
 
-      <label>Email
-        <input type="email" name="email" required autofocus>
-      </label>
-      <label>Mật khẩu
-        <input type="password" name="password" required>
-      </label>
+          <label>Email
+            <input type="email" name="email" required autofocus>
+          </label>
+          <label>Mật khẩu
+            <input type="password" name="password" required>
+          </label>
 
-      <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+          <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
 
-      <p class="auth-switch">Chưa có tài khoản? <a href="/dang-ky">Đăng ký ngay</a></p>
-    </form>
+          <p class="auth-switch">Chưa có tài khoản? <a href="/dang-ky">Đăng ký ngay</a></p>
+        </form>
+      </div>
+    </div>
   </div>
 </section>
 

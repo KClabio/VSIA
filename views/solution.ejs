@@ -1,40 +1,47 @@
 <%- include('partials/header', { title: 'Giải pháp giáo dục STEM tổng thể - VSIA' }) %>
 
-<section class="hero">
-  <div class="container hero-inner">
-    <span class="hero-badge">VỀ VSIA</span>
-    <h1>GIẢI PHÁP<br><span class="highlight">GIÁO DỤC STEM TỔNG THỂ</span></h1>
-    <p>VSIA đồng hành cùng nhà trường và địa phương xây dựng phong trào giáo dục STEM bền vững, từ con người, chương trình đến cơ sở vật chất.</p>
-    <a href="mailto:taphuan@vsia.edu.vn" class="btn btn-hero">Liên hệ hợp tác</a>
+<section class="page-hero">
+  <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
+  <div class="wrap page-hero-inner">
+    <span class="eyebrow"><%= hero.heroBadge %></span>
+    <h1><%= hero.heroTitleLine1 %><br><span class="accent"><%= hero.heroTitleLine2 %></span></h1>
+    <p class="sub"><%= hero.heroSubtitle %></p>
+    <div class="page-hero-cta">
+      <a href="<%= hero.heroCtaLink %>" class="btn btn-primary"><%= hero.heroCtaText %> →</a>
+    </div>
   </div>
 </section>
 
-<section class="section">
+<section class="section team-section">
   <div class="container">
     <h2 class="section-title">BAN LÃNH ĐẠO &amp; HỘI ĐỒNG CHUYÊN GIA</h2>
     <p class="section-subtitle">Đội ngũ điều hành và cố vấn chuyên môn đồng hành cùng VSIA trong các chương trình giáo dục STEM.</p>
 
-    <div class="people-grid">
-      <div class="person-card">
-        <span class="person-avatar">HA</span>
-        <h3>ThS. Nguyễn Thị Hoàng Anh</h3>
-        <p>Giám đốc vận hành của VSIA</p>
-      </div>
-      <div class="person-card">
-        <span class="person-avatar">ĐS</span>
-        <h3>TS. Đặng Văn Sơn</h3>
-        <p>Giảng viên Trường ĐH Khoa học Tự nhiên, ĐH Quốc gia HN</p>
-      </div>
-      <div class="person-card">
-        <span class="person-avatar">TH</span>
-        <h3>TS. Dương Tuấn Hưng</h3>
-        <p>Phó Trưởng Phòng Hoá Phân tích, Viện Hoá học, Viện Hàn lâm KH&amp;CN Việt Nam</p>
-      </div>
-      <div class="person-card">
-        <span class="person-avatar">VĐ</span>
-        <h3>ThS. Hoàng Vân Đông</h3>
-        <p>Giảng viên Khoa Điện tử viễn thông, Trường Đại học Điện lực HN</p>
-      </div>
+    <div class="team-tabs" role="tablist">
+      <button type="button" class="team-tab active" data-team-tab="leadership">Ban lãnh đạo</button>
+      <button type="button" class="team-tab" data-team-tab="expert">Hội đồng chuyên gia</button>
+    </div>
+
+    <div class="team-panel active" data-team-panel="leadership">
+      <% if (leadershipMembers.length === 0) { %>
+        <p class="empty-state">Chưa có thông tin Ban lãnh đạo. Thêm ở trang quản trị (<code>/admin/doi-ngu</code>).</p>
+      <% } else { %>
+        <% leadershipMembers.forEach(member => { %>
+          <%- include('partials/leadership-spotlight', { member }) %>
+        <% }) %>
+      <% } %>
+    </div>
+
+    <div class="team-panel" data-team-panel="expert">
+      <% if (expertMembers.length === 0) { %>
+        <p class="empty-state">Chưa có thông tin Hội đồng chuyên gia. Thêm ở trang quản trị (<code>/admin/doi-ngu</code>).</p>
+      <% } else { %>
+        <div class="people-grid">
+          <% expertMembers.forEach(member => { %>
+            <%- include('partials/person-card', { member }) %>
+          <% }) %>
+        </div>
+      <% } %>
     </div>
   </div>
 </section>
@@ -43,17 +50,15 @@
   <div class="container">
     <h2 class="section-title">ĐỐI TÁC CỦA VSIA</h2>
     <p class="section-subtitle">Đồng hành cùng VSIA trong triển khai giáo dục STEM.</p>
-    <div class="partner-badges">
-      <span class="partner-badge">Petrovietnam</span>
-      <span class="partner-badge">VNU University of Science (HUS)</span>
-      <span class="partner-badge">Học viện Sáng tạo S3</span>
-      <span class="partner-badge">STEM &amp; Coding</span>
-      <span class="partner-badge">Teky</span>
-      <span class="partner-badge">CETT</span>
-      <span class="partner-badge">Nexta</span>
-      <span class="partner-badge">AIG</span>
-      <span class="partner-badge">Robot STEAM Việt Nam</span>
-    </div>
+    <% if (partners.length === 0) { %>
+      <p class="empty-state">Chưa có đối tác nào. Thêm ở trang quản trị (<code>/admin/doi-tac</code>).</p>
+    <% } else { %>
+      <div class="plogos">
+        <% partners.forEach(partner => { %>
+          <%- include('partials/partner-tile', { name: partner.name, logo: partner.logo }) %>
+        <% }) %>
+      </div>
+    <% } %>
   </div>
 </section>
 
@@ -61,26 +66,44 @@
   <div class="container">
     <h2 class="section-title">GIẢI PHÁP GIÁO DỤC STEM TỔNG THỂ, TOÀN DIỆN</h2>
 
-    <div class="info-grid">
-      <div class="info-card">
-        <h3>1. Chương trình giáo dục STEM phổ cập đại trà</h3>
-        <p>Bộ S3 STEM KIT — chương trình đóng gói đồng bộ, bám sát Chương trình GDPT 2018, có thể triển khai diện rộng.</p>
+    <div class="solution-showcase">
+      <div class="solution-showcase-image <%= solutionImage ? '' : 'empty' %>">
+        <% if (solutionImage) { %>
+          <img src="<%= solutionImage %>" alt="Giải pháp giáo dục STEM tổng thể VSIA">
+        <% } else { %>
+          <span>Ảnh minh hoạ sẽ hiển thị ở đây<br>(thêm ở trang quản trị &nbsp;<code>/admin/cai-dat</code>)</span>
+        <% } %>
       </div>
-      <div class="info-card">
-        <h3>2. Chương trình học STEM AI Robotics</h3>
-        <p>Ứng dụng hệ thống Robot VEX, phát triển tư duy thiết kế và lập trình cho học sinh.</p>
-      </div>
-      <div class="info-card">
-        <h3>3. Tư vấn phòng thực hành STEM (STEM LAB)</h3>
-        <p>Tư vấn thiết kế, thi công lắp đặt và xây dựng chương trình vận hành phòng Lab.
-          <a href="/tu-van-phong-lab">Xem chi tiết →</a>
-        </p>
-      </div>
-      <div class="info-card">
-        <h3>4. Đồng hành phong trào giáo dục STEM địa phương</h3>
-        <p>Hỗ trợ triển khai và tham gia các cuộc thi về STEM, KHKT tại địa phương.
-          <a href="/ngay-hoi-cuoc-thi">Xem chi tiết →</a>
-        </p>
+
+      <div class="solution-timeline">
+        <div class="solution-timeline-item">
+          <span class="solution-timeline-number">1</span>
+          <div class="solution-timeline-content">
+            <h3>Chương trình giáo dục STEM phổ cập đại trà</h3>
+            <p>Bộ S3 STEM KIT — chương trình đóng gói đồng bộ, bám sát Chương trình GDPT 2018, có thể triển khai diện rộng.</p>
+          </div>
+        </div>
+        <div class="solution-timeline-item">
+          <span class="solution-timeline-number">2</span>
+          <div class="solution-timeline-content">
+            <h3>Chương trình học STEM AI Robotics</h3>
+            <p>Ứng dụng hệ thống Robot VEX, phát triển tư duy thiết kế và lập trình cho học sinh.</p>
+          </div>
+        </div>
+        <div class="solution-timeline-item">
+          <span class="solution-timeline-number">3</span>
+          <div class="solution-timeline-content">
+            <h3>Tư vấn phòng thực hành STEM (STEM LAB)</h3>
+            <p>Tư vấn thiết kế, thi công lắp đặt và xây dựng chương trình vận hành phòng Lab. <a href="/tu-van-phong-lab">Xem chi tiết →</a></p>
+          </div>
+        </div>
+        <div class="solution-timeline-item">
+          <span class="solution-timeline-number">4</span>
+          <div class="solution-timeline-content">
+            <h3>Đồng hành phong trào giáo dục STEM địa phương</h3>
+            <p>Hỗ trợ triển khai và tham gia các cuộc thi về STEM, KHKT tại địa phương. <a href="/ngay-hoi-cuoc-thi">Xem chi tiết →</a></p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -111,31 +134,20 @@
   </div>
 </section>
 
-<section class="section">
-  <div class="container">
-    <h2 class="section-title">DỰ ÁN NỔI BẬT: STEM INNOVATION PETROVIETNAM</h2>
-
-    <div class="info-grid">
-      <div class="info-card">
-        <h3>Năm 2025</h3>
-        <p>VSIA là đơn vị triển khai đào tạo giáo viên cho Chương trình STEM Innovation Petrovietnam do Tập đoàn Công nghiệp - Năng lượng Quốc gia Việt Nam tài trợ.</p>
-      </div>
-      <div class="info-card">
-        <h3>Năm 2026</h3>
-        <p>VSIA tiếp tục là đối tác chiến lược của Petrovietnam triển khai Kế hoạch Chương trình STEM Innovation Petrovietnam 2026.</p>
-      </div>
-      <div class="info-card">
-        <h3>Chuyên môn &amp; Điều phối</h3>
-        <p>Trực tiếp điều phối 5 sự kiện tập huấn trực tiếp và 21 hội thảo trực tuyến của Chương trình.</p>
-      </div>
-      <div class="info-card">
-        <h3>Kết nối &amp; Lan toả</h3>
-        <p>Kênh kết nối trực tiếp với địa phương và nhà trường, thúc đẩy phong trào giáo dục STEM.</p>
-      </div>
+<section class="section highlight">
+  <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
+  <div class="wrap hl-inner">
+    <div>
+      <span class="eyebrow">Dự án nổi bật</span>
+      <h2>STEM Innovation PetroVietnam</h2>
+      <p class="lead-new">VSIA là đơn vị đào tạo giáo viên và đối tác chiến lược của Tập đoàn Công nghiệp – Năng lượng Quốc gia Việt Nam trong chương trình STEM quy mô toàn quốc.</p>
+      <a href="mailto:taphuan@vsia.edu.vn" class="btn btn-ghost" style="margin-top:26px">Liên hệ hợp tác cùng VSIA →</a>
     </div>
-
-    <div class="section-cta">
-      <a href="mailto:taphuan@vsia.edu.vn" class="btn btn-primary">Liên hệ hợp tác cùng VSIA</a>
+    <div class="hl-tl">
+      <div class="hl-item"><div class="y">2025</div><div><h4>Đơn vị đào tạo giáo viên</h4><p>VSIA là đơn vị triển khai đào tạo giáo viên cho Chương trình STEM Innovation PetroVietnam do Tập đoàn Công nghiệp - Năng lượng Quốc gia Việt Nam tài trợ.</p></div></div>
+      <div class="hl-item"><div class="y">2026</div><div><h4>Đối tác chiến lược</h4><p>VSIA tiếp tục là đối tác chiến lược của PetroVietnam triển khai Kế hoạch Chương trình STEM Innovation PetroVietnam 2026.</p></div></div>
+      <div class="hl-item"><div class="y">05</div><div><h4>Chuyên môn &amp; Điều phối</h4><p>Trực tiếp điều phối 5 sự kiện tập huấn trực tiếp và 21 hội thảo trực tuyến của Chương trình.</p></div></div>
+      <div class="hl-item"><div class="y">09+</div><div><h4>Kết nối &amp; Lan toả</h4><p>Kênh kết nối trực tiếp với địa phương và nhà trường, thúc đẩy phong trào giáo dục STEM.</p></div></div>
     </div>
   </div>
 </section>

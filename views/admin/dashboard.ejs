@@ -22,6 +22,18 @@
     <span class="admin-stat-value" data-stat="mediaCount"><%= stats.mediaCount %></span>
   </div>
   <div class="admin-stat-card">
+    <span class="admin-stat-label">Bài viết</span>
+    <span class="admin-stat-value" data-stat="articleCount"><%= stats.articleCount %></span>
+  </div>
+  <div class="admin-stat-card">
+    <span class="admin-stat-label">Thành viên đội ngũ</span>
+    <span class="admin-stat-value" data-stat="teamCount"><%= stats.teamCount %></span>
+  </div>
+  <div class="admin-stat-card">
+    <span class="admin-stat-label">Đối tác</span>
+    <span class="admin-stat-value" data-stat="partnerCount"><%= stats.partnerCount %></span>
+  </div>
+  <div class="admin-stat-card">
     <span class="admin-stat-label">Tài liệu đính kèm</span>
     <span class="admin-stat-value" data-stat="materialCount"><%= stats.materialCount %></span>
   </div>
@@ -29,6 +41,30 @@
     <span class="admin-stat-label">Đánh giá trung bình</span>
     <span class="admin-stat-value" data-stat="avgRating"><%= stats.avgRating %></span><span class="admin-stat-value">/5</span>
   </div>
+</div>
+
+<h2 class="admin-section-heading">Thống kê nội dung</h2>
+<div class="admin-chart-card">
+  <%
+    const chartItems = [
+      { key: 'courseCount', label: 'Khoá học', value: stats.courseCount },
+      { key: 'articleCount', label: 'Bài viết', value: stats.articleCount },
+      { key: 'teamCount', label: 'Đội ngũ', value: stats.teamCount },
+      { key: 'partnerCount', label: 'Đối tác', value: stats.partnerCount },
+      { key: 'mediaCount', label: 'Ảnh/video', value: stats.mediaCount },
+      { key: 'materialCount', label: 'Tài liệu', value: stats.materialCount },
+    ];
+    const chartMax = Math.max(1, ...chartItems.map((i) => i.value));
+  %>
+  <% chartItems.forEach(item => { %>
+    <div class="chart-bar-row">
+      <span class="chart-bar-label"><%= item.label %></span>
+      <div class="chart-bar-track">
+        <div class="chart-bar-fill" data-stat-bar="<%= item.key %>" style="width: <%= Math.round(item.value / chartMax * 100) %>%;" title="<%= item.label %>: <%= item.value %>"></div>
+      </div>
+      <span class="chart-bar-value" data-stat="<%= item.key %>"><%= item.value %></span>
+    </div>
+  <% }) %>
 </div>
 
 <h2 class="admin-section-heading">Truy cập nhanh</h2>
@@ -41,9 +77,25 @@
     <h3>Thư viện ảnh/video</h3>
     <p>Quản lý ảnh, video hiển thị ở mục "Hình ảnh hoạt động" trang chủ.</p>
   </a>
+  <a href="/admin/bai-viet" class="admin-tile">
+    <h3>Quản lý bài viết</h3>
+    <p>Tạo, sửa, xoá bài viết hiển thị ở mục "Tin tức" trang chủ.</p>
+  </a>
+  <a href="/admin/doi-ngu" class="admin-tile">
+    <h3>Ban lãnh đạo &amp; Hội đồng chuyên gia</h3>
+    <p>Thêm, sửa ảnh và thông tin thành viên hiển thị ở trang chủ.</p>
+  </a>
+  <a href="/admin/doi-tac" class="admin-tile">
+    <h3>Đối tác đồng hành</h3>
+    <p>Thêm, sửa logo và thông tin đối tác hiển thị ở trang chủ.</p>
+  </a>
   <a href="/admin/nguoi-dung" class="admin-tile">
     <h3>Quản lý người dùng</h3>
     <p>Cấp hoặc thu hồi quyền quản trị cho tài khoản khác.</p>
+  </a>
+  <a href="/admin/cai-dat" class="admin-tile">
+    <h3>Nội dung website</h3>
+    <p>Logo, ảnh nền trang chủ, ảnh minh hoạ và tiêu đề đầu trang.</p>
   </a>
 </div>
 
@@ -63,15 +115,28 @@
       indicator.classList.add('live-indicator-off');
     };
 
+    var chartKeys = ['courseCount', 'articleCount', 'teamCount', 'partnerCount', 'mediaCount', 'materialCount'];
+
     source.onmessage = function (event) {
       var stats = JSON.parse(event.data);
+
       Object.keys(stats).forEach(function (key) {
-        var el = document.querySelector('[data-stat="' + key + '"]');
-        if (!el || el.textContent === String(stats[key])) return;
-        el.textContent = stats[key];
-        el.classList.remove('stat-flash');
-        void el.offsetWidth;
-        el.classList.add('stat-flash');
+        document.querySelectorAll('[data-stat="' + key + '"]').forEach(function (el) {
+          if (el.textContent === String(stats[key])) return;
+          el.textContent = stats[key];
+          el.classList.remove('stat-flash');
+          void el.offsetWidth;
+          el.classList.add('stat-flash');
+        });
+      });
+
+      var max = Math.max(1, chartKeys.map(function (k) { return stats[k] || 0; }).reduce(function (a, b) { return Math.max(a, b); }, 0));
+      chartKeys.forEach(function (key) {
+        var bar = document.querySelector('[data-stat-bar="' + key + '"]');
+        if (!bar) return;
+        var value = stats[key] || 0;
+        bar.style.width = Math.round((value / max) * 100) + '%';
+        bar.title = bar.title.replace(/: \d+$/, ': ' + value);
       });
     };
   })();

@@ -1,0 +1,29 @@
+<%- include('partials/header', { title: 'Hình ảnh hoạt động - VSIA' }) %>
+
+<section class="section">
+  <div class="container">
+    <div class="center">
+      <span class="eyebrow">Hình ảnh</span>
+      <h1 class="page-title" style="margin-top:16px;">Hình ảnh hoạt động</h1>
+    </div>
+
+    <% if (galleryItems.length === 0) { %>
+      <p class="empty-state" style="margin-top:44px;">Chưa có ảnh/video nào.</p>
+    <% } else { %>
+      <div class="gallery-list-grid">
+        <% galleryItems.forEach(item => { %>
+          <div class="gallery-item">
+            <% if (item.type === 'image') { %>
+              <img src="<%= item.filePath %>" alt="<%= item.title %>">
+            <% } else { %>
+              <video src="<%= item.filePath %>" controls></video>
+            <% } %>
+            <span><%= item.title %></span>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
