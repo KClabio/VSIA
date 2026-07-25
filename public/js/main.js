@@ -113,3 +113,128 @@ document.querySelectorAll('.biz-tabs').forEach((tabs) => {
     });
   });
 });
+
+// Chatbot AI (widget nổi)
+const chatToggleBtn = document.getElementById('chatToggleBtn');
+const chatPanel = document.getElementById('chatPanel');
+const chatPanelClose = document.getElementById('chatPanelClose');
+const chatMessages = document.getElementById('chatMessages');
+const chatForm = document.getElementById('chatForm');
+const chatInput = document.getElementById('chatInput');
+
+if (chatToggleBtn && chatPanel) {
+  const chatHistory = [];
+
+  function addChatMessage(role, text) {
+    const el = document.createElement('div');
+    el.className = 'chat-msg ' + (role === 'user' ? 'chat-msg-user' : 'chat-msg-bot');
+    el.textContent = text;
+    chatMessages.appendChild(el);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return el;
+  }
+
+  chatToggleBtn.addEventListener('click', () => {
+    chatPanel.classList.toggle('open');
+    if (chatPanel.classList.contains('open')) chatInput?.focus();
+  });
+  chatPanelClose?.addEventListener('click', () => chatPanel.classList.remove('open'));
+
+  chatForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    addChatMessage('user', text);
+    chatHistory.push({ role: 'user', content: text });
+    chatInput.value = '';
+    chatInput.disabled = true;
+
+    const typingEl = document.createElement('div');
+    typingEl.className = 'chat-msg chat-msg-typing';
+    typingEl.textContent = 'Đang trả lời...';
+    chatMessages.appendChild(typingEl);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    try {
+      const res = await fetch('/api/chatbot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: chatHistory }),
+      });
+      const data = await res.json();
+      typingEl.remove();
+      if (res.ok && data.reply) {
+        addChatMessage('bot', data.reply);
+        chatHistory.push({ role: 'assistant', content: data.reply });
+      } else {
+        addChatMessage('bot', data.error || 'Có lỗi xảy ra, vui lòng thử lại.');
+      }
+    } catch (err) {
+      typingEl.remove();
+      addChatMessage('bot', 'Không thể kết nối, vui lòng kiểm tra mạng và thử lại.');
+    } finally {
+      chatInput.disabled = false;
+      chatInput.focus();
+    }
+  });
+}
+
+// Modal đăng ký tư vấn
+const contactToggleBtn = document.getElementById('contactToggleBtn');
+const contactOverlay = document.getElementById('contactOverlay');
+const contactModalClose = document.getElementById('contactModalClose');
+const contactForm = document.getElementById('contactForm');
+const contactFormMsg = document.getElementById('contactFormMsg');
+
+if (contactToggleBtn && contactOverlay) {
+  const openContactModal = () => contactOverlay.classList.add('open');
+  const closeContactModal = () => contactOverlay.classList.remove('open');
+
+  contactToggleBtn.addEventListener('click', openContactModal);
+  contactModalClose?.addEventListener('click', closeContactModal);
+  contactOverlay.addEventListener('click', (e) => {
+    if (e.target === contactOverlay) closeContactModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeContactModal();
+  });
+
+  contactForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    contactFormMsg.style.display = 'none';
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+
+    const formData = new FormData(contactForm);
+    try {
+      const res = await fetch('/lien-he-tu-van', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.get('name'),
+          contact: formData.get('contact'),
+          message: formData.get('message'),
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        contactForm.reset();
+        contactFormMsg.style.display = 'block';
+        contactFormMsg.style.color = 'var(--green)';
+        contactFormMsg.textContent = 'Đã gửi yêu cầu! VSIA sẽ liên hệ với bạn sớm nhất.';
+        setTimeout(closeContactModal, 1800);
+      } else {
+        contactFormMsg.style.display = 'block';
+        contactFormMsg.style.color = '';
+        contactFormMsg.textContent = data.error || 'Có lỗi xảy ra, vui lòng thử lại.';
+      }
+    } catch (err) {
+      contactFormMsg.style.display = 'block';
+      contactFormMsg.style.color = '';
+      contactFormMsg.textContent = 'Không thể kết nối, vui lòng thử lại.';
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+}

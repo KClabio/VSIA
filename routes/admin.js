@@ -14,6 +14,7 @@ const { unlinkUploaded } = require('../lib/files');
 const { getSiteSettings } = require('../lib/settings');
 const { getAllPageContents, PAGE_DEFAULTS } = require('../lib/pageContent');
 const PageContent = require('../models/PageContent');
+const ContactRequest = require('../models/ContactRequest');
 
 router.use(requireAuth, requireAdmin);
 
@@ -578,6 +579,27 @@ router.post('/nguoi-dung/:id/vai-tro', async (req, res) => {
   await User.findByIdAndUpdate(req.params.id, { role });
   await broadcastStats();
   res.redirect('/admin/nguoi-dung');
+});
+
+// --- Liên hệ tư vấn ---
+
+router.get('/lien-he', async (req, res) => {
+  const requests = await ContactRequest.find().sort({ createdAt: -1 }).lean();
+  res.render('admin/contacts', { requests, active: 'lien-he' });
+});
+
+router.post('/lien-he/:id/trang-thai', async (req, res) => {
+  const current = await ContactRequest.findById(req.params.id);
+  if (current) {
+    current.status = current.status === 'moi' ? 'da_lien_he' : 'moi';
+    await current.save();
+  }
+  res.redirect('/admin/lien-he');
+});
+
+router.post('/lien-he/:id/xoa', async (req, res) => {
+  await ContactRequest.findByIdAndDelete(req.params.id);
+  res.redirect('/admin/lien-he');
 });
 
 // --- Cài đặt (logo trang web, ảnh minh hoạ, nội dung Hero từng trang) ---

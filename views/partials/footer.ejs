@@ -40,7 +40,43 @@
 
   <div class="float-actions">
     <button type="button" class="float-btn float-btn-top" id="backToTop" title="Về đầu trang" aria-label="Về đầu trang">↑</button>
-    <a href="mailto:taphuan@vsia.edu.vn" class="float-btn float-btn-email" title="Gửi email tư vấn" aria-label="Gửi email tư vấn">✉</a>
+    <button type="button" class="float-btn float-btn-chat" id="chatToggleBtn" title="Chat với trợ lý AI" aria-label="Chat với trợ lý AI">💬</button>
+    <button type="button" class="float-btn float-btn-email" id="contactToggleBtn" title="Đăng ký tư vấn" aria-label="Đăng ký tư vấn">✉</button>
+  </div>
+
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-panel-header">
+      <span>💬 Trợ lý VSIA</span>
+      <button type="button" id="chatPanelClose" aria-label="Đóng chat">✕</button>
+    </div>
+    <div class="chat-panel-messages" id="chatMessages">
+      <div class="chat-msg chat-msg-bot">Xin chào! Tôi là trợ lý ảo của VSIA 👋 Bạn cần tư vấn gì về khoá học, thiết kế phòng Lab hay ngày hội STEM không?</div>
+    </div>
+    <form class="chat-panel-input" id="chatForm">
+      <input type="text" id="chatInput" placeholder="Nhập câu hỏi của bạn..." autocomplete="off" maxlength="2000">
+      <button type="submit" aria-label="Gửi">➤</button>
+    </form>
+  </div>
+
+  <div class="contact-modal-overlay" id="contactOverlay">
+    <div class="contact-modal">
+      <button type="button" class="contact-modal-close" id="contactModalClose" aria-label="Đóng">✕</button>
+      <h3>Đăng ký tư vấn</h3>
+      <p>Để lại thông tin, đội ngũ VSIA sẽ liên hệ tư vấn cho bạn sớm nhất.</p>
+      <form id="contactForm">
+        <label>Họ tên
+          <input type="text" name="name" required maxlength="200">
+        </label>
+        <label>Số điện thoại / Email
+          <input type="text" name="contact" required maxlength="200">
+        </label>
+        <label>Nội dung cần tư vấn
+          <textarea name="message" rows="3" required maxlength="2000"></textarea>
+        </label>
+        <p id="contactFormMsg" class="form-error" style="display:none;"></p>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Gửi yêu cầu</button>
+      </form>
+    </div>
   </div>
 
   <script src="/js/main.js"></script>

@@ -1,0 +1,52 @@
+<%- include('partials/head', { pageTitle: 'Liên hệ tư vấn', active: 'lien-he' }) %>
+
+<div class="admin-page-head">
+  <h1 class="page-title">Yêu cầu liên hệ tư vấn</h1>
+</div>
+<p class="section-subtitle" style="margin-bottom:24px; text-align:left;">Danh sách người dùng gửi yêu cầu tư vấn từ nút nổi trên trang web.</p>
+
+<% if (requests.length === 0) { %>
+  <p class="empty-state">Chưa có yêu cầu tư vấn nào.</p>
+<% } else { %>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Họ tên</th>
+          <th>Liên hệ</th>
+          <th>Nội dung</th>
+          <th>Thời gian</th>
+          <th>Trạng thái</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% requests.forEach(r => { %>
+          <tr>
+            <td><%= r.name %></td>
+            <td><%= r.contact %></td>
+            <td class="admin-table-truncate" title="<%= r.message %>"><%= r.message %></td>
+            <td><%= new Date(r.createdAt).toLocaleString('vi-VN') %></td>
+            <td>
+              <span class="role-badge <%= r.status === 'da_lien_he' ? 'role-badge-admin' : '' %>">
+                <%= r.status === 'da_lien_he' ? 'Đã liên hệ' : 'Mới' %>
+              </span>
+            </td>
+            <td class="admin-table-actions">
+              <form action="/admin/lien-he/<%= r._id %>/trang-thai" method="POST" class="inline-form">
+                <button type="submit" class="btn btn-icon" title="Đổi trạng thái">
+                  <%= r.status === 'da_lien_he' ? '↺ Đánh dấu mới' : '✓ Đã liên hệ' %>
+                </button>
+              </form>
+              <form action="/admin/lien-he/<%= r._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá yêu cầu tư vấn này?');">
+                <button type="submit" class="btn btn-icon btn-danger" title="Xoá">🗑 Xoá</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('partials/foot') %>
