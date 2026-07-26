@@ -18,7 +18,7 @@ function sanitizeMessages(rawMessages) {
 }
 
 router.post('/api/chatbot', async (req, res) => {
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     return res.status(503).json({ error: 'Chatbot chưa được cấu hình. Vui lòng thử lại sau hoặc dùng form tư vấn.' });
   }
 
@@ -28,15 +28,19 @@ router.post('/api/chatbot', async (req, res) => {
   }
 
   try {
-    const OpenAI = require('openai');
-    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-    const completion = await client.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
-      max_tokens: 500,
-      temperature: 0.6,
+    const { GoogleGenAI } = require('@google/genai');
+    const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const contents = messages.map((m) => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }],
+    }));
+    const response = await client.models.generateContent({
+      model: 'gemini-flash-latest',
+      contents,
+      config: { systemInstruction: SYSTEM_PROMPT, maxOutputTokens: 1024, temperature: 0.6 },
     });
-    const reply = completion.choices[0]?.message?.content?.trim() || 'Xin lỗi, tôi chưa có câu trả lời phù hợp lúc này.';
+    const reply = (typeof response.text === 'function' ? response.text() : response.text)?.trim()
+      || 'Xin lỗi, tôi chưa có câu trả lời phù hợp lúc này.';
     res.json({ reply });
   } catch (err) {
     console.error('Chatbot error:', err.message);
