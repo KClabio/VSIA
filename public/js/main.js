@@ -125,10 +125,43 @@ const chatInput = document.getElementById('chatInput');
 if (chatToggleBtn && chatPanel) {
   const chatHistory = [];
 
+  function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function inlineFormat(str) {
+    return str.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  }
+
+  // Chuyển markdown đơn giản (đậm, gạch đầu dòng) từ AI thành HTML.
+  // Escape HTML trước, sau đó mới bọc thẻ do chính ta tạo ra nên an toàn khỏi XSS.
+  function renderBotMarkdown(text) {
+    const lines = escapeHtml(text).split('\n');
+    let html = '';
+    let inList = false;
+    lines.forEach((rawLine) => {
+      const line = rawLine.trim();
+      const bulletMatch = line.match(/^[-*]\s+(.*)$/) || line.match(/^\d+[.)]\s+(.*)$/);
+      if (bulletMatch) {
+        if (!inList) { html += '<ul>'; inList = true; }
+        html += '<li>' + inlineFormat(bulletMatch[1]) + '</li>';
+      } else {
+        if (inList) { html += '</ul>'; inList = false; }
+        if (line) html += '<p>' + inlineFormat(line) + '</p>';
+      }
+    });
+    if (inList) html += '</ul>';
+    return html;
+  }
+
   function addChatMessage(role, text) {
     const el = document.createElement('div');
     el.className = 'chat-msg ' + (role === 'user' ? 'chat-msg-user' : 'chat-msg-bot');
-    el.textContent = text;
+    if (role === 'user') {
+      el.textContent = text;
+    } else {
+      el.innerHTML = renderBotMarkdown(text);
+    }
     chatMessages.appendChild(el);
     chatMessages.scrollTop = chatMessages.scrollHeight;
     return el;

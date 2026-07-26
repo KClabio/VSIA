@@ -40,13 +40,18 @@
 
   <div class="float-actions">
     <button type="button" class="float-btn float-btn-top" id="backToTop" title="Về đầu trang" aria-label="Về đầu trang">↑</button>
-    <button type="button" class="float-btn float-btn-chat" id="chatToggleBtn" title="Chat với trợ lý AI" aria-label="Chat với trợ lý AI">💬</button>
+    <button type="button" class="float-btn float-btn-chat" id="chatToggleBtn" title="Chat với trợ lý AI" aria-label="Chat với trợ lý AI">
+      <% if (siteLogo) { %><img src="<%= siteLogo %>" alt="VSIA"><% } else { %>💬<% } %>
+    </button>
     <button type="button" class="float-btn float-btn-email" id="contactToggleBtn" title="Đăng ký tư vấn" aria-label="Đăng ký tư vấn">✉</button>
   </div>
 
   <div class="chat-panel" id="chatPanel">
     <div class="chat-panel-header">
-      <span>💬 Trợ lý VSIA</span>
+      <span class="chat-panel-title">
+        <span class="chat-avatar"><% if (siteLogo) { %><img src="<%= siteLogo %>" alt="VSIA"><% } else { %>💬<% } %></span>
+        Trợ lý VSIA
+      </span>
       <button type="button" id="chatPanelClose" aria-label="Đóng chat">✕</button>
     </div>
     <div class="chat-panel-messages" id="chatMessages">
