@@ -12,6 +12,10 @@
 </head>
 <body>
 
+<% if (siteLogo) { %>
+  <div class="site-watermark" aria-hidden="true"><img src="<%= siteLogo %>" alt=""></div>
+<% } %>
+
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <pattern id="hexpat" width="56" height="48" patternUnits="userSpaceOnUse">
     <path d="M28 0 L56 16 L56 48 M28 0 L0 16 L0 48 M0 16 L28 32 L56 16 M28 32 L28 64" fill="none" stroke="currentColor" stroke-width="1.3"/>

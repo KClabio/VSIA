@@ -57,6 +57,22 @@
 .admin-sidebar-logo .tag { color: #9fb4c9; }
 
 /* ============ NAV ============ */
+/* Watermark logo xoay doc, co dinh ben phai, hien tren moi trang */
+.site-watermark {
+  position: fixed;
+  top: 0; right: 0;
+  width: 320px; height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  opacity: .06;
+}
+.site-watermark img { width: 560px; max-width: none; height: auto; transform: rotate(90deg); }
+@media (max-width: 900px) {
+  .site-watermark { display: none; }
+}
+
 .site-header {
   border-bottom: 1px solid var(--border);
   position: sticky; top: 0; z-index: 60;
