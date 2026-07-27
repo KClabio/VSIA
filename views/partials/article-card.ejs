@@ -21,6 +21,6 @@
     <span class="article-date"><%= new Date(article.createdAt).toLocaleDateString('vi-VN') %></span>
     <h3><a href="/tin-tuc/<%= article._id %>"><%= article.title %></a></h3>
     <p class="article-summary"><%= article.summary %></p>
-    <a href="/tin-tuc/<%= article._id %>" class="article-more">Xem thêm →</a>
+    <a href="<%= article.sourceUrl || ('/tin-tuc/' + article._id) %>" class="article-more"<% if (article.sourceUrl) { %> rel="noopener noreferrer nofollow"<% } %>>Xem thêm →</a>
   </div>
 </div>
