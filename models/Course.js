@@ -9,6 +9,9 @@ const courseSchema = new mongoose.Schema({
   price: { type: Number, default: 0 },
   rating: { type: Number, default: 0, min: 0, max: 5 },
   image: { type: String, default: null },
+  instructor: { type: String, default: '' },
+  studyPeriod: { type: String, default: '' },
+  examDate: { type: String, default: '' },
   materials: [{
     name: { type: String, required: true },
     filePath: { type: String, required: true },

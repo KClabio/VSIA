@@ -26,16 +26,34 @@
       <p class="empty-state" style="margin-top:40px;">Bạn chưa đăng ký khoá học nào. <a href="/khoa-hoc">Xem danh sách khoá học →</a></p>
     <% } else { %>
       <div class="my-courses-list">
-        <% items.forEach(item => { %>
+        <% items.forEach(item => { const course = item.course; %>
           <div class="my-course-card">
-            <div class="my-course-card-info">
-              <h3><%= item.course.title %></h3>
-              <p><%= item.stats.done %>/<%= item.stats.total %> bài học đã hoàn thành</p>
-              <div class="player-progress-track"><div class="player-progress-fill" style="width:<%= item.stats.percent %>%;"></div></div>
+            <div class="mc-thumb <%= course.image ? 'mc-thumb-image' : '' %>" <% if (course.image) { %>style="background-image: url('<%= course.image %>');"<% } else { %>style="background: linear-gradient(135deg, hsl(<%= 140 + (course.title.length % 20) %>, 45%, <%= 22 + (course.title.length % 10) %>%), #072617);"<% } %>>
+              <% if (!course.image) { %><div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div><% } %>
             </div>
-            <div class="my-course-card-actions">
-              <span class="my-course-percent"><%= item.stats.percent %>%</span>
-              <a href="/hoc/<%= item.course._id %>" class="btn btn-primary">Tiếp tục học →</a>
+
+            <div class="mc-body">
+              <h3><%= course.title %></h3>
+
+              <% if (course.instructor) { %>
+                <div class="mc-instructor"><span class="mc-avatar">👤</span> Giảng viên: <%= course.instructor %></div>
+              <% } %>
+
+              <% if (course.studyPeriod || course.examDate) { %>
+                <div class="mc-meta-row">
+                  <% if (course.studyPeriod) { %><div><span class="mc-meta-label">Thời gian học:</span><%= course.studyPeriod %></div><% } %>
+                  <% if (course.examDate) { %><div><span class="mc-meta-label">Ngày thi dự kiến:</span><%= course.examDate %></div><% } %>
+                </div>
+              <% } %>
+
+              <div class="mc-progress">
+                <span class="mc-progress-label">Hoàn thành <%= item.stats.percent %>% (<%= item.stats.done %>/<%= item.stats.total %> bài)</span>
+                <div class="player-progress-track"><div class="player-progress-fill" style="width:<%= item.stats.percent %>%;"></div></div>
+              </div>
+            </div>
+
+            <div class="mc-actions">
+              <a href="/hoc/<%= course._id %>" class="btn btn-primary btn-lg">Học ngay</a>
             </div>
           </div>
         <% }) %>

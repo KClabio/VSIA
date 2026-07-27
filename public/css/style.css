@@ -202,6 +202,8 @@ a { text-decoration: none; color: inherit; }
 .btn-ghost { background: transparent; color: var(--navy); }
 .btn-ghost:hover { text-decoration: underline; }
 
+.btn-lg { padding: 15px 32px; font-size: 16.5px; border-radius: 10px; }
+
 .btn-block { width: 100%; }
 
 /* Page hero (trang con: Giải pháp, Tư vấn phòng Lab, Ngày hội & Cuộc thi) */
@@ -2032,24 +2034,36 @@ a { text-decoration: none; color: inherit; }
 .my-courses-stat .n { display: block; font-size: 32px; font-weight: 800; color: var(--navy); }
 .my-courses-stat .l { display: block; margin-top: 6px; font-size: 13px; color: var(--steel); }
 
-.my-courses-list { display: flex; flex-direction: column; gap: 16px; }
+.my-courses-list { display: flex; flex-direction: column; gap: 18px; }
 .my-course-card {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  align-items: stretch;
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 22px 26px;
+  border-radius: 14px;
+  overflow: hidden;
   box-shadow: var(--shadow-sm);
+  transition: box-shadow .2s ease, transform .2s ease;
 }
-.my-course-card-info { flex: 1; min-width: 0; }
-.my-course-card-info h3 { margin: 0 0 8px; color: var(--navy); font-size: 17px; }
-.my-course-card-info p { margin: 0 0 10px; font-size: 13px; color: var(--steel); }
-.my-course-card-info .player-progress-track { max-width: 320px; }
-.my-course-card-actions { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
-.my-course-percent { font-size: 20px; font-weight: 800; color: var(--green); }
+.my-course-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+
+.mc-thumb { width: 220px; flex-shrink: 0; position: relative; }
+.mc-thumb-image { background-size: cover; background-position: center; }
+
+.mc-body { flex: 1; min-width: 0; padding: 20px 26px; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+.mc-body h3 { margin: 0; color: var(--navy); font-size: 17px; }
+.mc-instructor { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--text); }
+.mc-avatar {
+  width: 24px; height: 24px; border-radius: 50%; background: var(--mist);
+  display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0;
+}
+.mc-meta-row { display: flex; flex-wrap: wrap; gap: 6px 36px; font-size: 13px; color: var(--steel); }
+.mc-meta-label { font-weight: 600; color: var(--text); margin-right: 4px; }
+.mc-progress { margin-top: 2px; }
+.mc-progress-label { display: block; font-size: 12px; color: var(--steel); margin-bottom: 6px; font-weight: 600; }
+.mc-progress .player-progress-track { max-width: 440px; }
+
+.mc-actions { display: flex; align-items: center; justify-content: center; padding: 0 28px; flex-shrink: 0; }
 
 /* Admin: nội dung khoá học (chương/bài học) */
 .admin-lesson-list { margin: 4px 0 12px; }
@@ -2111,5 +2125,7 @@ a { text-decoration: none; color: inherit; }
   .player-sidebar { position: static; max-height: none; }
   .my-courses-summary { grid-template-columns: 1fr; }
   .my-course-card { flex-direction: column; align-items: stretch; }
-  .my-course-card-actions { justify-content: space-between; }
+  .mc-thumb { width: 100%; height: 140px; }
+  .mc-actions { padding: 18px 26px 24px; }
+  .mc-actions .btn { width: 100%; text-align: center; }
 }

@@ -28,6 +28,9 @@ function courseFieldsFromBody(body) {
     isFree,
     price: isFree ? 0 : Number(body.price) || 0,
     rating: Number(body.rating) || 0,
+    instructor: body.instructor || '',
+    studyPeriod: body.studyPeriod || '',
+    examDate: body.examDate || '',
   };
 }
 

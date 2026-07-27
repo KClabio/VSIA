@@ -38,6 +38,19 @@
     </label>
   </div>
 
+  <label>Giảng viên phụ trách
+    <input type="text" name="instructor" placeholder="Vd: TS. Lê Thị Tú Anh" value="<%= course ? course.instructor : '' %>">
+  </label>
+
+  <div class="admin-form-row">
+    <label>Thời gian học
+      <input type="text" name="studyPeriod" placeholder="Vd: 07/06/2026 - 30/08/2026" value="<%= course ? course.studyPeriod : '' %>">
+    </label>
+    <label>Ngày thi dự kiến
+      <input type="text" name="examDate" placeholder="Vd: 13/09/2026 - 20/09/2026" value="<%= course ? course.examDate : '' %>">
+    </label>
+  </div>
+
   <label>Ảnh đại diện <% if (course && course.image) { %>(đang có, chọn file mới để thay)<% } %>
     <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif">
   </label>
