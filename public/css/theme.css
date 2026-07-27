@@ -534,15 +534,6 @@
 .footer-bottom { border-top: none; padding: 24px 0 28px; font-size: .84rem; }
 .footer-bottom-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; text-align: left; }
 
-.footer-contact-bar { background: var(--navy); }
-.footer-contact-bar-inner { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px 40px; padding: 16px 26px; }
-.fcb-item { display: inline-flex; align-items: center; gap: 9px; color: #fff; font-size: .86rem; font-weight: 500; }
-.fcb-item:hover { color: #cfe6f7; }
-.fcb-ic {
-  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
-  background: rgba(255, 255, 255, .14); color: #cfe6f7;
-  display: inline-flex; align-items: center; justify-content: center;
-}
 
 /* ============ AUTH (Đăng nhập / Đăng ký) ============ */
 .auth-section-new { background: var(--mist); position: relative; padding: 80px 0; overflow: hidden; }
