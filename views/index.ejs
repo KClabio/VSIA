@@ -268,24 +268,25 @@
   <div class="wrap">
     <div class="center reveal">
       <span class="eyebrow">Hình ảnh</span>
-      <h2 class="h-sec">Hình ảnh hoạt động</h2>
+      <h2 class="h-sec">Dự án STEM nổi bật</h2>
     </div>
 
     <% if (galleryItems.length === 0) { %>
       <p class="empty-state" style="margin-top:44px;">Chưa có ảnh/video, thêm ở trang quản trị (<code>/admin/thu-vien</code>).</p>
     <% } else { %>
-      <div class="gallery-grid" style="margin-top:44px;">
-        <% const galleryClasses = ['gallery-large', '', '', 'gallery-wide']; %>
-        <% galleryItems.forEach((item, i) => { %>
-          <div class="gallery-item <%= galleryClasses[i] || '' %> reveal">
-            <% if (item.type === 'image') { %>
-              <img src="<%= item.filePath %>" alt="<%= item.title %>">
-            <% } else { %>
-              <video src="<%= item.filePath %>" muted loop autoplay playsinline></video>
-            <% } %>
-            <span><%= item.title %></span>
-          </div>
-        <% }) %>
+      <div class="gallery-marquee reveal" style="margin-top:44px;">
+        <div class="gallery-marquee-track" style="animation-duration:<%= galleryItems.length * 5 %>s;">
+          <% [...galleryItems, ...galleryItems].forEach((item) => { %>
+            <div class="gallery-marquee-item">
+              <% if (item.type === 'image') { %>
+                <img src="<%= item.filePath %>" alt="<%= item.title %>">
+              <% } else { %>
+                <video src="<%= item.filePath %>" muted loop autoplay playsinline></video>
+              <% } %>
+              <span><%= item.title %></span>
+            </div>
+          <% }) %>
+        </div>
       </div>
       <div class="section-cta" style="margin-top:36px;">
         <a href="/hinh-anh" class="btn btn-primary">Xem tất cả →</a>

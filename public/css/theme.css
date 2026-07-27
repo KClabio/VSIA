@@ -433,6 +433,52 @@
 .cta .btn-primary:hover { background: #eef3fa; }
 .cta-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 
+/* ============ GALLERY MARQUEE (ảnh hoạt động lướt tự động) ============ */
+.gallery-marquee { overflow: hidden; }
+.gallery-marquee-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation-name: galleryMarquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.gallery-marquee:hover .gallery-marquee-track { animation-play-state: paused; }
+@keyframes galleryMarquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-marquee-track { animation: none; }
+}
+.gallery-marquee-item {
+  position: relative;
+  flex: 0 0 auto;
+  width: 340px;
+  height: 240px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #135f96, #062544);
+  border-radius: 14px;
+  display: flex;
+  align-items: flex-end;
+  padding: 18px 20px;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+.gallery-marquee-item img, .gallery-marquee-item video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.gallery-marquee-item::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to top, rgba(3, 14, 26, .8) 0%, rgba(3, 14, 26, .18) 55%, transparent 75%);
+}
+.gallery-marquee-item span { position: relative; z-index: 2; font-size: .96rem; text-shadow: 0 2px 10px rgba(0, 0, 0, .45); }
+@media (max-width: 640px) {
+  .gallery-marquee-item { width: 260px; height: 190px; }
+}
+
 /* ============ BRAND MARQUEE (dải chữ VSIA STEM chạy ngang) ============ */
 .brand-marquee {
   background: var(--mist);
