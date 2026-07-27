@@ -252,10 +252,34 @@
 .about-media .badge { position: absolute; right: -18px; bottom: -18px; background: var(--navy); color: #fff; border-radius: 8px; padding: 22px 26px; box-shadow: var(--shadow); max-width: 210px; }
 .about-media .badge .n { font-family: 'Playfair Display'; font-weight: 700; font-size: 2rem; line-height: 1; }
 .about-media .badge .l { font-size: .8rem; color: #c2e0f5; margin-top: 6px; }
-.expertise { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-top: 30px; }
-.exp .ic { width: 46px; height: 46px; border-radius: 8px; background: var(--mist); color: var(--blue); display: grid; place-items: center; margin-bottom: 14px; }
-.exp h4 { font-size: 1.04rem; color: var(--navy); font-weight: 700; }
-.exp p { color: #5a6b84; font-size: .9rem; margin-top: 6px; }
+.services-list { display: flex; flex-direction: column; gap: 12px; margin-top: 28px; }
+.service-pill {
+  display: flex; align-items: center; gap: 16px; width: 100%; text-align: left;
+  background: #fff; border: 1px solid var(--line); border-radius: 14px;
+  padding: 14px 20px; cursor: pointer; font-family: inherit;
+  box-shadow: var(--shadow-sm);
+  transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+}
+.service-pill:hover { transform: translateX(8px); box-shadow: var(--shadow); border-color: var(--blue); }
+.service-pill.active {
+  background: linear-gradient(90deg, var(--blue), #1c7fc7);
+  border-color: transparent;
+  box-shadow: 0 14px 30px -14px rgba(26, 143, 209, .55);
+}
+.service-pill-ic {
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center; color: #fff;
+  background: linear-gradient(135deg, var(--blue), #38b6f1);
+  transition: transform .25s ease, background .25s ease;
+}
+.service-pill:hover .service-pill-ic { transform: scale(1.12) rotate(-6deg); }
+.service-pill.active .service-pill-ic { background: rgba(255, 255, 255, .22); }
+.service-pill-text { font-weight: 600; color: var(--navy); font-size: .96rem; line-height: 1.4; transition: color .22s ease; }
+.service-pill.active .service-pill-text { color: #fff; }
+.services-list > .reveal:nth-child(2) { transition-delay: .07s; }
+.services-list > .reveal:nth-child(3) { transition-delay: .14s; }
+.services-list > .reveal:nth-child(4) { transition-delay: .21s; }
+.services-list > .reveal:nth-child(5) { transition-delay: .28s; }
 
 /* ============ BIZ (Lĩnh vực hoạt động) ============ */
 .biz { background: var(--mist); position: relative; overflow: hidden; }

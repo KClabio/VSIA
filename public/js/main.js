@@ -1,3 +1,13 @@
+document.querySelectorAll('.services-list').forEach((list) => {
+  const pills = list.querySelectorAll('.service-pill');
+  pills.forEach((pill) => {
+    pill.addEventListener('click', () => {
+      pills.forEach((p) => p.classList.remove('active'));
+      pill.classList.add('active');
+    });
+  });
+});
+
 document.getElementById('navToggle')?.addEventListener('click', () => {
   document.getElementById('mainNav')?.classList.toggle('open');
 });
