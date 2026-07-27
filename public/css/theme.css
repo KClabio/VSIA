@@ -217,7 +217,7 @@
 }
 .svc:hover::before { width: 100%; }
 .svc:hover { transform: translateY(-8px); }
-.svc .top { height: 150px; position: relative; }
+.svc .top { height: 220px; position: relative; }
 .svc .top .num { position: absolute; left: 20px; top: 16px; z-index: 3; font-family: 'Playfair Display'; font-weight: 700; font-size: 1.5rem; color: rgba(255, 255, 255, .92); }
 .svc .top .ic { position: absolute; right: 18px; bottom: 16px; z-index: 3; color: #fff; opacity: .92; }
 .svc .svc-body { padding: 26px 26px 30px; }
