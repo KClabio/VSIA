@@ -43,6 +43,42 @@ document.querySelectorAll('.carousel').forEach((carousel) => {
   });
 });
 
+document.querySelectorAll('.gallery-marquee').forEach((marquee) => {
+  const track = marquee.querySelector('.gallery-marquee-track');
+  if (!track) return;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let paused = false;
+  const speed = 0.6; // px mỗi frame
+
+  function autoScroll() {
+    if (!paused) {
+      const half = track.scrollWidth / 2;
+      track.scrollLeft += speed;
+      if (track.scrollLeft >= half) track.scrollLeft -= half;
+    }
+    requestAnimationFrame(autoScroll);
+  }
+  if (!prefersReducedMotion) requestAnimationFrame(autoScroll);
+
+  marquee.addEventListener('mouseenter', () => { paused = true; });
+  marquee.addEventListener('mouseleave', () => { paused = false; });
+  track.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+
+  const nudge = () => Math.min(track.clientWidth * 0.7, 360);
+  marquee.querySelector('[data-marquee-prev]')?.addEventListener('click', () => {
+    let target = track.scrollLeft - nudge();
+    if (target < 0) target += track.scrollWidth / 2;
+    track.scrollLeft = target;
+  });
+  marquee.querySelector('[data-marquee-next]')?.addEventListener('click', () => {
+    let target = track.scrollLeft + nudge();
+    const half = track.scrollWidth / 2;
+    if (target >= half) target -= half;
+    track.scrollLeft = target;
+  });
+});
+
 document.querySelectorAll('.team-tabs').forEach((tabs) => {
   const container = tabs.parentElement;
   const buttons = tabs.querySelectorAll('[data-team-tab]');
