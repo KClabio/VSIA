@@ -209,6 +209,25 @@
 
 /* ============ SERVICE CARDS (overlap hero) ============ */
 .svc-wrap { position: relative; z-index: 20; margin-top: -92px; }
+
+/* ============ VỀ CHÚNG TÔI (Sứ mệnh / Tầm nhìn / Giá trị cốt lõi) ============ */
+.about-us-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.about-us-card {
+  background: #fff; border: 1px solid var(--line); border-radius: 14px;
+  padding: 32px 28px; box-shadow: var(--shadow-sm);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.about-us-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+.about-us-num { font-family: 'Playfair Display'; font-weight: 700; font-size: 1.6rem; color: var(--gold); margin-bottom: 10px; }
+.about-us-card h3 { color: var(--navy); font-size: 1.2rem; margin: 0 0 12px; }
+.about-us-card p { color: var(--muted); font-size: .94rem; line-height: 1.65; }
+.about-us-card ul { list-style: none; padding: 0; margin: 0; }
+.about-us-card ul li { position: relative; padding-left: 22px; margin-bottom: 10px; color: var(--text); font-size: .95rem; font-weight: 500; }
+.about-us-card ul li:last-child { margin-bottom: 0; }
+.about-us-card ul li::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+@media (max-width: 900px) {
+  .about-us-grid { grid-template-columns: 1fr; }
+}
 .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .svc { position: relative; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); transition: transform .25s, box-shadow .25s; }
 .svc::before {
@@ -524,6 +543,7 @@
 .site-footer { background: linear-gradient(180deg, #e9f4fb 0%, #dcedf9 100%); color: var(--muted); padding: 64px 0 0; border-top: none; }
 .footer-inner { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 44px; padding-bottom: 38px; border-bottom: 1px solid rgba(10, 61, 102, .12); }
 .footer-brand p { font-size: .92rem; margin-top: 16px; max-width: 36ch; color: var(--muted); }
+.footer-brand .footer-tagline { font-weight: 700; font-size: .96rem; color: var(--navy); margin-top: 10px; }
 .footer-col h4 { color: var(--navy); font-weight: 700; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 16px; }
 .footer-col a, .footer-col span { display: block; font-size: .92rem; margin-bottom: 10px; color: var(--muted); transition: color .2s; }
 .footer-col a:hover { color: var(--blue); }
