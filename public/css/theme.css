@@ -94,7 +94,7 @@
 .logo-text .wm { font-size: 1.55rem; }
 .logo-text .tag { font-size: .6rem; }
 .site-logo-img { height: 48px; }
-.site-header .site-logo-img { height: 44px; }
+.site-header .site-logo-img { height: 56px; }
 
 .nav-toggle { display: none; background: none; border: 0; cursor: pointer; padding: 8px; }
 .nav-toggle span { display: block; width: 22px; height: 2px; background: var(--navy); border-radius: 2px; transition: .3s; }
@@ -217,7 +217,7 @@
 }
 .svc:hover::before { width: 100%; }
 .svc:hover { transform: translateY(-8px); }
-.svc .top { height: 220px; position: relative; }
+.svc .top { height: 250px; position: relative; }
 .svc .top .num { position: absolute; left: 20px; top: 16px; z-index: 3; font-family: 'Playfair Display'; font-weight: 700; font-size: 1.5rem; color: rgba(255, 255, 255, .92); }
 .svc .top .ic { position: absolute; right: 18px; bottom: 16px; z-index: 3; color: #fff; opacity: .92; }
 .svc .svc-body { padding: 26px 26px 30px; }
@@ -277,7 +277,7 @@
   transition: transform .22s, box-shadow .22s, border-color .22s;
 }
 .course-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: #d3ddec; }
-.course-thumb { height: 170px; position: relative; flex: none; }
+.course-thumb { height: 210px; position: relative; flex: none; }
 .course-thumb.course-thumb-image { background-size: cover; background-position: center; }
 .course-cat {
   position: absolute; left: 16px; top: 14px; z-index: 3; background: var(--blue); color: #fff;
@@ -298,7 +298,7 @@
 }
 .article-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
 .article-thumb-link { display: block; flex: none; }
-.article-thumb { height: 180px; position: relative; }
+.article-thumb { height: 220px; position: relative; }
 .article-thumb.course-thumb-image { background-size: cover; background-position: center; }
 .article-body { padding: 22px 24px 26px; display: flex; flex-direction: column; flex: 1; }
 .article-date { font-size: .76rem; color: var(--steel); letter-spacing: .04em; }

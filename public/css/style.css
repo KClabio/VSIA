@@ -361,7 +361,7 @@ a { text-decoration: none; color: inherit; }
   gap: 20px;
   margin-top: 44px;
 }
-.gallery-list-grid .gallery-item { height: 220px; }
+.gallery-list-grid .gallery-item { height: 280px; }
 
 /* Article cards */
 .article-grid {
