@@ -97,11 +97,11 @@
 
 .slogan { display: none; }
 .site-header .slogan {
-  display: block; font-size: .62rem; font-weight: 600; color: var(--steel);
-  margin-top: 3px; white-space: nowrap;
+  display: block; font-size: .72rem; font-weight: 600; color: #2c5f8a;
+  margin-top: 7px; letter-spacing: .01em; white-space: nowrap;
 }
 .site-header.nav-transparent .slogan { color: #eaf4fb; text-shadow: 0 1px 4px rgba(0, 0, 0, .35); }
-.site-header.nav-transparent.solid .slogan { color: var(--steel); text-shadow: none; }
+.site-header.nav-transparent.solid .slogan { color: #2c5f8a; text-shadow: none; }
 @media (max-width: 640px) {
   .site-header .slogan { display: none; }
 }
