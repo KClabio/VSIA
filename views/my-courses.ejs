@@ -2,63 +2,69 @@
 
 <section class="section">
   <div class="container">
-    <div class="center">
-      <span class="eyebrow">Học tập</span>
-      <h1 class="page-title" style="margin-top:16px;">Khoá học của tôi</h1>
-    </div>
+    <div class="learn-layout">
+      <%- include('partials/learning-sidebar', { active: 'khoa-hoc-cua-toi' }) %>
 
-    <div class="my-courses-summary">
-      <div class="my-courses-stat">
-        <span class="n"><%= summary.total %></span>
-        <span class="l">Khoá học đã đăng ký</span>
-      </div>
-      <div class="my-courses-stat">
-        <span class="n"><%= summary.completedCount %></span>
-        <span class="l">Đã hoàn thành 100%</span>
-      </div>
-      <div class="my-courses-stat">
-        <span class="n"><%= summary.avgPercent %>%</span>
-        <span class="l">Tiến độ trung bình</span>
-      </div>
-    </div>
+      <div class="learn-content">
+        <div class="center">
+          <span class="eyebrow">Học tập</span>
+          <h1 class="page-title" style="margin-top:16px;">Khoá học của tôi</h1>
+        </div>
 
-    <% if (items.length === 0) { %>
-      <p class="empty-state" style="margin-top:40px;">Bạn chưa đăng ký khoá học nào. <a href="/khoa-hoc">Xem danh sách khoá học →</a></p>
-    <% } else { %>
-      <div class="my-courses-list">
-        <% items.forEach(item => { const course = item.course; %>
-          <div class="my-course-card">
-            <div class="mc-thumb <%= course.image ? 'mc-thumb-image' : '' %>" <% if (course.image) { %>style="background-image: url('<%= course.image %>');"<% } else { %>style="background: linear-gradient(135deg, hsl(<%= 140 + (course.title.length % 20) %>, 45%, <%= 22 + (course.title.length % 10) %>%), #072617);"<% } %>>
-              <% if (!course.image) { %><div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div><% } %>
-            </div>
-
-            <div class="mc-body">
-              <h3><%= course.title %></h3>
-
-              <% if (course.instructor) { %>
-                <div class="mc-instructor"><span class="mc-avatar">👤</span> Giảng viên: <%= course.instructor %></div>
-              <% } %>
-
-              <% if (course.studyPeriod || course.examDate) { %>
-                <div class="mc-meta-row">
-                  <% if (course.studyPeriod) { %><div><span class="mc-meta-label">Thời gian học:</span><%= course.studyPeriod %></div><% } %>
-                  <% if (course.examDate) { %><div><span class="mc-meta-label">Ngày thi dự kiến:</span><%= course.examDate %></div><% } %>
-                </div>
-              <% } %>
-
-              <div class="mc-progress">
-                <span class="mc-progress-label">Hoàn thành <%= item.stats.percent %>% (<%= item.stats.done %>/<%= item.stats.total %> bài)</span>
-                <div class="player-progress-track"><div class="player-progress-fill" style="width:<%= item.stats.percent %>%;"></div></div>
-              </div>
-            </div>
-
-            <div class="mc-actions">
-              <a href="/hoc/<%= course._id %>" class="btn btn-primary btn-lg">Học ngay</a>
-            </div>
+        <div class="my-courses-summary">
+          <div class="my-courses-stat">
+            <span class="n"><%= summary.total %></span>
+            <span class="l">Khoá học đã đăng ký</span>
           </div>
-        <% }) %>
+          <div class="my-courses-stat">
+            <span class="n"><%= summary.completedCount %></span>
+            <span class="l">Đã hoàn thành 100%</span>
+          </div>
+          <div class="my-courses-stat">
+            <span class="n"><%= summary.avgPercent %>%</span>
+            <span class="l">Tiến độ trung bình</span>
+          </div>
+        </div>
+
+        <% if (items.length === 0) { %>
+          <p class="empty-state" style="margin-top:40px;">Bạn chưa đăng ký khoá học nào. <a href="/khoa-hoc">Xem danh sách khoá học →</a></p>
+        <% } else { %>
+          <div class="my-courses-list">
+            <% items.forEach(item => { const course = item.course; %>
+              <div class="my-course-card">
+                <div class="mc-thumb <%= course.image ? 'mc-thumb-image' : '' %>" <% if (course.image) { %>style="background-image: url('<%= course.image %>');"<% } else { %>style="background: linear-gradient(135deg, hsl(<%= 140 + (course.title.length % 20) %>, 45%, <%= 22 + (course.title.length % 10) %>%), #072617);"<% } %>>
+                  <% if (!course.image) { %><div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div><% } %>
+                </div>
+
+                <div class="mc-body">
+                  <h3><%= course.title %></h3>
+
+                  <% if (course.instructor) { %>
+                    <div class="mc-instructor"><span class="mc-avatar">👤</span> Giảng viên: <%= course.instructor %></div>
+                  <% } %>
+
+                  <% if (course.studyPeriod || course.examDate) { %>
+                    <div class="mc-meta-row">
+                      <% if (course.studyPeriod) { %><div><span class="mc-meta-label">Thời gian học:</span><%= course.studyPeriod %></div><% } %>
+                      <% if (course.examDate) { %><div><span class="mc-meta-label">Ngày thi dự kiến:</span><%= course.examDate %></div><% } %>
+                    </div>
+                  <% } %>
+
+                  <div class="mc-progress">
+                    <span class="mc-progress-label">Hoàn thành <%= item.stats.percent %>% (<%= item.stats.done %>/<%= item.stats.total %> bài)</span>
+                    <div class="player-progress-track"><div class="player-progress-fill" style="width:<%= item.stats.percent %>%;"></div></div>
+                  </div>
+                </div>
+
+                <div class="mc-actions">
+                  <a href="/hoc/<%= course._id %>" class="btn btn-primary btn-lg">Học ngay</a>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
       </div>
-    <% } %>
+    </div>
   </div>
 </section>
 

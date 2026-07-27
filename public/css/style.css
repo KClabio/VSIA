@@ -2065,6 +2065,41 @@ a { text-decoration: none; color: inherit; }
 
 .mc-actions { display: flex; align-items: center; justify-content: center; padding: 0 28px; flex-shrink: 0; }
 
+/* Sidebar điều hướng khu vực học tập (Khoá học của tôi, Nhiệm vụ, Kết quả) */
+.learn-layout { display: grid; grid-template-columns: 240px 1fr; gap: 28px; align-items: start; }
+.learn-sidebar {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.learn-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+.learn-nav-item:hover { background: var(--mist); }
+.learn-nav-item.active { background: var(--green); color: #fff; }
+.learn-nav-icon { font-size: 16px; flex-shrink: 0; }
+.learn-content { min-width: 0; }
+
+@media (max-width: 860px) {
+  .learn-layout { grid-template-columns: 1fr; }
+  .learn-sidebar { position: static; flex-direction: row; flex-wrap: wrap; }
+  .learn-nav-item { flex: 1; min-width: 140px; justify-content: center; }
+}
+
 /* Admin: nội dung khoá học (chương/bài học) */
 .admin-lesson-list { margin: 4px 0 12px; }
 .admin-lesson-type-icon { margin-right: 6px; }

@@ -116,4 +116,20 @@ router.get('/khoa-hoc-cua-toi', requireAuth, async (req, res) => {
   });
 });
 
+router.get('/nhiem-vu-hoc-tap', requireAuth, (req, res) => {
+  res.render('learning-placeholder', {
+    active: 'nhiem-vu',
+    title: 'Nhiệm vụ học tập',
+    message: 'Tính năng theo dõi nhiệm vụ, bài tập được giao đang được phát triển. Vui lòng quay lại sau.',
+  });
+});
+
+router.get('/ket-qua-hoc-tap', requireAuth, (req, res) => {
+  res.render('learning-placeholder', {
+    active: 'ket-qua',
+    title: 'Kết quả học tập',
+    message: 'Tính năng tổng hợp kết quả, điểm số học tập đang được phát triển. Vui lòng quay lại sau.',
+  });
+});
+
 module.exports = router;
