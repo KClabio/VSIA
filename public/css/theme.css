@@ -94,11 +94,12 @@
 .logo-text .wm { font-size: 1.55rem; }
 .logo-text .tag { font-size: .6rem; }
 .site-logo-img { height: 48px; }
+.site-header .site-logo-img { height: 40px; }
 
 .slogan { display: none; }
 .site-header .slogan {
-  display: block; font-size: .72rem; font-weight: 600; color: #2c5f8a;
-  margin-top: 7px; letter-spacing: .01em; white-space: nowrap;
+  display: block; font-size: .66rem; font-weight: 600; color: #2c5f8a;
+  margin-top: 5px; letter-spacing: .01em; white-space: nowrap;
 }
 .site-header.nav-transparent .slogan { color: #eaf4fb; text-shadow: 0 1px 4px rgba(0, 0, 0, .35); }
 .site-header.nav-transparent.solid .slogan { color: #2c5f8a; text-shadow: none; }
