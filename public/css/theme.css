@@ -45,7 +45,7 @@
 
 /* Logo (icon + wordmark), used in header/footer/admin sidebar */
 .logo-icon { width: 36px; height: 36px; flex: none; }
-.logo-text { display: inline-flex; flex-direction: column; line-height: 1; }
+.logo-text { display: inline-flex; flex-direction: column; align-items: flex-start; line-height: 1; }
 .wm { font-weight: 800; font-size: 1.3rem; letter-spacing: .02em; line-height: 1; }
 .tag { font-weight: 600; font-size: .54rem; letter-spacing: .24em; text-transform: uppercase; opacity: .7; display: block; margin-top: 2px; }
 .site-header .wm { color: var(--navy); }
