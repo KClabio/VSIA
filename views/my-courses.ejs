@@ -32,7 +32,7 @@
           <div class="my-courses-list">
             <% items.forEach(item => { const course = item.course; %>
               <div class="my-course-card">
-                <div class="mc-thumb <%= course.image ? 'mc-thumb-image' : '' %>" <% if (course.image) { %>style="background-image: url('<%= course.image %>');"<% } else { %>style="background: linear-gradient(135deg, hsl(<%= 140 + (course.title.length % 20) %>, 45%, <%= 22 + (course.title.length % 10) %>%), #072617);"<% } %>>
+                <div class="mc-thumb <%= course.image ? 'mc-thumb-image' : '' %>" <% if (course.image) { %>style="background-image: url('<%= course.image %>');"<% } else { %>style="background: linear-gradient(135deg, hsl(<%= 205 + (course.title.length % 20) %>, 55%, <%= 26 + (course.title.length % 10) %>%), #062544);"<% } %>>
                   <% if (!course.image) { %><div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div><% } %>
                 </div>
 
