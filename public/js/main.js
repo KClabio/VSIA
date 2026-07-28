@@ -176,10 +176,17 @@ if (chatToggleBtn && chatPanel) {
   }
 
   function inlineFormat(str) {
-    return str.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    let out = str.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    // Chỉ chấp nhận link nội bộ (bắt đầu bằng /) hoặc http(s), chặn javascript:/data: để tránh XSS.
+    out = out.replace(/\[([^[\]]+)\]\s?\((\/[^\s()]*|https?:\/\/[^\s()]+)\)/g, (match, label, url) => {
+      const external = /^https?:\/\//.test(url);
+      const attrs = external ? ' target="_blank" rel="noopener noreferrer"' : '';
+      return '<a href="' + url + '"' + attrs + '>' + label + '</a>';
+    });
+    return out;
   }
 
-  // Chuyển markdown đơn giản (đậm, gạch đầu dòng) từ AI thành HTML.
+  // Chuyển markdown đơn giản (đậm, link, gạch đầu dòng) từ AI thành HTML.
   // Escape HTML trước, sau đó mới bọc thẻ do chính ta tạo ra nên an toàn khỏi XSS.
   function renderBotMarkdown(text) {
     const lines = escapeHtml(text).split('\n');
