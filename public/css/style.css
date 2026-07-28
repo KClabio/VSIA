@@ -469,6 +469,7 @@ a { text-decoration: none; color: inherit; }
 .course-materials li { margin-bottom: 8px; }
 .course-materials a { color: var(--blue); font-weight: 600; }
 .course-materials a:hover { text-decoration: underline; }
+.course-materials-locked p { margin: 0; color: var(--muted); font-size: 14px; }
 
 /* Info / step cards (service pages) */
 .info-grid {
