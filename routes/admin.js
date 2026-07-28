@@ -153,15 +153,29 @@ router.get('/khoa-hoc/:id/noi-dung', async (req, res) => {
   await renderCourseContent(res, req.params.id, null);
 });
 
+function parseTopics(raw) {
+  return (raw || '')
+    .split('\n')
+    .map((t) => t.trim())
+    .filter(Boolean);
+}
+
 router.post('/khoa-hoc/:id/noi-dung/chuong', async (req, res) => {
   const course = await Course.findById(req.params.id);
   if (!course) return res.status(404).render('404');
 
   if (!req.body.title || !req.body.title.trim()) {
-    return renderCourseContent(res, req.params.id, 'Vui lòng nhập tên chương.');
+    return renderCourseContent(res, req.params.id, 'Vui lòng nhập tên tuần/chương.');
   }
 
-  course.modules.push({ title: req.body.title.trim(), lessons: [] });
+  course.modules.push({
+    title: req.body.title.trim(),
+    weekStart: req.body.weekStart ? req.body.weekStart.trim() : '',
+    weekEnd: req.body.weekEnd ? req.body.weekEnd.trim() : '',
+    chapterTitle: req.body.chapterTitle ? req.body.chapterTitle.trim() : '',
+    topics: parseTopics(req.body.topics),
+    lessons: [],
+  });
   await course.save();
   res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
 });
@@ -173,6 +187,10 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/sua', async (req, res) => {
   const mod = course.modules.id(req.params.moduleId);
   if (mod && req.body.title && req.body.title.trim()) {
     mod.title = req.body.title.trim();
+    mod.weekStart = req.body.weekStart ? req.body.weekStart.trim() : '';
+    mod.weekEnd = req.body.weekEnd ? req.body.weekEnd.trim() : '';
+    mod.chapterTitle = req.body.chapterTitle ? req.body.chapterTitle.trim() : '';
+    mod.topics = parseTopics(req.body.topics);
     await course.save();
   }
   res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
@@ -209,6 +227,7 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai', (req, res) => {
     mod.lessons.push({
       title: req.body.title.trim(),
       type: req.body.type || 'video',
+      category: req.body.category || 'lecture',
       videoUrl: req.body.videoUrl ? req.body.videoUrl.trim() : null,
       videoFile: req.file ? `/uploads/videos/${req.file.filename}` : null,
       content: req.body.content || '',
@@ -231,6 +250,7 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/sua', (req, r
 
     lesson.title = req.body.title ? req.body.title.trim() : lesson.title;
     lesson.type = req.body.type || lesson.type;
+    lesson.category = req.body.category || lesson.category;
     lesson.videoUrl = req.body.videoUrl ? req.body.videoUrl.trim() : null;
     lesson.content = req.body.content || '';
     if (req.file) {

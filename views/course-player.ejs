@@ -14,20 +14,54 @@
         <p class="empty-state" style="text-align:left;">Khoá học chưa có nội dung.</p>
       <% } %>
 
-      <% (course.modules || []).forEach(mod => { %>
-        <div class="player-module">
-          <h4><%= mod.title %></h4>
-          <% mod.lessons.forEach(lesson => {
-            const isDone = enrollment.completedLessons.includes(String(lesson._id));
-            const isActive = currentLesson && String(currentLesson._id) === String(lesson._id);
-          %>
-            <a href="/hoc/<%= course._id %>?bai=<%= lesson._id %>" class="player-lesson <%= isActive ? 'active' : '' %> <%= isDone ? 'done' : '' %>">
-              <span class="player-lesson-icon"><%= lesson.type === 'video' ? '▶' : (lesson.type === 'document' ? '📄' : '📝') %></span>
-              <span class="player-lesson-title"><%= lesson.title %></span>
-              <% if (isDone) { %><span class="player-lesson-check">✓</span><% } %>
-            </a>
-          <% }) %>
-        </div>
+      <%
+        const lessonIcon = { video: '▶', document: '📄', quiz: '📝', forum: '🌐', qa: '❓' };
+        const catList = [
+          { key: 'lecture', badge: 'L', label: 'Lecture/ Lý thuyết', empty: 'Không có bài lý thuyết trong tuần này.' },
+          { key: 'interaction', badge: 'I', label: 'Interation/ Tương tác', empty: 'Không có nội dung tương tác trong tuần này.' },
+          { key: 'practice', badge: 'P', label: 'Practice/ Luyện tập', empty: 'Không có bài luyện tập trong tuần này.' },
+          { key: 'exam', badge: 'E', label: 'Exams/ Bài kiểm tra', empty: 'Không có bài kiểm tra trong tuần này.' },
+        ];
+      %>
+      <% (course.modules || []).forEach((mod, mi) => { %>
+        <details class="player-week" <%= mi === 0 ? 'open' : '' %>>
+          <summary class="player-week-summary">
+            <%= mod.title %><% if (mod.weekStart || mod.weekEnd) { %> (<%= mod.weekStart %> - <%= mod.weekEnd %>)<% } %>
+          </summary>
+          <div class="player-week-body">
+            <% if (mod.chapterTitle) { %><h5 class="player-chapter-title"><%= mod.chapterTitle %></h5><% } %>
+            <% if (mod.topics && mod.topics.length > 0) { %>
+              <ul class="player-topics">
+                <% mod.topics.forEach(t => { %><li><%= t %></li><% }) %>
+              </ul>
+            <% } %>
+
+            <% catList.forEach(cat => {
+              const catLessons = mod.lessons.filter(l => (l.category || 'lecture') === cat.key);
+            %>
+              <div class="player-cat">
+                <div class="player-cat-head">
+                  <span class="player-cat-badge cat-<%= cat.key %>"><%= cat.badge %></span>
+                  <span><%= cat.label %></span>
+                </div>
+                <% if (catLessons.length === 0) { %>
+                  <p class="player-cat-empty"><%= cat.empty %></p>
+                <% } else { %>
+                  <% catLessons.forEach(lesson => {
+                    const isDone = enrollment.completedLessons.includes(String(lesson._id));
+                    const isActive = currentLesson && String(currentLesson._id) === String(lesson._id);
+                  %>
+                    <a href="/hoc/<%= course._id %>?bai=<%= lesson._id %>" class="player-lesson <%= isActive ? 'active' : '' %> <%= isDone ? 'done' : '' %>">
+                      <span class="player-lesson-icon"><%= lessonIcon[lesson.type] || '▶' %></span>
+                      <span class="player-lesson-title"><%= lesson.title %></span>
+                      <% if (isDone) { %><span class="player-lesson-check">✓</span><% } %>
+                    </a>
+                  <% }) %>
+                <% } %>
+              </div>
+            <% }) %>
+          </div>
+        </details>
       <% }) %>
 
       <% if (course.materials && course.materials.length > 0) { %>

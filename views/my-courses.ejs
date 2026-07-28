@@ -48,26 +48,32 @@
     <div class="dash-sec-title">
       <h2>Khoá học đã đăng ký</h2>
     </div>
-    <div class="dash-courses">
+    <div class="dash-enrolled-list">
       <% items.forEach(item => { const course = item.course; %>
-        <a href="/hoc/<%= course._id %>" class="dash-course reveal">
-          <div class="top" <% if (course.image) { %>style="background-image:url('<%= course.image %>');"<% } else { %>style="background: linear-gradient(135deg, hsl(<%= 205 + (course.title.length % 20) %>, 55%, 30%), #062544);"<% } %>>
+        <div class="dash-enrolled-card reveal">
+          <div class="thumb" <% if (course.image) { %>style="background-image:url('<%= course.image %>');"<% } else { %>style="background: linear-gradient(135deg, hsl(<%= 205 + (course.title.length % 20) %>, 55%, 30%), #062544);"<% } %>>
             <% if (!course.image) { %><div class="hex"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div><% } %>
-            <span class="cat"><%= course.category %></span>
-            <span class="lv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><%= item.stats.total %> bài</span>
           </div>
-          <div class="body">
+          <div class="info">
             <h4><%= course.title %></h4>
+            <% if (course.instructor) { %>
+              <div class="instructor"><span class="av">👤</span> Giảng viên: <%= course.instructor %></div>
+            <% } %>
+            <% if (course.studyPeriod || course.examDate) { %>
+              <div class="meta-row">
+                <% if (course.studyPeriod) { %><div><span class="lbl">Thời gian học:</span><%= course.studyPeriod %></div><% } %>
+                <% if (course.examDate) { %><div><span class="lbl">Ngày thi dự kiến:</span><%= course.examDate %></div><% } %>
+              </div>
+            <% } %>
             <div class="progress-wrap">
               <span class="progress-label">Hoàn thành <%= item.stats.percent %>%</span>
               <div class="player-progress-track"><div class="player-progress-fill" style="width:<%= item.stats.percent %>%;"></div></div>
             </div>
-            <div class="meta">
-              <span class="free"><%= item.stats.percent === 100 ? 'Hoàn thành' : 'Học tiếp →' %></span>
-              <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-            </div>
           </div>
-        </a>
+          <div class="action">
+            <a href="/hoc/<%= course._id %>" class="btn btn-primary">Học ngay</a>
+          </div>
+        </div>
       <% }) %>
     </div>
   <% } %>

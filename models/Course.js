@@ -19,9 +19,14 @@ const courseSchema = new mongoose.Schema({
   }],
   modules: [{
     title: { type: String, required: true, trim: true },
+    weekStart: { type: String, default: '' },
+    weekEnd: { type: String, default: '' },
+    chapterTitle: { type: String, default: '' },
+    topics: [{ type: String }],
     lessons: [{
       title: { type: String, required: true, trim: true },
-      type: { type: String, enum: ['video', 'document', 'quiz'], default: 'video' },
+      type: { type: String, enum: ['video', 'document', 'quiz', 'forum', 'qa'], default: 'video' },
+      category: { type: String, enum: ['lecture', 'interaction', 'practice', 'exam'], default: 'lecture' },
       videoUrl: { type: String, default: null },
       videoFile: { type: String, default: null },
       content: { type: String, default: '' },
