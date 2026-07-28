@@ -1,0 +1,68 @@
+<%- include('partials/head', { pageTitle: 'Học viên: ' + course.title, active: 'khoa-hoc' }) %>
+
+<div class="admin-page-head">
+  <h1 class="page-title">Học viên: <%= course.title %></h1>
+  <div class="admin-table-actions">
+    <a href="/admin/khoa-hoc/<%= course._id %>/hoc-vien/xuat-csv" class="btn btn-ghost">⬇ Xuất CSV</a>
+    <a href="/admin/khoa-hoc" class="btn btn-ghost">← Danh sách khoá học</a>
+  </div>
+</div>
+
+<% if (error) { %><p class="form-error"><%= error %></p><% } %>
+
+<div class="admin-form" style="margin-bottom:24px;">
+  <h3 style="margin-top:0;">Thêm học viên thủ công</h3>
+  <p class="admin-form-hint" style="margin-top:-4px;">Dùng khi xử lý thanh toán/đăng ký ngoài hệ thống. Học viên cần đã có tài khoản trên web.</p>
+  <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/hoc-vien/them" class="admin-form-row">
+    <label style="flex:1;">Email học viên
+      <input type="email" name="email" placeholder="ten@example.com" required>
+    </label>
+    <div class="admin-form-actions" style="align-self:flex-end;">
+      <button type="submit" class="btn btn-primary">+ Thêm học viên</button>
+    </div>
+  </form>
+</div>
+
+<% if (rows.length === 0) { %>
+  <p class="empty-state">Chưa có học viên nào đăng ký khoá học này.</p>
+<% } else { %>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Học viên</th>
+          <th>Email</th>
+          <th>Ngày đăng ký</th>
+          <th>Tiến độ</th>
+          <th>Trạng thái</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% rows.forEach(row => { %>
+          <tr>
+            <td><%= row.user.name %></td>
+            <td><%= row.user.email %></td>
+            <td><%= new Date(row.enrollment.enrolledAt).toLocaleDateString('vi-VN') %></td>
+            <td>
+              <div class="player-progress-track" style="width:120px;"><div class="player-progress-fill" style="width:<%= row.stats.percent %>%;"></div></div>
+              <span style="font-size:12px; color:var(--muted);"><%= row.stats.percent %>% (<%= row.stats.done %>/<%= row.stats.total %> bài)</span>
+            </td>
+            <td>
+              <span class="role-badge <%= row.stats.total > 0 && row.stats.percent === 100 ? 'role-badge-admin' : '' %>">
+                <%= row.stats.total > 0 && row.stats.percent === 100 ? 'Đã hoàn thành' : 'Đang học' %>
+              </span>
+            </td>
+            <td class="admin-table-actions">
+              <form action="/admin/khoa-hoc/<%= course._id %>/hoc-vien/<%= row.enrollment._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá học viên này khỏi khoá học?');">
+                <button type="submit" class="btn btn-icon btn-danger" title="Xoá khỏi khoá học">🗑 Xoá</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('partials/foot') %>

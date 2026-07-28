@@ -4,6 +4,7 @@ const router = express.Router();
 const Course = require('../models/Course');
 const Enrollment = require('../models/Enrollment');
 const { requireAuth } = require('../middleware/auth');
+const { courseStats } = require('../lib/courseStats');
 
 function toYoutubeEmbedUrl(url) {
   if (!url) return null;
@@ -21,15 +22,6 @@ function toYoutubeEmbedUrl(url) {
   } catch {
     return url;
   }
-}
-
-function courseStats(course, completedLessons) {
-  let total = 0;
-  (course.modules || []).forEach((m) => { total += (m.lessons || []).length; });
-  const done = (completedLessons || []).filter((id) =>
-    (course.modules || []).some((m) => (m.lessons || []).some((l) => String(l._id) === id))
-  ).length;
-  return { total, done, percent: total > 0 ? Math.round((done / total) * 100) : 0 };
 }
 
 router.post('/khoa-hoc/:id/dang-ky', requireAuth, async (req, res) => {

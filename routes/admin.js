@@ -15,6 +15,8 @@ const { getSiteSettings } = require('../lib/settings');
 const { getAllPageContents, PAGE_DEFAULTS } = require('../lib/pageContent');
 const PageContent = require('../models/PageContent');
 const ContactRequest = require('../models/ContactRequest');
+const Enrollment = require('../models/Enrollment');
+const { courseStats } = require('../lib/courseStats');
 
 router.use(requireAuth, requireAdmin);
 
@@ -274,6 +276,111 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/xoa', async (
     }
   }
   res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
+});
+
+// --- Học viên & tiến độ ---
+
+async function renderCourseStudents(res, courseId, error) {
+  const course = await Course.findById(courseId).lean();
+  if (!course) return res.status(404).render('404');
+
+  const enrollments = await Enrollment.find({ course: courseId }).sort({ enrolledAt: -1 }).lean();
+  const userIds = enrollments.map((e) => e.user);
+  const users = await User.find({ _id: { $in: userIds } }).select('-passwordHash').lean();
+  const userMap = new Map(users.map((u) => [String(u._id), u]));
+
+  const rows = enrollments
+    .map((e) => {
+      const user = userMap.get(String(e.user));
+      if (!user) return null;
+      return { enrollment: e, user, stats: courseStats(course, e.completedLessons) };
+    })
+    .filter(Boolean);
+
+  res.render('admin/course-students', { course, rows, error, active: 'khoa-hoc' });
+}
+
+router.get('/khoa-hoc/:id/hoc-vien', async (req, res) => {
+  await renderCourseStudents(res, req.params.id, null);
+});
+
+router.post('/khoa-hoc/:id/hoc-vien/them', async (req, res) => {
+  const email = (req.body.email || '').trim().toLowerCase();
+  if (!email) return renderCourseStudents(res, req.params.id, 'Vui lòng nhập email học viên.');
+
+  const user = await User.findOne({ email });
+  if (!user) return renderCourseStudents(res, req.params.id, `Không tìm thấy tài khoản với email "${email}". Học viên cần đăng ký tài khoản trước.`);
+
+  await Enrollment.findOneAndUpdate(
+    { user: user._id, course: req.params.id },
+    { $setOnInsert: { user: user._id, course: req.params.id, completedLessons: [], enrolledAt: new Date() } },
+    { upsert: true },
+  );
+  res.redirect(`/admin/khoa-hoc/${req.params.id}/hoc-vien`);
+});
+
+router.post('/khoa-hoc/:id/hoc-vien/:enrollmentId/xoa', async (req, res) => {
+  await Enrollment.findOneAndDelete({ _id: req.params.enrollmentId, course: req.params.id });
+  res.redirect(`/admin/khoa-hoc/${req.params.id}/hoc-vien`);
+});
+
+router.get('/khoa-hoc/:id/hoc-vien/xuat-csv', async (req, res) => {
+  const course = await Course.findById(req.params.id).lean();
+  if (!course) return res.status(404).render('404');
+
+  const enrollments = await Enrollment.find({ course: req.params.id }).sort({ enrolledAt: -1 }).lean();
+  const userIds = enrollments.map((e) => e.user);
+  const users = await User.find({ _id: { $in: userIds } }).select('-passwordHash').lean();
+  const userMap = new Map(users.map((u) => [String(u._id), u]));
+
+  const escapeCsv = (val) => `"${String(val).replace(/"/g, '""')}"`;
+  const lines = [['Họ tên', 'Email', 'Ngày đăng ký', 'Tiến độ (%)', 'Trạng thái'].map(escapeCsv).join(',')];
+  enrollments.forEach((e) => {
+    const user = userMap.get(String(e.user));
+    if (!user) return;
+    const stats = courseStats(course, e.completedLessons);
+    const status = stats.total > 0 && stats.percent === 100 ? 'Đã hoàn thành' : 'Đang học';
+    lines.push([
+      user.name,
+      user.email,
+      new Date(e.enrolledAt).toLocaleDateString('vi-VN'),
+      stats.percent,
+      status,
+    ].map(escapeCsv).join(','));
+  });
+
+  const csv = '﻿' + lines.join('\r\n');
+  const filename = `hoc-vien-${course.title.replace(/[^a-zA-Z0-9]+/g, '-')}.csv`;
+  res.set({
+    'Content-Type': 'text/csv; charset=utf-8',
+    'Content-Disposition': `attachment; filename="${filename}"`,
+  });
+  res.send(csv);
+});
+
+router.get('/tien-do', async (req, res) => {
+  const courses = await Course.find().sort({ createdAt: -1 }).lean();
+  const enrollments = await Enrollment.find().lean();
+
+  const courseMap = new Map(courses.map((c) => [String(c._id), c]));
+  const byCourse = new Map();
+  enrollments.forEach((e) => {
+    const key = String(e.course);
+    if (!byCourse.has(key)) byCourse.set(key, []);
+    byCourse.get(key).push(e);
+  });
+
+  const rows = courses.map((course) => {
+    const courseEnrollments = byCourse.get(String(course._id)) || [];
+    const stats = courseEnrollments.map((e) => courseStats(course, e.completedLessons));
+    const completedCount = stats.filter((s) => s.total > 0 && s.percent === 100).length;
+    const avgPercent = stats.length
+      ? Math.round(stats.reduce((sum, s) => sum + s.percent, 0) / stats.length)
+      : 0;
+    return { course, total: courseEnrollments.length, completedCount, avgPercent };
+  });
+
+  res.render('admin/progress-overview', { rows, active: 'tien-do' });
 });
 
 // --- Thư viện ảnh/video ---

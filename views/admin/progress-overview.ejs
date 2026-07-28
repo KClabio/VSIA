@@ -1,0 +1,42 @@
+<%- include('partials/head', { pageTitle: 'Tiến độ học tập', active: 'tien-do' }) %>
+
+<div class="admin-page-head">
+  <h1 class="page-title">Tiến độ học tập theo khoá</h1>
+</div>
+<p class="section-subtitle" style="margin-bottom:24px; text-align:left;">Tổng quan số học viên và tiến độ trung bình từng khoá học. Bấm vào một khoá để xem danh sách học viên chi tiết.</p>
+
+<% if (rows.length === 0) { %>
+  <p class="empty-state">Chưa có khoá học nào.</p>
+<% } else { %>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Khoá học</th>
+          <th>Học viên đã đăng ký</th>
+          <th>Đã hoàn thành 100%</th>
+          <th>Tiến độ trung bình</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% rows.forEach(row => { %>
+          <tr>
+            <td><%= row.course.title %></td>
+            <td><%= row.total %></td>
+            <td><%= row.completedCount %></td>
+            <td>
+              <div class="player-progress-track" style="width:140px;"><div class="player-progress-fill" style="width:<%= row.avgPercent %>%;"></div></div>
+              <span style="font-size:12px; color:var(--muted);"><%= row.avgPercent %>%</span>
+            </td>
+            <td class="admin-table-actions">
+              <a href="/admin/khoa-hoc/<%= row.course._id %>/hoc-vien" class="btn btn-icon" title="Xem học viên">👥 Học viên</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('partials/foot') %>
