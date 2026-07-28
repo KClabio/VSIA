@@ -110,8 +110,13 @@ router.get('/khoa-hoc-cua-toi', requireAuth, async (req, res) => {
     ? Math.round(items.reduce((sum, i) => sum + i.stats.percent, 0) / items.length)
     : 0;
 
+  const suggested = await Course.find({ _id: { $nin: courseIds } }).sort({ createdAt: -1 }).limit(3).lean();
+
   res.render('my-courses', {
+    pageTitle: 'Khoá học của tôi',
+    active: 'khoa-hoc-cua-toi',
     items,
+    suggested,
     summary: { total: items.length, completedCount, avgPercent },
   });
 });
@@ -119,7 +124,7 @@ router.get('/khoa-hoc-cua-toi', requireAuth, async (req, res) => {
 router.get('/nhiem-vu-hoc-tap', requireAuth, (req, res) => {
   res.render('learning-placeholder', {
     active: 'nhiem-vu',
-    title: 'Nhiệm vụ học tập',
+    pageTitle: 'Nhiệm vụ học tập',
     message: 'Tính năng theo dõi nhiệm vụ, bài tập được giao đang được phát triển. Vui lòng quay lại sau.',
   });
 });
@@ -127,7 +132,7 @@ router.get('/nhiem-vu-hoc-tap', requireAuth, (req, res) => {
 router.get('/ket-qua-hoc-tap', requireAuth, (req, res) => {
   res.render('learning-placeholder', {
     active: 'ket-qua',
-    title: 'Kết quả học tập',
+    pageTitle: 'Kết quả học tập',
     message: 'Tính năng tổng hợp kết quả, điểm số học tập đang được phát triển. Vui lòng quay lại sau.',
   });
 });
