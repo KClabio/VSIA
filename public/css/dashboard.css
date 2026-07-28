@@ -13,9 +13,8 @@
   padding: 24px 18px; display: flex; flex-direction: column;
   position: sticky; top: 0; height: 100vh;
 }
-.dash-brand { display: flex; flex-direction: column; padding: 6px 8px 22px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
-.dash-brand-wm { font-family: 'Playfair Display'; font-weight: 800; font-size: 1.5rem; color: var(--navy); line-height: 1; }
-.dash-brand-tag { font-weight: 600; font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--steel); margin-top: 4px; }
+.dash-brand { display: flex; align-items: center; padding: 6px 8px 22px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+.dash-brand .site-logo-img { height: 40px; }
 
 .dash-nav { display: flex; flex-direction: column; gap: 4px; }
 .dash-nav-lbl { font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--steel); padding: 6px 12px; margin-top: 4px; }
