@@ -29,6 +29,15 @@
           <% }) %>
         </div>
       <% }) %>
+
+      <% if (course.materials && course.materials.length > 0) { %>
+        <div class="player-materials">
+          <h4>Tài liệu khoá học</h4>
+          <% course.materials.forEach(m => { %>
+            <a href="<%= m.filePath %>" target="_blank" rel="noopener">📄 <%= m.name %></a>
+          <% }) %>
+        </div>
+      <% } %>
     </aside>
 
     <div class="player-main">

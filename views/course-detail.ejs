@@ -23,22 +23,6 @@
       <p class="course-price"><%= course.isFree ? 'Miễn phí' : course.price.toLocaleString('vi-VN') + ' đ' %></p>
       <p class="course-description"><%= course.description %></p>
 
-      <% if (user && enrollment && course.materials && course.materials.length > 0) { %>
-        <div class="course-materials">
-          <h3>Tài liệu khoá học</h3>
-          <ul>
-            <% course.materials.forEach(m => { %>
-              <li><a href="<%= m.filePath %>" target="_blank" rel="noopener">📄 <%= m.name %></a></li>
-            <% }) %>
-          </ul>
-        </div>
-      <% } else if (course.materials && course.materials.length > 0) { %>
-        <div class="course-materials course-materials-locked">
-          <h3>🔒 Tài liệu khoá học</h3>
-          <p>Đăng ký khoá học để xem và tải tài liệu.</p>
-        </div>
-      <% } %>
-
       <% if (user && enrollment) { %>
         <a href="/hoc/<%= course._id %>" class="btn btn-primary">Tiếp tục học →</a>
       <% } else if (user) { %>
