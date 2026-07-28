@@ -292,7 +292,7 @@ if (contactToggleBtn && contactOverlay) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: formData.get('name'),
-          contact: formData.get('contact'),
+          contact: [formData.get('phone'), formData.get('email')].filter(Boolean).join(' - '),
           message: formData.get('message'),
         }),
       });
