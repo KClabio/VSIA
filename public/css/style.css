@@ -193,6 +193,7 @@ a { text-decoration: none; color: inherit; }
   cursor: pointer;
   border: none;
   font-size: 15px;
+  white-space: nowrap;
 }
 
 .btn-primary { background: var(--green); color: #fff; }
@@ -991,41 +992,6 @@ a { text-decoration: none; color: inherit; }
 }
 .carousel-btn:hover { background: var(--bg-alt); }
 
-/* Auth forms */
-.auth-section { background: var(--bg-alt); }
-.auth-container { display: flex; justify-content: center; }
-
-.auth-form {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 40px;
-  width: 100%;
-  max-width: 420px;
-}
-
-.auth-form h1 { color: var(--navy); margin-top: 0; font-size: 24px; }
-.auth-subtitle { color: var(--muted); margin-top: -10px; }
-
-.auth-form label {
-  display: block;
-  margin-bottom: 16px;
-  font-weight: 500;
-  font-size: 14px;
-}
-
-.auth-form input {
-  display: block;
-  width: 100%;
-  margin-top: 6px;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 15px;
-}
-
-.auth-form input:focus { outline: 2px solid var(--navy); }
-
 .form-error {
   background: #fef2f2;
   color: #b91c1c;
@@ -1053,9 +1019,6 @@ a { text-decoration: none; color: inherit; }
   border-radius: 8px;
   font-size: 14px;
 }
-
-.auth-switch { text-align: center; margin-top: 18px; font-size: 14px; }
-.auth-switch a { color: var(--navy); font-weight: 600; }
 
 /* Profile page */
 .profile-banner {
@@ -1345,6 +1308,7 @@ a { text-decoration: none; color: inherit; }
   position: fixed;
   inset: 0;
   background: rgba(6, 37, 68, 0.55);
+  backdrop-filter: blur(2px);
   z-index: 1001;
   align-items: center;
   justify-content: center;
@@ -1354,37 +1318,69 @@ a { text-decoration: none; color: inherit; }
 .contact-modal {
   position: relative;
   background: #fff;
-  border-radius: 14px;
-  padding: 32px;
+  border-radius: 18px;
+  padding: 40px 36px 34px;
   max-width: 420px;
   width: 100%;
   box-shadow: var(--shadow);
 }
-.contact-modal h3 { margin: 0 0 8px; color: var(--navy); font-size: 20px; }
-.contact-modal > p { margin: 0 0 20px; color: var(--muted); font-size: 14px; }
+.contact-modal-ic {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-d));
+  color: #fff;
+}
+.contact-modal h3 { margin: 0 0 8px; color: var(--navy); font-size: 20px; text-align: center; }
+.contact-modal > p { margin: 0 0 24px; color: var(--muted); font-size: 14px; text-align: center; }
 .contact-modal-close {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  background: none;
+  top: 16px;
+  right: 16px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mist);
   border: none;
+  border-radius: 50%;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   color: var(--muted);
+  transition: background .2s, color .2s;
 }
-.contact-modal-close:hover { color: var(--navy); }
-.contact-modal label { display: block; margin-bottom: 14px; font-weight: 500; font-size: 14px; }
-.contact-modal input[type="text"], .contact-modal textarea {
+.contact-modal-close:hover { background: var(--line); color: var(--navy); }
+.contact-modal label { display: block; margin-bottom: 16px; font-weight: 600; font-size: .86rem; color: var(--navy); }
+.contact-modal .auth-input-wrap input {
   display: block;
   width: 100%;
-  margin-top: 6px;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
+  padding: 12px 14px 12px 40px;
+  border: 1.5px solid var(--line);
   border-radius: 8px;
-  font-size: 14px;
+  font-size: .94rem;
   font-family: inherit;
   box-sizing: border-box;
+  transition: border-color .2s;
 }
+.contact-modal textarea {
+  display: block;
+  width: 100%;
+  margin-top: 7px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: .94rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color .2s;
+  box-sizing: border-box;
+}
+.contact-modal input:focus, .contact-modal textarea:focus { outline: none; border-color: var(--blue); }
 
 /* Admin */
 .admin-dashboard-grid {

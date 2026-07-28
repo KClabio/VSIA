@@ -1,36 +1,35 @@
 <%- include('partials/header', { title: 'Đăng nhập - VSIA' }) %>
 
 <section class="auth-section-new">
+  <div class="auth-deco-bg" aria-hidden="true"></div>
   <div class="wrap">
-    <div class="auth-shell">
-      <div class="auth-visual">
-        <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
-        <div class="auth-visual-content">
-          <span class="eyebrow" style="color:#7ecbf5;">Chào mừng trở lại</span>
-          <h2>Kiến tạo thế hệ đổi mới - Vươn tầm Việt Nam</h2>
-          <p>Đăng nhập để tiếp tục theo dõi khoá học, tài liệu và các chương trình bồi dưỡng STEM cùng VSIA.</p>
-        </div>
-      </div>
-      <div class="auth-form-side">
-        <h1>Đăng nhập</h1>
-        <p class="lead-new">Nhập email và mật khẩu tài khoản của bạn.</p>
-        <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+    <div class="auth-card">
+      <div class="auth-card-brand"><%- include('partials/logo') %></div>
+      <span class="eyebrow" style="justify-content:center;">Chào mừng trở lại</span>
+      <h1>Đăng nhập</h1>
+      <p class="lead-new">Nhập email và mật khẩu tài khoản của bạn để tiếp tục.</p>
+      <% if (error) { %><p class="form-error"><%= error %></p><% } %>
 
-        <form method="POST" action="/dang-nhap">
-          <input type="hidden" name="redirectTo" value="<%= redirectTo %>">
+      <form method="POST" action="/dang-nhap">
+        <input type="hidden" name="redirectTo" value="<%= redirectTo %>">
 
-          <label>Email
-            <input type="email" name="email" required autofocus>
-          </label>
-          <label>Mật khẩu
-            <input type="password" name="password" required>
-          </label>
+        <label>Email
+          <div class="auth-input-wrap">
+            <svg class="auth-input-ic" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+            <input type="email" name="email" placeholder="ten@email.com" required autofocus>
+          </div>
+        </label>
+        <label>Mật khẩu
+          <div class="auth-input-wrap">
+            <svg class="auth-input-ic" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" name="password" placeholder="••••••••" required>
+          </div>
+        </label>
 
-          <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Đăng nhập</button>
 
-          <p class="auth-switch">Chưa có tài khoản? <a href="/dang-ky">Đăng ký ngay</a></p>
-        </form>
-      </div>
+        <p class="auth-switch">Chưa có tài khoản? <a href="/dang-ky">Đăng ký ngay</a></p>
+      </form>
     </div>
   </div>
 </section>
