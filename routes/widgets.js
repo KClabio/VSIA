@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const crypto = require('crypto');
 
 const ContactRequest = require('../models/ContactRequest');
 const { TOOL_DECLARATIONS, executeTool } = require('../lib/chatbotTools');
@@ -74,7 +75,7 @@ router.post('/api/chatbot', async (req, res) => {
       const responseParts = [];
       for (const call of functionCalls) {
         const result = await executeTool(call.name, call.args, req);
-        responseParts.push(createPartFromFunctionResponse(call.id, call.name, { output: result }));
+        responseParts.push(createPartFromFunctionResponse(call.id || crypto.randomUUID(), call.name, { output: result }));
       }
       contents.push({ role: 'user', parts: responseParts });
     }

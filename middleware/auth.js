@@ -3,7 +3,12 @@ const { ROLES, ROLE_LABELS, STAFF_ROLES, MODULE_ROLES, ROLE_HOME } = require('..
 
 async function loadUser(req, res, next) {
   if (req.session.userId) {
-    req.user = await User.findById(req.session.userId).lean();
+    try {
+      req.user = await User.findById(req.session.userId).lean();
+    } catch (err) {
+      // Session chứa id không hợp lệ (vd. store hỏng) — reset về ẩn danh thay vì lỗi lặp lại mọi trang.
+      req.session.userId = null;
+    }
   }
   res.locals.user = req.user || null;
   res.locals.roleLabel = req.user ? ROLE_LABELS[req.user.role] : null;

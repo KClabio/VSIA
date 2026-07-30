@@ -9,7 +9,7 @@ const Partner = require('../models/Partner');
 const User = require('../models/User');
 const { requireAuth, requireStaff, requireModule } = require('../middleware/auth');
 const { ROLES } = require('../lib/roles');
-const { uploadImage, uploadVideo, uploadCourseFiles, friendlyUploadError } = require('../middleware/upload');
+const { uploadImage, uploadVideo, uploadCourseFiles, friendlyUploadError, wrapUpload, fileUrl } = require('../middleware/upload');
 const { computeStats, computeDashboardCards, addClient, removeClient, broadcastStats } = require('../lib/stats');
 const { unlinkUploaded } = require('../lib/files');
 const { escapeRegExp } = require('../lib/search');
@@ -85,24 +85,22 @@ router.get('/khoa-hoc/moi', async (req, res) => {
   res.render('admin/course-form', { course: null, error: null, active: 'khoa-hoc', teachers });
 });
 
-router.post('/khoa-hoc/moi', (req, res) => {
-  uploadCourseFiles(req, res, async (err) => {
-    if (err) {
-      const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
-      return res.render('admin/course-form', { course: null, error: friendlyUploadError(err), active: 'khoa-hoc', teachers });
-    }
+router.post('/khoa-hoc/moi', wrapUpload(uploadCourseFiles, async (err, req, res) => {
+  if (err) {
+    const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
+    return res.render('admin/course-form', { course: null, error: friendlyUploadError(err), active: 'khoa-hoc', teachers });
+  }
 
-    const image = req.files?.image?.[0] ? `/uploads/images/${req.files.image[0].filename}` : null;
-    const materials = (req.files?.materials || []).map((f) => ({
-      name: f.originalname,
-      filePath: `/uploads/documents/${f.filename}`,
-    }));
+  const image = req.files?.image?.[0] ? fileUrl(req.files.image[0], 'images') : null;
+  const materials = (req.files?.materials || []).map((f) => ({
+    name: f.originalname,
+    filePath: fileUrl(f, 'documents'),
+  }));
 
-    await Course.create({ ...courseFieldsFromBody(req.body), image, materials });
-    await broadcastStats();
-    res.redirect('/admin/khoa-hoc');
-  });
-});
+  await Course.create({ ...courseFieldsFromBody(req.body), image, materials });
+  await broadcastStats();
+  res.redirect('/admin/khoa-hoc');
+}));
 
 router.get('/khoa-hoc/:id/sua', async (req, res) => {
   const course = await Course.findById(req.params.id).lean().catch(() => null);
@@ -111,35 +109,33 @@ router.get('/khoa-hoc/:id/sua', async (req, res) => {
   res.render('admin/course-form', { course, error: null, active: 'khoa-hoc', teachers });
 });
 
-router.post('/khoa-hoc/:id/sua', (req, res) => {
-  uploadCourseFiles(req, res, async (err) => {
-    const course = await Course.findById(req.params.id);
-    if (!course) return res.status(404).render('404');
+router.post('/khoa-hoc/:id/sua', wrapUpload(uploadCourseFiles, async (err, req, res) => {
+  const course = await Course.findById(req.params.id).catch(() => null);
+  if (!course) return res.status(404).render('404');
 
-    if (err) {
-      const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
-      return res.render('admin/course-form', { course: course.toObject(), error: friendlyUploadError(err), active: 'khoa-hoc', teachers });
-    }
+  if (err) {
+    const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
+    return res.render('admin/course-form', { course: course.toObject(), error: friendlyUploadError(err), active: 'khoa-hoc', teachers });
+  }
 
-    Object.assign(course, courseFieldsFromBody(req.body));
+  Object.assign(course, courseFieldsFromBody(req.body));
 
-    if (req.files?.image?.[0]) {
-      unlinkUploaded(course.image);
-      course.image = `/uploads/images/${req.files.image[0].filename}`;
-    }
+  if (req.files?.image?.[0]) {
+    unlinkUploaded(course.image);
+    course.image = fileUrl(req.files.image[0], 'images');
+  }
 
-    if (req.files?.materials?.length) {
-      course.materials.push(...req.files.materials.map((f) => ({
-        name: f.originalname,
-        filePath: `/uploads/documents/${f.filename}`,
-      })));
-    }
+  if (req.files?.materials?.length) {
+    course.materials.push(...req.files.materials.map((f) => ({
+      name: f.originalname,
+      filePath: fileUrl(f, 'documents'),
+    })));
+  }
 
-    await course.save();
-    await broadcastStats();
-    res.redirect('/admin/khoa-hoc');
-  });
-});
+  await course.save();
+  await broadcastStats();
+  res.redirect('/admin/khoa-hoc');
+}));
 
 router.post('/khoa-hoc/:id/xoa', async (req, res) => {
   const course = await Course.findByIdAndDelete(req.params.id);
@@ -233,58 +229,54 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/xoa', async (req, res) => {
   res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
 });
 
-router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai', (req, res) => {
-  uploadVideo.single('videoFile')(req, res, async (err) => {
-    if (err) return renderCourseContent(res, req.params.id, friendlyUploadError(err));
+router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai', wrapUpload(uploadVideo.single('videoFile'), async (err, req, res) => {
+  if (err) return renderCourseContent(res, req.params.id, friendlyUploadError(err));
 
-    const course = await Course.findById(req.params.id);
-    if (!course) return res.status(404).render('404');
+  const course = await Course.findById(req.params.id);
+  if (!course) return res.status(404).render('404');
 
-    const mod = course.modules.id(req.params.moduleId);
-    if (!mod) return renderCourseContent(res, req.params.id, 'Không tìm thấy chương.');
+  const mod = course.modules.id(req.params.moduleId);
+  if (!mod) return renderCourseContent(res, req.params.id, 'Không tìm thấy chương.');
 
-    if (!req.body.title || !req.body.title.trim()) {
-      if (req.file) unlinkUploaded(`/uploads/videos/${req.file.filename}`);
-      return renderCourseContent(res, req.params.id, 'Vui lòng nhập tên bài học.');
-    }
+  if (!req.body.title || !req.body.title.trim()) {
+    if (req.file) unlinkUploaded(fileUrl(req.file, 'videos'));
+    return renderCourseContent(res, req.params.id, 'Vui lòng nhập tên bài học.');
+  }
 
-    mod.lessons.push({
-      title: req.body.title.trim(),
-      type: req.body.type || 'video',
-      category: req.body.category || 'lecture',
-      videoUrl: req.body.videoUrl ? req.body.videoUrl.trim() : null,
-      videoFile: req.file ? `/uploads/videos/${req.file.filename}` : null,
-      content: req.body.content || '',
-    });
-    await course.save();
-    res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
+  mod.lessons.push({
+    title: req.body.title.trim(),
+    type: req.body.type || 'video',
+    category: req.body.category || 'lecture',
+    videoUrl: req.body.videoUrl ? req.body.videoUrl.trim() : null,
+    videoFile: req.file ? fileUrl(req.file, 'videos') : null,
+    content: req.body.content || '',
   });
-});
+  await course.save();
+  res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
+}));
 
-router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/sua', (req, res) => {
-  uploadVideo.single('videoFile')(req, res, async (err) => {
-    if (err) return renderCourseContent(res, req.params.id, friendlyUploadError(err));
+router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/sua', wrapUpload(uploadVideo.single('videoFile'), async (err, req, res) => {
+  if (err) return renderCourseContent(res, req.params.id, friendlyUploadError(err));
 
-    const course = await Course.findById(req.params.id);
-    if (!course) return res.status(404).render('404');
+  const course = await Course.findById(req.params.id);
+  if (!course) return res.status(404).render('404');
 
-    const mod = course.modules.id(req.params.moduleId);
-    const lesson = mod && mod.lessons.id(req.params.lessonId);
-    if (!lesson) return renderCourseContent(res, req.params.id, 'Không tìm thấy bài học.');
+  const mod = course.modules.id(req.params.moduleId);
+  const lesson = mod && mod.lessons.id(req.params.lessonId);
+  if (!lesson) return renderCourseContent(res, req.params.id, 'Không tìm thấy bài học.');
 
-    lesson.title = req.body.title ? req.body.title.trim() : lesson.title;
-    lesson.type = req.body.type || lesson.type;
-    lesson.category = req.body.category || lesson.category;
-    lesson.videoUrl = req.body.videoUrl ? req.body.videoUrl.trim() : null;
-    lesson.content = req.body.content || '';
-    if (req.file) {
-      unlinkUploaded(lesson.videoFile);
-      lesson.videoFile = `/uploads/videos/${req.file.filename}`;
-    }
-    await course.save();
-    res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
-  });
-});
+  lesson.title = req.body.title ? req.body.title.trim() : lesson.title;
+  lesson.type = req.body.type || lesson.type;
+  lesson.category = req.body.category || lesson.category;
+  lesson.videoUrl = req.body.videoUrl ? req.body.videoUrl.trim() : null;
+  lesson.content = req.body.content || '';
+  if (req.file) {
+    unlinkUploaded(lesson.videoFile);
+    lesson.videoFile = fileUrl(req.file, 'videos');
+  }
+  await course.save();
+  res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
+}));
 
 router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/xoa', async (req, res) => {
   const course = await Course.findById(req.params.id);
@@ -303,7 +295,7 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/xoa', async (
 // --- Học viên & tiến độ ---
 
 async function renderCourseStudents(res, courseId, error) {
-  const course = await Course.findById(courseId).lean();
+  const course = await Course.findById(courseId).lean().catch(() => null);
   if (!course) return res.status(404).render('404');
 
   const enrollments = await Enrollment.find({ course: courseId }).sort({ enrolledAt: -1 }).lean();
@@ -347,7 +339,7 @@ router.post('/khoa-hoc/:id/hoc-vien/:enrollmentId/xoa', async (req, res) => {
 });
 
 router.get('/khoa-hoc/:id/hoc-vien/xuat-csv', async (req, res) => {
-  const course = await Course.findById(req.params.id).lean();
+  const course = await Course.findById(req.params.id).lean().catch(() => null);
   if (!course) return res.status(404).render('404');
 
   const enrollments = await Enrollment.find({ course: req.params.id }).sort({ enrolledAt: -1 }).lean();
@@ -412,66 +404,67 @@ router.get('/thu-vien', async (req, res) => {
   res.render('admin/gallery', { mediaItems, error: null });
 });
 
-router.post('/thu-vien/anh', (req, res) => {
-  uploadImage.single('image')(req, res, async (err) => {
-    const mediaItems = await Media.find().sort({ createdAt: -1 }).lean();
-    if (err) {
-      return res.render('admin/gallery', { mediaItems, error: friendlyUploadError(err) });
-    }
-    if (!req.file) {
-      return res.render('admin/gallery', { mediaItems, error: 'Vui lòng chọn ảnh.' });
-    }
-    await Media.create({
-      title: req.body.title || req.file.originalname,
-      type: 'image',
-      filePath: `/uploads/images/${req.file.filename}`,
-    });
-    await broadcastStats();
-    res.redirect('/admin/thu-vien');
+router.post('/thu-vien/anh', wrapUpload(uploadImage.single('image'), async (err, req, res) => {
+  const mediaItems = await Media.find().sort({ createdAt: -1 }).lean();
+  if (err) {
+    return res.render('admin/gallery', { mediaItems, error: friendlyUploadError(err) });
+  }
+  if (!req.file) {
+    return res.render('admin/gallery', { mediaItems, error: 'Vui lòng chọn ảnh.' });
+  }
+  await Media.create({
+    title: req.body.title || req.file.originalname,
+    type: 'image',
+    filePath: fileUrl(req.file, 'images'),
   });
-});
+  await broadcastStats();
+  res.redirect('/admin/thu-vien');
+}));
 
-router.post('/thu-vien/video', (req, res) => {
-  uploadVideo.single('video')(req, res, async (err) => {
-    const mediaItems = await Media.find().sort({ createdAt: -1 }).lean();
-    if (err) {
-      return res.render('admin/gallery', { mediaItems, error: friendlyUploadError(err) });
-    }
-    if (!req.file) {
-      return res.render('admin/gallery', { mediaItems, error: 'Vui lòng chọn video.' });
-    }
-    await Media.create({
-      title: req.body.title || req.file.originalname,
-      type: 'video',
-      filePath: `/uploads/videos/${req.file.filename}`,
-    });
-    await broadcastStats();
-    res.redirect('/admin/thu-vien');
+router.post('/thu-vien/video', wrapUpload(uploadVideo.single('video'), async (err, req, res) => {
+  const mediaItems = await Media.find().sort({ createdAt: -1 }).lean();
+  if (err) {
+    return res.render('admin/gallery', { mediaItems, error: friendlyUploadError(err) });
+  }
+  if (!req.file) {
+    return res.render('admin/gallery', { mediaItems, error: 'Vui lòng chọn video.' });
+  }
+  await Media.create({
+    title: req.body.title || req.file.originalname,
+    type: 'video',
+    filePath: fileUrl(req.file, 'videos'),
   });
-});
+  await broadcastStats();
+  res.redirect('/admin/thu-vien');
+}));
 
-router.post('/thu-vien/:id/sua', (req, res) => {
-  Media.findById(req.params.id).then((media) => {
+router.post('/thu-vien/:id/sua', async (req, res, next) => {
+  try {
+    const media = await Media.findById(req.params.id).catch(() => null);
     if (!media) return res.status(404).render('404');
 
     const uploader = media.type === 'video' ? uploadVideo.single('file') : uploadImage.single('file');
-    uploader(req, res, async (err) => {
-      if (err) {
-        const mediaItems = await Media.find().sort({ createdAt: -1 }).lean();
-        return res.render('admin/gallery', { mediaItems, error: friendlyUploadError(err) });
-      }
+    uploader(req, res, (err) => {
+      (async () => {
+        if (err) {
+          const mediaItems = await Media.find().sort({ createdAt: -1 }).lean();
+          return res.render('admin/gallery', { mediaItems, error: friendlyUploadError(err) });
+        }
 
-      media.title = (req.body.title || media.title).trim() || media.title;
-      if (req.file) {
-        unlinkUploaded(media.filePath);
-        const subfolder = media.type === 'video' ? 'videos' : 'images';
-        media.filePath = `/uploads/${subfolder}/${req.file.filename}`;
-      }
-      await media.save();
-      await broadcastStats();
-      res.redirect('/admin/thu-vien');
+        media.title = (req.body.title || media.title).trim() || media.title;
+        if (req.file) {
+          unlinkUploaded(media.filePath);
+          const subfolder = media.type === 'video' ? 'videos' : 'images';
+          media.filePath = fileUrl(req.file, subfolder);
+        }
+        await media.save();
+        await broadcastStats();
+        res.redirect('/admin/thu-vien');
+      })().catch(next);
     });
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.post('/thu-vien/:id/xoa', async (req, res) => {
@@ -508,25 +501,23 @@ router.get('/bai-viet/moi', (req, res) => {
   res.render('admin/article-form', { article: null, error: null, active: 'bai-viet' });
 });
 
-router.post('/bai-viet/moi', (req, res) => {
-  uploadImage.single('image')(req, res, async (err) => {
-    if (err) {
-      return res.render('admin/article-form', { article: null, error: friendlyUploadError(err), active: 'bai-viet' });
-    }
+router.post('/bai-viet/moi', wrapUpload(uploadImage.single('image'), async (err, req, res) => {
+  if (err) {
+    return res.render('admin/article-form', { article: null, error: friendlyUploadError(err), active: 'bai-viet' });
+  }
 
-    const image = req.file ? `/uploads/images/${req.file.filename}` : null;
-    await Article.create({
-      title: req.body.title,
-      summary: req.body.summary,
-      content: req.body.content,
-      image,
-      sourceUrl: sanitizeSourceUrl(req.body.sourceUrl),
-      published: req.body.published === 'on',
-    });
-    await broadcastStats();
-    res.redirect('/admin/bai-viet');
+  const image = req.file ? fileUrl(req.file, 'images') : null;
+  await Article.create({
+    title: req.body.title,
+    summary: req.body.summary,
+    content: req.body.content,
+    image,
+    sourceUrl: sanitizeSourceUrl(req.body.sourceUrl),
+    published: req.body.published === 'on',
   });
-});
+  await broadcastStats();
+  res.redirect('/admin/bai-viet');
+}));
 
 router.get('/bai-viet/:id/sua', async (req, res) => {
   const article = await Article.findById(req.params.id).lean().catch(() => null);
@@ -534,31 +525,29 @@ router.get('/bai-viet/:id/sua', async (req, res) => {
   res.render('admin/article-form', { article, error: null, active: 'bai-viet' });
 });
 
-router.post('/bai-viet/:id/sua', (req, res) => {
-  uploadImage.single('image')(req, res, async (err) => {
-    const article = await Article.findById(req.params.id);
-    if (!article) return res.status(404).render('404');
+router.post('/bai-viet/:id/sua', wrapUpload(uploadImage.single('image'), async (err, req, res) => {
+  const article = await Article.findById(req.params.id).catch(() => null);
+  if (!article) return res.status(404).render('404');
 
-    if (err) {
-      return res.render('admin/article-form', { article: article.toObject(), error: friendlyUploadError(err), active: 'bai-viet' });
-    }
+  if (err) {
+    return res.render('admin/article-form', { article: article.toObject(), error: friendlyUploadError(err), active: 'bai-viet' });
+  }
 
-    article.title = req.body.title;
-    article.summary = req.body.summary;
-    article.content = req.body.content;
-    article.sourceUrl = sanitizeSourceUrl(req.body.sourceUrl);
-    article.published = req.body.published === 'on';
+  article.title = req.body.title;
+  article.summary = req.body.summary;
+  article.content = req.body.content;
+  article.sourceUrl = sanitizeSourceUrl(req.body.sourceUrl);
+  article.published = req.body.published === 'on';
 
-    if (req.file) {
-      unlinkUploaded(article.image);
-      article.image = `/uploads/images/${req.file.filename}`;
-    }
+  if (req.file) {
+    unlinkUploaded(article.image);
+    article.image = fileUrl(req.file, 'images');
+  }
 
-    await article.save();
-    await broadcastStats();
-    res.redirect('/admin/bai-viet');
-  });
-});
+  await article.save();
+  await broadcastStats();
+  res.redirect('/admin/bai-viet');
+}));
 
 router.post('/bai-viet/:id/xoa', async (req, res) => {
   const article = await Article.findByIdAndDelete(req.params.id);
@@ -587,27 +576,25 @@ router.get('/doi-ngu/moi', (req, res) => {
   res.render('admin/team-form', { member: null, error: null, active: 'doi-ngu' });
 });
 
-router.post('/doi-ngu/moi', (req, res) => {
-  uploadImage.single('photo')(req, res, async (err) => {
-    if (err) {
-      return res.render('admin/team-form', { member: null, error: friendlyUploadError(err), active: 'doi-ngu' });
-    }
+router.post('/doi-ngu/moi', wrapUpload(uploadImage.single('photo'), async (err, req, res) => {
+  if (err) {
+    return res.render('admin/team-form', { member: null, error: friendlyUploadError(err), active: 'doi-ngu' });
+  }
 
-    const photo = req.file ? `/uploads/images/${req.file.filename}` : null;
-    await TeamMember.create({
-      name: req.body.name,
-      title: req.body.title,
-      group: req.body.group === 'leadership' ? 'leadership' : 'expert',
-      bio: req.body.bio || null,
-      highlight: req.body.highlight || null,
-      achievements: parseAchievements(req.body.achievements),
-      order: Number(req.body.order) || 0,
-      photo,
-    });
-    await broadcastStats();
-    res.redirect('/admin/doi-ngu');
+  const photo = req.file ? fileUrl(req.file, 'images') : null;
+  await TeamMember.create({
+    name: req.body.name,
+    title: req.body.title,
+    group: req.body.group === 'leadership' ? 'leadership' : 'expert',
+    bio: req.body.bio || null,
+    highlight: req.body.highlight || null,
+    achievements: parseAchievements(req.body.achievements),
+    order: Number(req.body.order) || 0,
+    photo,
   });
-});
+  await broadcastStats();
+  res.redirect('/admin/doi-ngu');
+}));
 
 router.get('/doi-ngu/:id/sua', async (req, res) => {
   const member = await TeamMember.findById(req.params.id).lean().catch(() => null);
@@ -615,33 +602,31 @@ router.get('/doi-ngu/:id/sua', async (req, res) => {
   res.render('admin/team-form', { member, error: null, active: 'doi-ngu' });
 });
 
-router.post('/doi-ngu/:id/sua', (req, res) => {
-  uploadImage.single('photo')(req, res, async (err) => {
-    const member = await TeamMember.findById(req.params.id);
-    if (!member) return res.status(404).render('404');
+router.post('/doi-ngu/:id/sua', wrapUpload(uploadImage.single('photo'), async (err, req, res) => {
+  const member = await TeamMember.findById(req.params.id).catch(() => null);
+  if (!member) return res.status(404).render('404');
 
-    if (err) {
-      return res.render('admin/team-form', { member: member.toObject(), error: friendlyUploadError(err), active: 'doi-ngu' });
-    }
+  if (err) {
+    return res.render('admin/team-form', { member: member.toObject(), error: friendlyUploadError(err), active: 'doi-ngu' });
+  }
 
-    member.name = req.body.name;
-    member.title = req.body.title;
-    member.group = req.body.group === 'leadership' ? 'leadership' : 'expert';
-    member.bio = req.body.bio || null;
-    member.highlight = req.body.highlight || null;
-    member.achievements = parseAchievements(req.body.achievements);
-    member.order = Number(req.body.order) || 0;
+  member.name = req.body.name;
+  member.title = req.body.title;
+  member.group = req.body.group === 'leadership' ? 'leadership' : 'expert';
+  member.bio = req.body.bio || null;
+  member.highlight = req.body.highlight || null;
+  member.achievements = parseAchievements(req.body.achievements);
+  member.order = Number(req.body.order) || 0;
 
-    if (req.file) {
-      unlinkUploaded(member.photo);
-      member.photo = `/uploads/images/${req.file.filename}`;
-    }
+  if (req.file) {
+    unlinkUploaded(member.photo);
+    member.photo = fileUrl(req.file, 'images');
+  }
 
-    await member.save();
-    await broadcastStats();
-    res.redirect('/admin/doi-ngu');
-  });
-});
+  await member.save();
+  await broadcastStats();
+  res.redirect('/admin/doi-ngu');
+}));
 
 router.post('/doi-ngu/:id/xoa', async (req, res) => {
   const member = await TeamMember.findByIdAndDelete(req.params.id);
@@ -663,23 +648,21 @@ router.get('/doi-tac/moi', (req, res) => {
   res.render('admin/partner-form', { partner: null, error: null, active: 'doi-tac' });
 });
 
-router.post('/doi-tac/moi', (req, res) => {
-  uploadImage.single('logo')(req, res, async (err) => {
-    if (err) {
-      return res.render('admin/partner-form', { partner: null, error: friendlyUploadError(err), active: 'doi-tac' });
-    }
+router.post('/doi-tac/moi', wrapUpload(uploadImage.single('logo'), async (err, req, res) => {
+  if (err) {
+    return res.render('admin/partner-form', { partner: null, error: friendlyUploadError(err), active: 'doi-tac' });
+  }
 
-    const logo = req.file ? `/uploads/images/${req.file.filename}` : null;
-    await Partner.create({
-      name: req.body.name,
-      tagline: req.body.tagline || null,
-      order: Number(req.body.order) || 0,
-      logo,
-    });
-    await broadcastStats();
-    res.redirect('/admin/doi-tac');
+  const logo = req.file ? fileUrl(req.file, 'images') : null;
+  await Partner.create({
+    name: req.body.name,
+    tagline: req.body.tagline || null,
+    order: Number(req.body.order) || 0,
+    logo,
   });
-});
+  await broadcastStats();
+  res.redirect('/admin/doi-tac');
+}));
 
 router.get('/doi-tac/:id/sua', async (req, res) => {
   const partner = await Partner.findById(req.params.id).lean().catch(() => null);
@@ -687,29 +670,27 @@ router.get('/doi-tac/:id/sua', async (req, res) => {
   res.render('admin/partner-form', { partner, error: null, active: 'doi-tac' });
 });
 
-router.post('/doi-tac/:id/sua', (req, res) => {
-  uploadImage.single('logo')(req, res, async (err) => {
-    const partner = await Partner.findById(req.params.id);
-    if (!partner) return res.status(404).render('404');
+router.post('/doi-tac/:id/sua', wrapUpload(uploadImage.single('logo'), async (err, req, res) => {
+  const partner = await Partner.findById(req.params.id).catch(() => null);
+  if (!partner) return res.status(404).render('404');
 
-    if (err) {
-      return res.render('admin/partner-form', { partner: partner.toObject(), error: friendlyUploadError(err), active: 'doi-tac' });
-    }
+  if (err) {
+    return res.render('admin/partner-form', { partner: partner.toObject(), error: friendlyUploadError(err), active: 'doi-tac' });
+  }
 
-    partner.name = req.body.name;
-    partner.tagline = req.body.tagline || null;
-    partner.order = Number(req.body.order) || 0;
+  partner.name = req.body.name;
+  partner.tagline = req.body.tagline || null;
+  partner.order = Number(req.body.order) || 0;
 
-    if (req.file) {
-      unlinkUploaded(partner.logo);
-      partner.logo = `/uploads/images/${req.file.filename}`;
-    }
+  if (req.file) {
+    unlinkUploaded(partner.logo);
+    partner.logo = fileUrl(req.file, 'images');
+  }
 
-    await partner.save();
-    await broadcastStats();
-    res.redirect('/admin/doi-tac');
-  });
-});
+  await partner.save();
+  await broadcastStats();
+  res.redirect('/admin/doi-tac');
+}));
 
 router.post('/doi-tac/:id/xoa', async (req, res) => {
   const partner = await Partner.findByIdAndDelete(req.params.id);
@@ -785,19 +766,17 @@ router.get('/cai-dat', async (req, res) => {
   await renderSettings(res, null);
 });
 
-router.post('/cai-dat/logo', (req, res) => {
-  uploadImage.single('logo')(req, res, async (err) => {
-    if (err) return renderSettings(res, friendlyUploadError(err));
+router.post('/cai-dat/logo', wrapUpload(uploadImage.single('logo'), async (err, req, res) => {
+  if (err) return renderSettings(res, friendlyUploadError(err));
 
-    const settings = await getSiteSettings();
-    if (!req.file) return renderSettings(res, 'Vui lòng chọn file logo.');
+  const settings = await getSiteSettings();
+  if (!req.file) return renderSettings(res, 'Vui lòng chọn file logo.');
 
-    unlinkUploaded(settings.logo);
-    settings.logo = `/uploads/images/${req.file.filename}`;
-    await settings.save();
-    res.redirect('/admin/cai-dat');
-  });
-});
+  unlinkUploaded(settings.logo);
+  settings.logo = fileUrl(req.file, 'images');
+  await settings.save();
+  res.redirect('/admin/cai-dat');
+}));
 
 router.post('/cai-dat/logo/xoa', async (req, res) => {
   const settings = await getSiteSettings();
@@ -807,19 +786,17 @@ router.post('/cai-dat/logo/xoa', async (req, res) => {
   res.redirect('/admin/cai-dat');
 });
 
-router.post('/cai-dat/anh-hero', (req, res) => {
-  uploadImage.single('heroImage')(req, res, async (err) => {
-    if (err) return renderSettings(res, friendlyUploadError(err));
+router.post('/cai-dat/anh-hero', wrapUpload(uploadImage.single('heroImage'), async (err, req, res) => {
+  if (err) return renderSettings(res, friendlyUploadError(err));
 
-    const settings = await getSiteSettings();
-    if (!req.file) return renderSettings(res, 'Vui lòng chọn ảnh.');
+  const settings = await getSiteSettings();
+  if (!req.file) return renderSettings(res, 'Vui lòng chọn ảnh.');
 
-    unlinkUploaded(settings.heroImage);
-    settings.heroImage = `/uploads/images/${req.file.filename}`;
-    await settings.save();
-    res.redirect('/admin/cai-dat');
-  });
-});
+  unlinkUploaded(settings.heroImage);
+  settings.heroImage = fileUrl(req.file, 'images');
+  await settings.save();
+  res.redirect('/admin/cai-dat');
+}));
 
 router.post('/cai-dat/anh-hero/xoa', async (req, res) => {
   const settings = await getSiteSettings();
@@ -829,19 +806,17 @@ router.post('/cai-dat/anh-hero/xoa', async (req, res) => {
   res.redirect('/admin/cai-dat');
 });
 
-router.post('/cai-dat/anh-giai-phap', (req, res) => {
-  uploadImage.single('solutionImage')(req, res, async (err) => {
-    if (err) return renderSettings(res, friendlyUploadError(err));
+router.post('/cai-dat/anh-giai-phap', wrapUpload(uploadImage.single('solutionImage'), async (err, req, res) => {
+  if (err) return renderSettings(res, friendlyUploadError(err));
 
-    const settings = await getSiteSettings();
-    if (!req.file) return renderSettings(res, 'Vui lòng chọn ảnh.');
+  const settings = await getSiteSettings();
+  if (!req.file) return renderSettings(res, 'Vui lòng chọn ảnh.');
 
-    unlinkUploaded(settings.solutionImage);
-    settings.solutionImage = `/uploads/images/${req.file.filename}`;
-    await settings.save();
-    res.redirect('/admin/cai-dat');
-  });
-});
+  unlinkUploaded(settings.solutionImage);
+  settings.solutionImage = fileUrl(req.file, 'images');
+  await settings.save();
+  res.redirect('/admin/cai-dat');
+}));
 
 router.post('/cai-dat/anh-giai-phap/xoa', async (req, res) => {
   const settings = await getSiteSettings();
@@ -858,20 +833,22 @@ const BIZ_IMAGE_FIELDS = {
   robotics: 'bizRoboticsImage',
 };
 
-router.post('/cai-dat/anh-linh-vuc/:key', (req, res) => {
+router.post('/cai-dat/anh-linh-vuc/:key', (req, res, next) => {
   const field = BIZ_IMAGE_FIELDS[req.params.key];
   if (!field) return res.status(404).render('404');
 
-  uploadImage.single('image')(req, res, async (err) => {
-    if (err) return renderSettings(res, friendlyUploadError(err));
+  uploadImage.single('image')(req, res, (err) => {
+    (async () => {
+      if (err) return renderSettings(res, friendlyUploadError(err));
 
-    const settings = await getSiteSettings();
-    if (!req.file) return renderSettings(res, 'Vui lòng chọn ảnh.');
+      const settings = await getSiteSettings();
+      if (!req.file) return renderSettings(res, 'Vui lòng chọn ảnh.');
 
-    unlinkUploaded(settings[field]);
-    settings[field] = `/uploads/images/${req.file.filename}`;
-    await settings.save();
-    res.redirect('/admin/cai-dat');
+      unlinkUploaded(settings[field]);
+      settings[field] = fileUrl(req.file, 'images');
+      await settings.save();
+      res.redirect('/admin/cai-dat');
+    })().catch(next);
   });
 });
 

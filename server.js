@@ -18,6 +18,9 @@ const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/vsia_db';
 
 app.set('view engine', 'ejs');
+// Chỉ bật khi thật sự đứng sau reverse proxy (Nginx/Vercel/Render...) — nếu bật sai khi không có
+// proxy, req.ip có thể bị giả mạo qua header X-Forwarded-For, làm rate limit vô hiệu.
+if (process.env.TRUST_PROXY) app.set('trust proxy', process.env.TRUST_PROXY);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -27,7 +30,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: MONGO_URI }),
-  cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 },
+  cookie: { maxAge: 1000 * 60 * 60 * 24 * 7, secure: process.env.NODE_ENV === 'production' },
 }));
 
 app.use(loadUser);
@@ -41,6 +44,12 @@ app.use('/admin', adminRoutes);
 
 app.use((req, res) => {
   res.status(404).render('404');
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  if (res.headersSent) return next(err);
+  res.status(500).render('500');
 });
 
 connectDB()

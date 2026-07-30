@@ -72,6 +72,13 @@ router.get('/hoc/:courseId', requireAuth, async (req, res) => {
 });
 
 router.post('/hoc/:courseId/bai/:lessonId/toggle', requireAuth, async (req, res) => {
+  const course = await Course.findById(req.params.courseId).lean().catch(() => null);
+  if (!course) return res.status(404).render('404');
+
+  const validLessonIds = new Set();
+  (course.modules || []).forEach((m) => (m.lessons || []).forEach((l) => validLessonIds.add(String(l._id))));
+  if (!validLessonIds.has(req.params.lessonId)) return res.status(404).render('404');
+
   const enrollment = await Enrollment.findOne({ user: req.user._id, course: req.params.courseId });
   if (!enrollment) return res.redirect(`/khoa-hoc/${req.params.courseId}`);
 

@@ -1,6 +1,8 @@
 <%
   const nameParts = member.name.trim().split(/\s+/);
-  const initials = (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase();
+  const initials = nameParts.length > 1
+    ? (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase()
+    : nameParts[0].slice(0, 2).toUpperCase();
 %>
 <div class="leader">
   <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>

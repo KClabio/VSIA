@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const { requireAuth } = require('../middleware/auth');
-const { uploadImage } = require('../middleware/upload');
+const { uploadImage, wrapUpload, fileUrl } = require('../middleware/upload');
 const { unlinkUploaded } = require('../lib/files');
 const { computeStats, broadcastStats } = require('../lib/stats');
 
@@ -31,7 +31,15 @@ router.post('/dang-ky', async (req, res) => {
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
-  const user = await User.create({ name, email, passwordHash });
+  let user;
+  try {
+    user = await User.create({ name, email, passwordHash });
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.render('register', { error: 'Email này đã được đăng ký.', form: { name, email } });
+    }
+    throw err;
+  }
   await broadcastStats();
 
   req.session.userId = user._id;
@@ -79,31 +87,29 @@ router.get('/ho-so', requireAuth, async (req, res) => {
   }));
 });
 
-router.post('/ho-so', requireAuth, (req, res) => {
-  uploadImage.single('avatar')(req, res, async (err) => {
-    const stats = req.user.role === 'admin' ? await computeStats() : null;
+router.post('/ho-so', requireAuth, wrapUpload(uploadImage.single('avatar'), async (err, req, res) => {
+  const stats = req.user.role === 'admin' ? await computeStats() : null;
 
-    if (err) {
-      return res.render('profile', profileViewData(req, stats, { error: err.message }));
-    }
+  if (err) {
+    return res.render('profile', profileViewData(req, stats, { error: err.message }));
+  }
 
-    const name = (req.body.name || '').trim();
-    if (!name) {
-      return res.render('profile', profileViewData(req, stats, { error: 'Họ tên không được để trống.' }));
-    }
+  const name = (req.body.name || '').trim();
+  if (!name) {
+    return res.render('profile', profileViewData(req, stats, { error: 'Họ tên không được để trống.' }));
+  }
 
-    const update = { name, phone: req.body.phone || '', bio: req.body.bio || '' };
+  const update = { name, phone: req.body.phone || '', bio: req.body.bio || '' };
 
-    const currentUser = await User.findById(req.user._id);
-    if (req.file) {
-      unlinkUploaded(currentUser.avatar);
-      update.avatar = `/uploads/images/${req.file.filename}`;
-    }
+  const currentUser = await User.findById(req.user._id);
+  if (req.file) {
+    unlinkUploaded(currentUser.avatar);
+    update.avatar = fileUrl(req.file, 'images');
+  }
 
-    await User.findByIdAndUpdate(req.user._id, update);
-    res.redirect('/ho-so?updated=1');
-  });
-});
+  await User.findByIdAndUpdate(req.user._id, update);
+  res.redirect('/ho-so?updated=1');
+}));
 
 router.post('/ho-so/mat-khau', requireAuth, async (req, res) => {
   const { currentPassword, newPassword, confirmNewPassword } = req.body;

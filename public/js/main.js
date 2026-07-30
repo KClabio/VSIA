@@ -152,16 +152,6 @@ if (window.IntersectionObserver) {
   document.querySelectorAll('.depth-section').forEach((el) => el.classList.add('depth-in'));
 }
 
-// Accordion "Lĩnh vực hoạt động" (trang chủ)
-document.querySelectorAll('.linhvuc-toggle').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const card = btn.closest('.linhvuc-card');
-    const open = card.classList.toggle('open');
-    btn.setAttribute('aria-expanded', open);
-    btn.querySelector('.linhvuc-toggle-label').textContent = open ? 'Thu gọn' : 'Xem chi tiết';
-  });
-});
-
 // Chatbot AI (widget nổi)
 const chatToggleBtn = document.getElementById('chatToggleBtn');
 const chatPanel = document.getElementById('chatPanel');
@@ -174,7 +164,7 @@ if (chatToggleBtn && chatPanel) {
   const chatHistory = [];
 
   function escapeHtml(str) {
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
   function inlineFormat(str) {

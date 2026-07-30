@@ -485,6 +485,7 @@
   background: #fff; border-radius: 18px;
   box-shadow: var(--shadow-sm); overflow: hidden;
   transition: transform .3s ease, box-shadow .3s ease;
+  text-decoration: none; color: inherit; cursor: pointer;
 }
 .linhvuc-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
 .lv-1 { --lv-a: #1a8fd1; --lv-b: #38b6f1; }
@@ -509,23 +510,11 @@
 
 .linhvuc-body { padding: 46px 26px 26px; flex: 1; display: flex; flex-direction: column; }
 .linhvuc-body h3 { font-size: 1.14rem; color: var(--navy); font-weight: 700; margin: 0 0 16px; line-height: 1.35; }
-.linhvuc-toggle {
-  display: inline-flex; align-items: center; gap: 6px; align-self: flex-start;
-  background: none; border: none; padding: 0; margin-top: auto;
-  font-weight: 600; font-size: .88rem; color: var(--lv-a); cursor: pointer; font-family: inherit;
-}
-.linhvuc-chevron { transition: transform .3s ease; }
-.linhvuc-card.open .linhvuc-chevron { transform: rotate(180deg); }
-.linhvuc-detail { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s ease; }
-.linhvuc-card.open .linhvuc-detail { grid-template-rows: 1fr; }
-.linhvuc-detail-inner { overflow: hidden; }
-.linhvuc-detail p { color: var(--muted); font-size: .9rem; line-height: 1.7; margin: 14px 0 0; }
-.linhvuc-detail p strong { color: #40506a; }
 .linhvuc-more {
-  display: inline-flex; align-items: center; gap: 6px; margin-top: 14px;
-  font-weight: 600; font-size: .86rem; color: var(--lv-a); transition: gap .2s ease;
+  display: inline-flex; align-items: center; gap: 6px; margin-top: auto;
+  font-weight: 600; font-size: .88rem; color: var(--lv-a); transition: gap .2s ease;
 }
-.linhvuc-more:hover { gap: 11px; }
+.linhvuc-card:hover .linhvuc-more { gap: 11px; }
 
 /* ============ COURSE CARD (restyle, dùng chung trang chủ + /khoa-hoc) ============ */
 .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; align-items: stretch; }
