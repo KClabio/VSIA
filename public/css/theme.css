@@ -358,9 +358,6 @@
 .hv-card .t { font-weight: 700; font-size: .9rem; color: #fff; }
 .hv-card .d { font-size: .74rem; color: #c7e3f5; margin-top: 2px; }
 
-/* ============ SERVICE CARDS (overlap hero) ============ */
-.svc-wrap { position: relative; z-index: 20; margin-top: -92px; }
-
 /* ============ VỀ CHÚNG TÔI (Sứ mệnh / Tầm nhìn / Giá trị cốt lõi) ============ */
 .about-us-section {
   position: relative;
@@ -435,23 +432,6 @@
   .about-vsia-grid { grid-template-columns: 1fr; }
   .av-values-grid { grid-template-columns: 1fr 1fr; }
 }
-.svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.svc { position: relative; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); transition: transform .25s, box-shadow .25s; }
-.svc::before {
-  content: ''; position: absolute; left: 0; top: 0; height: 4px; width: 0; z-index: 4;
-  background: linear-gradient(90deg, var(--blue), var(--gold)); transition: width .38s cubic-bezier(.2, .7, .2, 1);
-}
-.svc:hover::before { width: 100%; }
-.svc:hover { transform: translateY(-8px); }
-.svc .top { height: 250px; position: relative; }
-.svc .top .num { position: absolute; left: 20px; top: 16px; z-index: 3; font-family: 'Playfair Display'; font-weight: 700; font-size: 1.5rem; color: rgba(255, 255, 255, .92); }
-.svc .top .ic { position: absolute; right: 18px; bottom: 16px; z-index: 3; color: #fff; opacity: .92; }
-.svc .svc-body { padding: 26px 26px 30px; }
-.svc h3 { font-size: 1.32rem; color: var(--navy); font-weight: 700; }
-.svc p { color: #5a6b84; font-size: .94rem; margin: 12px 0 18px; }
-.svc a.more { font-weight: 600; font-size: .88rem; color: var(--blue); display: inline-flex; align-items: center; gap: 7px; transition: gap .2s; }
-.svc a.more:hover { gap: 12px; }
-
 /* ============ ABOUT + EXPERTISE ============ */
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
 .about-media { position: relative; }
@@ -935,8 +915,8 @@
   will-change: transform, opacity;
 }
 .depth-section.depth-in { opacity: 1; transform: translateY(0) scale(1); }
-.svc-grid > .reveal:nth-child(2), .course-grid > .reveal:nth-child(2), .article-grid > .reveal:nth-child(2), .linhvuc-grid > .reveal:nth-child(2), .info-grid > .reveal:nth-child(2) { transition-delay: .07s; }
-.svc-grid > .reveal:nth-child(3), .course-grid > .reveal:nth-child(3), .article-grid > .reveal:nth-child(3), .linhvuc-grid > .reveal:nth-child(3), .info-grid > .reveal:nth-child(3) { transition-delay: .14s; }
+.course-grid > .reveal:nth-child(2), .article-grid > .reveal:nth-child(2), .linhvuc-grid > .reveal:nth-child(2), .info-grid > .reveal:nth-child(2) { transition-delay: .07s; }
+.course-grid > .reveal:nth-child(3), .article-grid > .reveal:nth-child(3), .linhvuc-grid > .reveal:nth-child(3), .info-grid > .reveal:nth-child(3) { transition-delay: .14s; }
 .info-grid > .reveal:nth-child(4) { transition-delay: .21s; }
 .info-grid > .reveal:nth-child(5) { transition-delay: .28s; }
 .info-grid > .reveal:nth-child(6) { transition-delay: .35s; }
@@ -957,7 +937,7 @@
   .main-nav a.nav-cta { width: 100%; text-align: center; }
   .hero-home-inner { grid-template-columns: 1fr; }
   .hero-visual { display: none; }
-  .svc-grid, .course-grid, .article-grid, .experts3 { grid-template-columns: 1fr 1fr; }
+  .course-grid, .article-grid, .experts3 { grid-template-columns: 1fr 1fr; }
   .about-grid, .hl-inner { grid-template-columns: 1fr; gap: 40px; }
   .about-media .badge { position: static; margin-top: 16px; max-width: none; }
   .linhvuc-grid { grid-template-columns: 1fr; }
@@ -970,9 +950,8 @@
 }
 @media (max-width: 620px) {
   .section { padding: 64px 0; }
-  .svc-grid, .course-grid, .article-grid, .expertise, .experts3 { grid-template-columns: 1fr; }
+  .course-grid, .article-grid, .expertise, .experts3 { grid-template-columns: 1fr; }
   .hero-home { padding: 150px 0 120px; }
-  .svc-wrap { margin-top: 40px; }
   .hero-home-stats { grid-template-columns: 1fr; max-width: 340px; gap: 12px; }
 }
 :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }

@@ -1359,6 +1359,83 @@ a { text-decoration: none; color: inherit; }
 }
 .contact-modal input:focus, .contact-modal textarea:focus { outline: none; border-color: var(--blue); }
 
+/* Contact page */
+.contact-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 32px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .contact-page-grid { grid-template-columns: 1fr; }
+}
+
+.contact-info-card, .contact-form-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.contact-info-head { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+.contact-info-ic {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-alt);
+  color: var(--blue);
+}
+.contact-info-head h3 { margin: 0; color: var(--navy); font-size: 19px; }
+
+.contact-info-list { display: flex; flex-direction: column; gap: 18px; }
+.contact-info-row { display: flex; align-items: flex-start; gap: 12px; line-height: 1.55; font-size: 14.5px; color: var(--text); }
+.contact-info-row svg { flex-shrink: 0; margin-top: 2px; color: var(--blue); }
+.contact-info-row a { color: var(--text); }
+.contact-info-row a:hover { color: var(--blue); }
+
+.contact-map-link {
+  display: inline-block;
+  margin-top: 26px;
+  font-weight: 600;
+  font-size: .88rem;
+  color: var(--blue);
+}
+.contact-map-link:hover { text-decoration: underline; }
+
+.contact-form-card h3 { margin: 0 0 8px; color: var(--navy); font-size: 20px; }
+.contact-form-card > p { margin: 0 0 24px; color: var(--muted); font-size: 14px; }
+.contact-form-card label { display: block; margin-bottom: 16px; font-weight: 600; font-size: .86rem; color: var(--navy); }
+.contact-form-card .auth-input-wrap input {
+  display: block;
+  width: 100%;
+  padding: 12px 14px 12px 40px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: .94rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color .2s;
+}
+.contact-form-card textarea {
+  display: block;
+  width: 100%;
+  margin-top: 7px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: .94rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color .2s;
+  box-sizing: border-box;
+}
+.contact-form-card input:focus, .contact-form-card textarea:focus { outline: none; border-color: var(--blue); }
+
 /* Admin */
 .admin-dashboard-grid {
   display: grid;

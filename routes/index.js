@@ -39,6 +39,11 @@ router.get('/ngay-hoi-cuoc-thi', async (req, res) => {
   res.render('stem-events', { hero });
 });
 
+router.get('/lien-he', async (req, res) => {
+  const hero = await getPageContent('lien-he');
+  res.render('contact', { hero });
+});
+
 router.get('/khoa-hoc', async (req, res) => {
   const courses = await Course.find().sort({ createdAt: -1 }).lean();
   res.render('courses', { courses });
