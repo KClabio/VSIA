@@ -4,7 +4,7 @@ const crypto = require('crypto');
 
 const ContactRequest = require('../models/ContactRequest');
 const { TOOL_DECLARATIONS, executeTool } = require('../lib/chatbotTools');
-const { checkAndConsume } = require('../lib/rateLimit');
+const { checkAndConsume, checkGlobalChatbotLimit } = require('../lib/rateLimit');
 
 const SYSTEM_PROMPT = `Bạn là trợ lý ảo tư vấn của VSIA (Vietnam STEM Innovation Alliance) — tổ chức đào tạo, bồi dưỡng giáo viên STEM tại Việt Nam. VSIA cung cấp: các khoá học/chương trình bồi dưỡng giáo viên STEM, tư vấn thiết kế phòng Lab STEM, tổ chức ngày hội và cuộc thi STEM cho trường học, kết nối chuyên gia và mạng lưới đối tác giáo dục.
 Hãy trả lời bằng tiếng Việt, thân thiện, ngắn gọn, đúng trọng tâm.
@@ -44,6 +44,11 @@ router.post('/api/chatbot', async (req, res) => {
   if (!rateLimit.allowed) {
     res.set('Retry-After', String(rateLimit.retryAfterSeconds));
     return res.status(429).json({ error: `Bạn đã gửi quá nhiều tin nhắn, vui lòng thử lại sau ${rateLimit.retryAfterSeconds} giây.` });
+  }
+
+  const globalLimit = checkGlobalChatbotLimit();
+  if (!globalLimit.allowed) {
+    return res.json({ reply: FALLBACK_REPLY });
   }
 
   try {
@@ -88,6 +93,12 @@ router.post('/api/chatbot', async (req, res) => {
 });
 
 router.post('/lien-he-tu-van', async (req, res) => {
+  const contactRateLimit = checkAndConsume(`contact:ip:${req.ip}`, { minuteLimit: 3, dayLimit: 20 });
+  if (!contactRateLimit.allowed) {
+    res.set('Retry-After', String(contactRateLimit.retryAfterSeconds));
+    return res.status(429).json({ error: `Bạn đã gửi quá nhiều yêu cầu, vui lòng thử lại sau ${contactRateLimit.retryAfterSeconds} giây.` });
+  }
+
   const name = (req.body.name || '').trim();
   const contact = (req.body.contact || '').trim();
   const message = (req.body.message || '').trim();

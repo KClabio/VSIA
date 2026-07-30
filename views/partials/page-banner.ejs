@@ -1,0 +1,27 @@
+<%
+  const bannerImage = typeof image !== 'undefined' ? image : null;
+  const bannerTitle2 = typeof titleLine2 !== 'undefined' ? titleLine2 : null;
+  const bannerSubtitle = typeof subtitle !== 'undefined' ? subtitle : null;
+  const bannerCtaText = typeof ctaText !== 'undefined' ? ctaText : null;
+%>
+<section class="page-banner">
+  <% if (bannerImage) { %>
+    <div class="page-banner-photo"><img src="<%= bannerImage %>" alt=""></div>
+  <% } else { %>
+    <div class="page-banner-photo page-banner-photo-placeholder">
+      <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
+    </div>
+  <% } %>
+</section>
+<section class="page-banner-intro">
+  <div class="wrap">
+    <span class="eyebrow"><%= badge %></span>
+    <h1><%= titleLine1 %><% if (bannerTitle2) { %><br><span class="accent"><%= bannerTitle2 %></span><% } %></h1>
+    <% if (bannerSubtitle) { %><p class="sub"><%= bannerSubtitle %></p><% } %>
+    <% if (bannerCtaText) { %>
+      <div class="page-hero-cta">
+        <a href="<%= ctaLink %>" class="btn btn-primary"<% if (typeof ctaAttrs !== 'undefined' && ctaAttrs) { %> <%- ctaAttrs %><% } %>><%= bannerCtaText %> →</a>
+      </div>
+    <% } %>
+  </div>
+</section>

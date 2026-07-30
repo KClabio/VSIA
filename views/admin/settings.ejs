@@ -36,26 +36,31 @@
   </details>
 
   <details class="settings-page-block" id="hero-image">
-    <summary>🌄 Ảnh nền Hero trang chủ</summary>
+    <summary>🌄 Ảnh nền Hero trang chủ (slideshow)</summary>
     <div class="settings-page-form">
-      <p class="section-subtitle" style="margin-bottom:16px; text-align:left;">Ảnh nền cho khối đầu trang chủ (dưới lớp màu tan dần). Chưa có ảnh sẽ dùng nền gradient màu thương hiệu.</p>
-      <% if (settings.heroImage) { %>
-        <div class="admin-logo-preview">
-          <img src="<%= settings.heroImage %>" alt="Ảnh nền Hero" style="max-height:220px;">
+      <p class="section-subtitle" style="margin-bottom:16px; text-align:left;">Có thể thêm nhiều ảnh — trang chủ sẽ tự động chuyển lần lượt giữa các ảnh này. Chưa có ảnh nào sẽ dùng nền gradient màu thương hiệu.</p>
+
+      <% if (settings.heroImages && settings.heroImages.length > 0) { %>
+        <div class="admin-hero-slides-grid" style="margin-bottom:20px;">
+          <% settings.heroImages.forEach((img, i) => { %>
+            <div class="admin-hero-slide-item">
+              <img src="<%= img.url %>" alt="Ảnh nền Hero <%= i + 1 %>">
+              <form action="/admin/cai-dat/anh-hero/<%= img._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá ảnh này khỏi slideshow?');">
+                <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá</button>
+              </form>
+            </div>
+          <% }) %>
         </div>
-        <form action="/admin/cai-dat/anh-hero/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá ảnh nền này?');" style="margin-bottom:20px;">
-          <button type="submit" class="btn btn-ghost">Xoá ảnh, dùng lại nền gradient</button>
-        </form>
       <% } else { %>
         <p class="empty-state" style="text-align:left; margin-bottom:16px;">Chưa có ảnh — đang dùng nền gradient xanh thương hiệu.</p>
       <% } %>
 
       <form method="POST" enctype="multipart/form-data" action="/admin/cai-dat/anh-hero">
-        <label>Chọn ảnh nền mới (ảnh rộng, nên tối màu hoặc đủ tương phản để chữ trắng đọc rõ)
+        <label>Thêm ảnh vào slideshow (ảnh rộng, nên tối màu hoặc đủ tương phản để chữ trắng đọc rõ)
           <input type="file" name="heroImage" accept="image/png,image/jpeg,image/webp,image/gif" required>
         </label>
         <div class="admin-form-actions">
-          <button type="submit" class="btn btn-primary"><%= settings.heroImage ? 'Thay ảnh' : 'Tải ảnh lên' %></button>
+          <button type="submit" class="btn btn-primary">+ Thêm ảnh</button>
         </div>
       </form>
     </div>
@@ -90,13 +95,14 @@
   <details class="settings-page-block" id="biz-images">
     <summary>📷 Ảnh khu vực "Lĩnh vực hoạt động" (trang chủ)</summary>
     <div class="settings-page-form">
-      <p class="section-subtitle" style="margin-bottom:20px; text-align:left;">4 ảnh minh hoạ cho từng tab: Tư vấn phòng Lab, Đào tạo giáo viên, Ngày hội &amp; Cuộc thi, Robotics AI. Chưa có ảnh sẽ hiện hoạ tiết thay thế.</p>
+      <p class="section-subtitle" style="margin-bottom:20px; text-align:left;">Ảnh minh hoạ cho từng tab: Tư vấn phòng Lab, Đào tạo giáo viên, Ngày hội &amp; Cuộc thi, Robotics AI, và ảnh nền trang Liên hệ. Chưa có ảnh sẽ hiện hoạ tiết thay thế.</p>
 
       <% const bizImages = [
         { key: 'lab', label: 'Tư vấn phòng Lab', value: settings.bizLabImage },
         { key: 'teacher', label: 'Đào tạo giáo viên', value: settings.bizTeacherImage },
         { key: 'events', label: 'Ngày hội & Cuộc thi', value: settings.bizEventsImage },
         { key: 'robotics', label: 'Robotics AI', value: settings.bizRoboticsImage },
+        { key: 'contact', label: 'Ảnh nền trang Liên hệ', value: settings.contactImage },
       ]; %>
 
       <% bizImages.forEach((img, i) => { %>

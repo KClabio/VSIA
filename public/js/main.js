@@ -53,6 +53,20 @@ document.querySelectorAll('.carousel').forEach((carousel) => {
   });
 });
 
+// Hero trang chủ: tự động chuyển giữa nhiều ảnh nền (crossfade), nếu admin đã tải lên >1 ảnh.
+(function () {
+  const slides = document.querySelectorAll('.hero-home-bg-slide');
+  if (slides.length < 2) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 5000);
+})();
+
 document.querySelectorAll('.gallery-marquee').forEach((marquee) => {
   const track = marquee.querySelector('.gallery-marquee-track');
   if (!track) return;

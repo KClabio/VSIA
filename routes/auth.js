@@ -6,6 +6,7 @@ const { requireAuth } = require('../middleware/auth');
 const { uploadImage, wrapUpload, fileUrl } = require('../middleware/upload');
 const { unlinkUploaded } = require('../lib/files');
 const { computeStats, broadcastStats } = require('../lib/stats');
+const { checkAndConsume } = require('../lib/rateLimit');
 
 router.get('/dang-ky', (req, res) => {
   if (req.user) return res.redirect('/');
@@ -14,6 +15,11 @@ router.get('/dang-ky', (req, res) => {
 
 router.post('/dang-ky', async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
+
+  const registerLimit = checkAndConsume(`register:ip:${req.ip}`, { minuteLimit: 3, dayLimit: 10 });
+  if (!registerLimit.allowed) {
+    return res.render('register', { error: `Bạn đã đăng ký quá nhiều lần, vui lòng thử lại sau ${registerLimit.retryAfterSeconds} giây.`, form: { name, email } });
+  }
 
   if (!name || !email || !password) {
     return res.render('register', { error: 'Vui lòng điền đầy đủ thông tin.', form: { name, email } });
@@ -53,7 +59,14 @@ router.get('/dang-nhap', (req, res) => {
 
 router.post('/dang-nhap', async (req, res) => {
   const { email, password, redirectTo } = req.body;
-  const user = await User.findOne({ email: (email || '').toLowerCase().trim() });
+  const normalizedEmail = (email || '').toLowerCase().trim();
+
+  const loginLimit = checkAndConsume(`login:${normalizedEmail}`, { minuteLimit: 5, dayLimit: 20 });
+  if (!loginLimit.allowed) {
+    return res.render('login', { error: `Tài khoản tạm thời bị khoá do đăng nhập sai quá nhiều lần. Vui lòng thử lại sau ${loginLimit.retryAfterSeconds} giây.`, redirectTo: redirectTo || '/' });
+  }
+
+  const user = await User.findOne({ email: normalizedEmail });
 
   const valid = user && await bcrypt.compare(password || '', user.passwordHash);
   if (!valid) {

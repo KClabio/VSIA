@@ -1,15 +1,6 @@
 <%- include('partials/header', { title: 'Khoá học - VSIA' }) %>
 
-<section class="page-hero">
-  <div class="page-hero-bg <%= bizRoboticsImage ? 'has-photo' : '' %>" <% if (bizRoboticsImage) { %>style="background-image: url('<%= bizRoboticsImage %>');"<% } %>></div>
-  <% if (bizRoboticsImage) { %><div class="page-hero-overlay"></div><% } %>
-  <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
-  <div class="wrap page-hero-inner">
-    <span class="eyebrow">Chương trình đào tạo</span>
-    <h1>Khoá học đào tạo STEM</h1>
-    <p class="sub">Các khoá tập huấn, bồi dưỡng giáo viên STEM bài bản, từ kỹ thuật thiết bị đến hướng dẫn học sinh nghiên cứu khoa học.</p>
-  </div>
-</section>
+<%- include('partials/page-banner', { image: bizRoboticsImage, badge: 'Chương trình đào tạo', titleLine1: 'Khoá học đào tạo STEM', subtitle: 'Các khoá tập huấn, bồi dưỡng giáo viên STEM bài bản, từ kỹ thuật thiết bị đến hướng dẫn học sinh nghiên cứu khoa học.' }) %>
 
 <div class="wrap" style="padding: 48px 26px 0;">
   <p class="section-subtitle" style="margin-bottom:0;">Tổ chức các chương trình tập huấn nâng cao năng lực sư phạm và phương pháp giảng dạy STEM (Khoa học, Công nghệ, Kĩ thuật, Toán) cùng AI, Robotics cho đội ngũ cán bộ quản lý và giáo viên; chuyển giao công nghệ giáo dục hiện đại.</p>

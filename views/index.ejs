@@ -1,8 +1,16 @@
 <%- include('partials/header', { title: 'VSIA - Đào tạo giáo viên STEM Việt Nam', transparentNav: true }) %>
 
 <section class="hero-home">
-  <div class="hero-home-bg <%= heroImage ? 'has-photo' : '' %>" <% if (heroImage) { %>style="background-image: url('<%= heroImage %>');"<% } %>></div>
-  <% if (heroImage) { %><div class="hero-home-overlay"></div><% } %>
+  <% if (heroImages && heroImages.length > 0) { %>
+    <div class="hero-home-bg-slides">
+      <% heroImages.forEach((img, i) => { %>
+        <div class="hero-home-bg-slide <%= i === 0 ? 'active' : '' %>" style="background-image: url('<%= img.url %>');"></div>
+      <% }) %>
+    </div>
+    <div class="hero-home-overlay"></div>
+  <% } else { %>
+    <div class="hero-home-bg"></div>
+  <% } %>
   <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
   <div class="hero-home-inner">
     <div class="hero-home-copy">

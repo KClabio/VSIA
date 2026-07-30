@@ -6,97 +6,165 @@
   <% } %>
 </div>
 
-<div class="admin-stats-grid">
+<div class="adm-stat-grid">
   <% cards.forEach(card => { %>
-    <div class="admin-stat-card accent-<%= card.accent %>">
-      <span class="admin-stat-icon"><%= card.icon %></span>
-      <span class="admin-stat-label"><%= card.label %></span>
-      <span class="admin-stat-value" data-stat="<%= card.key %>"><%= card.value %></span><% if (card.suffix) { %><span class="admin-stat-value"><%= card.suffix %></span><% } %>
+    <div class="adm-stat-card">
+      <div class="adm-stat-top">
+        <span class="adm-stat-label"><%= card.label %></span>
+        <span class="adm-stat-icon-box <%= card.accent === 'amber' ? 'amber' : '' %>"><svg width="15" height="15"><use href="#<%= card.iconId %>"/></svg></span>
+      </div>
+      <div class="adm-stat-num"><span data-stat="<%= card.key %>"><%= card.value %></span><% if (card.suffix) { %><sup><%= card.suffix %></sup><% } %></div>
     </div>
   <% }) %>
 </div>
 
-<h2 class="admin-section-heading">Truy cập nhanh</h2>
-<div class="admin-dashboard-grid">
-  <% if (canAccessModule('khoa-hoc')) { %>
-  <a href="/admin/khoa-hoc" class="admin-tile">
-    <h3>Quản lý khoá học</h3>
-    <p>Tạo, sửa, xoá khoá học và tài liệu đính kèm.</p>
-  </a>
-  <% } %>
-  <% if (canAccessModule('tien-do')) { %>
-  <a href="/admin/tien-do" class="admin-tile">
-    <h3>Tiến độ học tập</h3>
-    <p>Theo dõi tiến trình hoàn thành bài học của học viên.</p>
-  </a>
-  <% } %>
-  <% if (canAccessModule('thu-vien')) { %>
-  <a href="/admin/thu-vien" class="admin-tile">
-    <h3>Thư viện ảnh/video</h3>
-    <p>Quản lý ảnh, video hiển thị ở mục "Hình ảnh hoạt động" trang chủ.</p>
-  </a>
-  <% } %>
-  <% if (canAccessModule('bai-viet')) { %>
-  <a href="/admin/bai-viet" class="admin-tile">
-    <h3>Quản lý bài viết</h3>
-    <p>Tạo, sửa, xoá bài viết hiển thị ở mục "Tin tức" trang chủ.</p>
-  </a>
-  <% } %>
-  <% if (canAccessModule('doi-ngu')) { %>
-  <a href="/admin/doi-ngu" class="admin-tile">
-    <h3>Ban lãnh đạo &amp; Hội đồng chuyên gia</h3>
-    <p>Thêm, sửa ảnh và thông tin thành viên hiển thị ở trang chủ.</p>
-  </a>
-  <% } %>
-  <% if (canAccessModule('doi-tac')) { %>
-  <a href="/admin/doi-tac" class="admin-tile">
-    <h3>Đối tác đồng hành</h3>
-    <p>Thêm, sửa logo và thông tin đối tác hiển thị ở trang chủ.</p>
-  </a>
-  <% } %>
-  <% if (canAccessModule('lien-he')) { %>
-  <a href="/admin/lien-he" class="admin-tile">
-    <h3>Liên hệ tư vấn</h3>
-    <p>Tiếp nhận, xử lý các yêu cầu tư vấn từ khách hàng.</p>
-  </a>
-  <% } %>
-  <% if (canAccessModule('nguoi-dung')) { %>
-  <a href="/admin/nguoi-dung" class="admin-tile">
-    <h3>Quản lý người dùng</h3>
-    <p>Cấp hoặc thu hồi quyền quản trị cho tài khoản khác.</p>
-  </a>
-  <% } %>
-  <% if (canAccessModule('cai-dat')) { %>
-  <a href="/admin/cai-dat" class="admin-tile">
-    <h3>Cài đặt website</h3>
-    <p>Logo, ảnh nền trang chủ, ảnh minh hoạ và tiêu đề đầu trang.</p>
-  </a>
-  <% } %>
+<h2 class="adm-section-title">Truy cập nhanh</h2>
+<div class="adm-qa-panel">
+  <div class="adm-qa-grid">
+    <% if (canAccessModule('khoa-hoc')) { %>
+    <a href="/admin/khoa-hoc" class="adm-qa-row">
+      <span class="adm-qa-icon-box"><svg><use href="#i-book"/></svg></span>
+      <span><span class="adm-qa-title">Quản lý khoá học</span><span class="adm-qa-desc">Tạo, sửa, xoá khoá học và tài liệu đính kèm.</span></span>
+      <svg class="adm-qa-chev"><use href="#i-chev"/></svg>
+    </a>
+    <% } %>
+    <% if (canAccessModule('tien-do')) { %>
+    <a href="/admin/tien-do" class="adm-qa-row">
+      <span class="adm-qa-icon-box"><svg><use href="#i-trend"/></svg></span>
+      <span><span class="adm-qa-title">Tiến độ học tập</span><span class="adm-qa-desc">Theo dõi tiến trình hoàn thành bài học của học viên.</span></span>
+      <svg class="adm-qa-chev"><use href="#i-chev"/></svg>
+    </a>
+    <% } %>
+    <% if (canAccessModule('thu-vien')) { %>
+    <a href="/admin/thu-vien" class="adm-qa-row">
+      <span class="adm-qa-icon-box"><svg><use href="#i-image"/></svg></span>
+      <span><span class="adm-qa-title">Thư viện ảnh/video</span><span class="adm-qa-desc">Quản lý ảnh, video hiển thị ở mục "Hình ảnh hoạt động".</span></span>
+      <svg class="adm-qa-chev"><use href="#i-chev"/></svg>
+    </a>
+    <% } %>
+    <% if (canAccessModule('bai-viet')) { %>
+    <a href="/admin/bai-viet" class="adm-qa-row">
+      <span class="adm-qa-icon-box"><svg><use href="#i-file"/></svg></span>
+      <span><span class="adm-qa-title">Quản lý bài viết</span><span class="adm-qa-desc">Tạo, sửa, xoá bài viết hiển thị ở mục "Tin tức".</span></span>
+      <svg class="adm-qa-chev"><use href="#i-chev"/></svg>
+    </a>
+    <% } %>
+    <% if (canAccessModule('doi-ngu')) { %>
+    <a href="/admin/doi-ngu" class="adm-qa-row">
+      <span class="adm-qa-icon-box"><svg><use href="#i-users"/></svg></span>
+      <span><span class="adm-qa-title">Ban lãnh đạo &amp; Hội đồng chuyên gia</span><span class="adm-qa-desc">Thêm, sửa ảnh và thông tin thành viên hiển thị ở trang chủ.</span></span>
+      <svg class="adm-qa-chev"><use href="#i-chev"/></svg>
+    </a>
+    <% } %>
+    <% if (canAccessModule('doi-tac')) { %>
+    <a href="/admin/doi-tac" class="adm-qa-row">
+      <span class="adm-qa-icon-box"><svg><use href="#i-link"/></svg></span>
+      <span><span class="adm-qa-title">Đối tác đồng hành</span><span class="adm-qa-desc">Thêm, sửa logo và thông tin đối tác hiển thị ở trang chủ.</span></span>
+      <svg class="adm-qa-chev"><use href="#i-chev"/></svg>
+    </a>
+    <% } %>
+    <% if (canAccessModule('lien-he')) { %>
+    <a href="/admin/lien-he" class="adm-qa-row">
+      <span class="adm-qa-icon-box"><svg><use href="#i-chat"/></svg></span>
+      <span><span class="adm-qa-title">Liên hệ tư vấn</span><span class="adm-qa-desc">Tiếp nhận, xử lý các yêu cầu tư vấn từ khách hàng.</span></span>
+      <svg class="adm-qa-chev"><use href="#i-chev"/></svg>
+    </a>
+    <% } %>
+    <% if (canAccessModule('nguoi-dung')) { %>
+    <a href="/admin/nguoi-dung" class="adm-qa-row">
+      <span class="adm-qa-icon-box"><svg><use href="#i-lock"/></svg></span>
+      <span><span class="adm-qa-title">Quản lý người dùng</span><span class="adm-qa-desc">Cấp hoặc thu hồi quyền quản trị cho tài khoản khác.</span></span>
+      <svg class="adm-qa-chev"><use href="#i-chev"/></svg>
+    </a>
+    <% } %>
+    <% if (canAccessModule('cai-dat')) { %>
+    <a href="/admin/cai-dat" class="adm-qa-row">
+      <span class="adm-qa-icon-box"><svg><use href="#i-gear"/></svg></span>
+      <span><span class="adm-qa-title">Cài đặt website</span><span class="adm-qa-desc">Logo, ảnh nền trang chủ, ảnh minh hoạ và tiêu đề đầu trang.</span></span>
+      <svg class="adm-qa-chev"><use href="#i-chev"/></svg>
+    </a>
+    <% } %>
+  </div>
 </div>
 
 <% if (showContentChart) { %>
-<h2 class="admin-section-heading">Thống kê nội dung</h2>
-<div class="admin-chart-card">
-  <%
-    const chartItems = [
-      { key: 'courseCount', label: 'Khoá học', value: stats.courseCount, accent: 'blue' },
-      { key: 'articleCount', label: 'Bài viết', value: stats.articleCount, accent: 'amber' },
-      { key: 'teamCount', label: 'Đội ngũ', value: stats.teamCount, accent: 'green' },
-      { key: 'partnerCount', label: 'Đối tác', value: stats.partnerCount, accent: 'amber' },
-      { key: 'mediaCount', label: 'Ảnh/video', value: stats.mediaCount, accent: 'blue' },
-      { key: 'materialCount', label: 'Tài liệu', value: stats.materialCount, accent: 'green' },
-    ];
-    const chartMax = Math.max(1, ...chartItems.map((i) => i.value));
-  %>
-  <% chartItems.forEach(item => { %>
-    <div class="chart-bar-row">
-      <span class="chart-bar-label"><%= item.label %></span>
-      <div class="chart-bar-track">
-        <div class="chart-bar-fill accent-<%= item.accent %>" data-stat-bar="<%= item.key %>" style="width: <%= Math.round(item.value / chartMax * 100) %>%;" title="<%= item.label %>: <%= item.value %>"></div>
-      </div>
-      <span class="chart-bar-value" data-stat="<%= item.key %>"><%= item.value %></span>
+<%
+  const chartItems = [
+    { key: 'courseCount', label: 'Khoá học', value: stats.courseCount, iconId: 'i-book', color: 'var(--adm-accent)' },
+    { key: 'articleCount', label: 'Bài viết', value: stats.articleCount, iconId: 'i-file', color: '#7C90F8' },
+    { key: 'teamCount', label: 'Đội ngũ', value: stats.teamCount, iconId: 'i-users', color: 'var(--adm-amber)' },
+    { key: 'partnerCount', label: 'Đối tác', value: stats.partnerCount, iconId: 'i-link', color: '#C7CEFB' },
+    { key: 'mediaCount', label: 'Ảnh/video', value: stats.mediaCount, iconId: 'i-image', color: '#E4D5B8' },
+    { key: 'materialCount', label: 'Tài liệu', value: stats.materialCount, iconId: 'i-clip', color: '#EEF0F5' },
+  ];
+  const rawMax = Math.max(1, ...chartItems.map((i) => i.value));
+  function niceCeil(max) {
+    if (max <= 5) return 5;
+    const magnitude = Math.pow(10, Math.floor(Math.log10(max)));
+    const residual = max / magnitude;
+    let niceResidual;
+    if (residual <= 1) niceResidual = 1;
+    else if (residual <= 2) niceResidual = 2;
+    else if (residual <= 5) niceResidual = 5;
+    else niceResidual = 10;
+    return niceResidual * magnitude;
+  }
+  const axisMax = niceCeil(rawMax);
+  const axisTicks = [0, 1, 2, 3, 4, 5].map((i) => Math.round(axisMax * i / 5));
+
+  const totalItems = chartItems.reduce((sum, i) => sum + i.value, 0) || 1;
+  const rating = parseFloat(stats.avgRating) || 0;
+  const gaugeCircumference = 251.3;
+  const gaugeOffset = (gaugeCircumference * (1 - rating / 5)).toFixed(1);
+%>
+<h2 class="adm-section-title">Thống kê nội dung</h2>
+<div class="adm-content-row">
+  <div class="adm-panel">
+    <div class="adm-chart-head">
+      <div><div class="adm-eyebrow">Thư viện nội dung</div><div class="adm-chart-title">Số lượng theo loại</div></div>
+      <div class="adm-chart-total"><b><%= totalItems %></b>mục nội dung</div>
     </div>
-  <% }) %>
+    <div class="adm-grid-wrap">
+      <div class="adm-grid-lines"><% axisTicks.forEach(() => { %><span></span><% }) %></div>
+      <% chartItems.forEach(item => { %>
+        <div class="adm-bar-row">
+          <div class="adm-bar-label"><svg width="14" height="14"><use href="#<%= item.iconId %>"/></svg><%= item.label %></div>
+          <div class="adm-bar-track">
+            <div class="adm-bar-fill" data-stat-bar="<%= item.key %>" style="width: <%= Math.round(item.value / axisMax * 100) %>%; background: <%= item.color %>;" title="<%= item.label %>: <%= item.value %>"></div>
+          </div>
+          <div class="adm-bar-value" data-stat="<%= item.key %>"><%= item.value %></div>
+        </div>
+      <% }) %>
+      <div class="adm-grid-axis"><% axisTicks.forEach(tick => { %><span><%= tick %></span><% }) %></div>
+    </div>
+  </div>
+
+  <div class="adm-panel">
+    <div class="adm-chart-head"><div><div class="adm-eyebrow">Chất lượng</div><div class="adm-chart-title">Đánh giá trung bình</div></div></div>
+    <div class="adm-gauge-wrap">
+      <svg class="adm-gauge-svg" viewBox="0 0 200 116">
+        <path d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="var(--adm-border)" stroke-width="16" stroke-linecap="round"/>
+        <path d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="var(--adm-amber)" stroke-width="16" stroke-linecap="round"
+              stroke-dasharray="<%= gaugeCircumference %>" stroke-dashoffset="<%= gaugeOffset %>"/>
+      </svg>
+      <div class="adm-gauge-num"><%= stats.avgRating %><sub>/5</sub></div>
+      <div class="adm-gauge-caption">Trung bình trên 5 điểm</div>
+    </div>
+
+    <div class="adm-panel-divider"></div>
+
+    <div class="adm-chart-head" style="margin-bottom:12px;"><div><div class="adm-eyebrow">Cơ cấu</div><div class="adm-chart-title">Tỉ trọng nội dung</div></div></div>
+    <div class="adm-stack-bar">
+      <% chartItems.forEach(item => { %>
+        <div class="adm-stack-seg" style="width: <%= (item.value / totalItems * 100).toFixed(1) %>%; background: <%= item.color %>;"></div>
+      <% }) %>
+    </div>
+    <div class="adm-legend">
+      <% chartItems.forEach(item => { %>
+        <div class="adm-legend-row"><span class="adm-legend-dot" style="background: <%= item.color %>;"></span><%= item.label %><span><%= item.value %></span></div>
+      <% }) %>
+    </div>
+  </div>
 </div>
 
 <script>

@@ -1,18 +1,6 @@
 <%- include('partials/header', { title: 'Tư vấn thiết kế phòng Lab STEM - VSIA' }) %>
 
-<section class="page-hero">
-  <div class="page-hero-bg <%= bizLabImage ? 'has-photo' : '' %>" <% if (bizLabImage) { %>style="background-image: url('<%= bizLabImage %>');"<% } %>></div>
-  <% if (bizLabImage) { %><div class="page-hero-overlay"></div><% } %>
-  <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
-  <div class="wrap page-hero-inner">
-    <span class="eyebrow"><%= hero.heroBadge %></span>
-    <h1><%= hero.heroTitleLine1 %><br><span class="accent"><%= hero.heroTitleLine2 %></span></h1>
-    <p class="sub"><%= hero.heroSubtitle %></p>
-    <div class="page-hero-cta">
-      <a href="<%= hero.heroCtaLink %>" class="btn btn-primary"><%= hero.heroCtaText %> →</a>
-    </div>
-  </div>
-</section>
+<%- include('partials/page-banner', { image: bizLabImage, badge: hero.heroBadge, titleLine1: hero.heroTitleLine1, titleLine2: hero.heroTitleLine2, subtitle: hero.heroSubtitle, ctaText: hero.heroCtaText, ctaLink: hero.heroCtaLink }) %>
 
 <div class="wrap" style="padding: 48px 26px 0;">
   <p class="section-subtitle" style="margin-bottom:0;">Cung cấp giải pháp tổng thể cho nhà trường và doanh nghiệp: quy hoạch không gian học tập vật lý (Phòng thực hành STEM), xây dựng khung chương trình và học liệu tối ưu.</p>

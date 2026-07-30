@@ -275,6 +275,17 @@
   filter: blur(1px) brightness(0.78);
   transform: scale(1.02);
 }
+/* Slideshow nhiều ảnh nền: các lớp xếp chồng, chỉ lớp .active hiện, chuyển dần (crossfade) */
+.hero-home-bg-slides { position: absolute; inset: 0; z-index: 0; }
+.hero-home-bg-slide {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  filter: blur(1px) brightness(0.78);
+  transform: scale(1.02);
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+.hero-home-bg-slide.active { opacity: 1; }
 .hero-home-overlay {
   position: absolute; inset: 0; z-index: 1;
   background:
@@ -282,7 +293,8 @@
     linear-gradient(180deg, rgba(3, 14, 26, .1) 0%, transparent 35%, rgba(3, 14, 26, .55) 100%);
 }
 .hero-home .hexlayer { z-index: 2; opacity: .5; color: rgba(255, 255, 255, .09); }
-.hero-home-bg.has-photo ~ .hexlayer { display: none; }
+.hero-home-bg.has-photo ~ .hexlayer,
+.hero-home-bg-slides ~ .hexlayer { display: none; }
 .hero-home-inner {
   position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; padding: 0 26px;
   display: grid; grid-template-columns: 1.06fr .94fr; gap: 50px; align-items: center;

@@ -792,18 +792,20 @@ router.post('/cai-dat/anh-hero', wrapUpload(uploadImage.single('heroImage'), asy
   const settings = await getSiteSettings();
   if (!req.file) return renderSettings(res, 'Vui lòng chọn ảnh.');
 
-  unlinkUploaded(settings.heroImage);
-  settings.heroImage = fileUrl(req.file, 'images');
+  settings.heroImages.push({ url: fileUrl(req.file, 'images') });
   await settings.save();
-  res.redirect('/admin/cai-dat');
+  res.redirect('/admin/cai-dat#hero-image');
 }));
 
-router.post('/cai-dat/anh-hero/xoa', async (req, res) => {
+router.post('/cai-dat/anh-hero/:id/xoa', async (req, res) => {
   const settings = await getSiteSettings();
-  unlinkUploaded(settings.heroImage);
-  settings.heroImage = null;
-  await settings.save();
-  res.redirect('/admin/cai-dat');
+  const item = settings.heroImages.id(req.params.id);
+  if (item) {
+    unlinkUploaded(item.url);
+    item.deleteOne();
+    await settings.save();
+  }
+  res.redirect('/admin/cai-dat#hero-image');
 });
 
 router.post('/cai-dat/anh-giai-phap', wrapUpload(uploadImage.single('solutionImage'), async (err, req, res) => {
@@ -831,6 +833,7 @@ const BIZ_IMAGE_FIELDS = {
   teacher: 'bizTeacherImage',
   events: 'bizEventsImage',
   robotics: 'bizRoboticsImage',
+  contact: 'contactImage',
 };
 
 router.post('/cai-dat/anh-linh-vuc/:key', (req, res, next) => {
