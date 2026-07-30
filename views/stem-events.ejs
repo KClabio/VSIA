@@ -1,6 +1,6 @@
 <%- include('partials/header', { title: 'Ngày hội & Cuộc thi STEM - VSIA' }) %>
 
-<%- include('partials/page-banner', { image: bizEventsImage, badge: hero.heroBadge, titleLine1: hero.heroTitleLine1, titleLine2: hero.heroTitleLine2, subtitle: hero.heroSubtitle, ctaText: hero.heroCtaText, ctaLink: hero.heroCtaLink }) %>
+<%- include('partials/page-banner', { image: bizEventsImage, badge: hero.heroBadge, titleLine1: hero.heroTitleLine1, titleLine2: hero.heroTitleLine2, subtitle: hero.heroSubtitle, ctaText: hero.heroCtaText, ctaLink: hero.heroCtaLink, ctaAttrs: 'data-open-contact' }) %>
 
 <section class="section">
   <div class="container">
@@ -35,7 +35,7 @@
     </p>
 
     <div class="section-cta">
-      <a href="mailto:taphuan@vsia.edu.vn" class="btn btn-primary">Liên hệ VSIA</a>
+      <a href="mailto:taphuan@vsia.edu.vn" class="btn btn-primary" data-open-contact>Liên hệ VSIA</a>
     </div>
   </div>
 </section>
