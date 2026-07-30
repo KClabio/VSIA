@@ -1,58 +1,90 @@
 <%- include('partials/head', { pageTitle: 'Dashboard', active: 'dashboard' }) %>
 
 <div class="admin-page-head">
+  <% if (user.role === 'admin') { %>
   <span class="live-indicator" id="liveIndicator"><span class="live-dot"></span> Trực tiếp</span>
+  <% } %>
 </div>
 
 <div class="admin-stats-grid">
-  <div class="admin-stat-card">
-    <span class="admin-stat-label">Tổng khoá học</span>
-    <span class="admin-stat-value" data-stat="courseCount"><%= stats.courseCount %></span>
-  </div>
-  <div class="admin-stat-card">
-    <span class="admin-stat-label">Giáo viên</span>
-    <span class="admin-stat-value" data-stat="teacherCount"><%= stats.teacherCount %></span>
-  </div>
-  <div class="admin-stat-card">
-    <span class="admin-stat-label">Quản trị viên</span>
-    <span class="admin-stat-value" data-stat="adminCount"><%= stats.adminCount %></span>
-  </div>
-  <div class="admin-stat-card">
-    <span class="admin-stat-label">Ảnh/video thư viện</span>
-    <span class="admin-stat-value" data-stat="mediaCount"><%= stats.mediaCount %></span>
-  </div>
-  <div class="admin-stat-card">
-    <span class="admin-stat-label">Bài viết</span>
-    <span class="admin-stat-value" data-stat="articleCount"><%= stats.articleCount %></span>
-  </div>
-  <div class="admin-stat-card">
-    <span class="admin-stat-label">Thành viên đội ngũ</span>
-    <span class="admin-stat-value" data-stat="teamCount"><%= stats.teamCount %></span>
-  </div>
-  <div class="admin-stat-card">
-    <span class="admin-stat-label">Đối tác</span>
-    <span class="admin-stat-value" data-stat="partnerCount"><%= stats.partnerCount %></span>
-  </div>
-  <div class="admin-stat-card">
-    <span class="admin-stat-label">Tài liệu đính kèm</span>
-    <span class="admin-stat-value" data-stat="materialCount"><%= stats.materialCount %></span>
-  </div>
-  <div class="admin-stat-card">
-    <span class="admin-stat-label">Đánh giá trung bình</span>
-    <span class="admin-stat-value" data-stat="avgRating"><%= stats.avgRating %></span><span class="admin-stat-value">/5</span>
-  </div>
+  <% cards.forEach(card => { %>
+    <div class="admin-stat-card accent-<%= card.accent %>">
+      <span class="admin-stat-icon"><%= card.icon %></span>
+      <span class="admin-stat-label"><%= card.label %></span>
+      <span class="admin-stat-value" data-stat="<%= card.key %>"><%= card.value %></span><% if (card.suffix) { %><span class="admin-stat-value"><%= card.suffix %></span><% } %>
+    </div>
+  <% }) %>
 </div>
 
+<h2 class="admin-section-heading">Truy cập nhanh</h2>
+<div class="admin-dashboard-grid">
+  <% if (canAccessModule('khoa-hoc')) { %>
+  <a href="/admin/khoa-hoc" class="admin-tile">
+    <h3>Quản lý khoá học</h3>
+    <p>Tạo, sửa, xoá khoá học và tài liệu đính kèm.</p>
+  </a>
+  <% } %>
+  <% if (canAccessModule('tien-do')) { %>
+  <a href="/admin/tien-do" class="admin-tile">
+    <h3>Tiến độ học tập</h3>
+    <p>Theo dõi tiến trình hoàn thành bài học của học viên.</p>
+  </a>
+  <% } %>
+  <% if (canAccessModule('thu-vien')) { %>
+  <a href="/admin/thu-vien" class="admin-tile">
+    <h3>Thư viện ảnh/video</h3>
+    <p>Quản lý ảnh, video hiển thị ở mục "Hình ảnh hoạt động" trang chủ.</p>
+  </a>
+  <% } %>
+  <% if (canAccessModule('bai-viet')) { %>
+  <a href="/admin/bai-viet" class="admin-tile">
+    <h3>Quản lý bài viết</h3>
+    <p>Tạo, sửa, xoá bài viết hiển thị ở mục "Tin tức" trang chủ.</p>
+  </a>
+  <% } %>
+  <% if (canAccessModule('doi-ngu')) { %>
+  <a href="/admin/doi-ngu" class="admin-tile">
+    <h3>Ban lãnh đạo &amp; Hội đồng chuyên gia</h3>
+    <p>Thêm, sửa ảnh và thông tin thành viên hiển thị ở trang chủ.</p>
+  </a>
+  <% } %>
+  <% if (canAccessModule('doi-tac')) { %>
+  <a href="/admin/doi-tac" class="admin-tile">
+    <h3>Đối tác đồng hành</h3>
+    <p>Thêm, sửa logo và thông tin đối tác hiển thị ở trang chủ.</p>
+  </a>
+  <% } %>
+  <% if (canAccessModule('lien-he')) { %>
+  <a href="/admin/lien-he" class="admin-tile">
+    <h3>Liên hệ tư vấn</h3>
+    <p>Tiếp nhận, xử lý các yêu cầu tư vấn từ khách hàng.</p>
+  </a>
+  <% } %>
+  <% if (canAccessModule('nguoi-dung')) { %>
+  <a href="/admin/nguoi-dung" class="admin-tile">
+    <h3>Quản lý người dùng</h3>
+    <p>Cấp hoặc thu hồi quyền quản trị cho tài khoản khác.</p>
+  </a>
+  <% } %>
+  <% if (canAccessModule('cai-dat')) { %>
+  <a href="/admin/cai-dat" class="admin-tile">
+    <h3>Cài đặt website</h3>
+    <p>Logo, ảnh nền trang chủ, ảnh minh hoạ và tiêu đề đầu trang.</p>
+  </a>
+  <% } %>
+</div>
+
+<% if (showContentChart) { %>
 <h2 class="admin-section-heading">Thống kê nội dung</h2>
 <div class="admin-chart-card">
   <%
     const chartItems = [
-      { key: 'courseCount', label: 'Khoá học', value: stats.courseCount },
-      { key: 'articleCount', label: 'Bài viết', value: stats.articleCount },
-      { key: 'teamCount', label: 'Đội ngũ', value: stats.teamCount },
-      { key: 'partnerCount', label: 'Đối tác', value: stats.partnerCount },
-      { key: 'mediaCount', label: 'Ảnh/video', value: stats.mediaCount },
-      { key: 'materialCount', label: 'Tài liệu', value: stats.materialCount },
+      { key: 'courseCount', label: 'Khoá học', value: stats.courseCount, accent: 'blue' },
+      { key: 'articleCount', label: 'Bài viết', value: stats.articleCount, accent: 'amber' },
+      { key: 'teamCount', label: 'Đội ngũ', value: stats.teamCount, accent: 'green' },
+      { key: 'partnerCount', label: 'Đối tác', value: stats.partnerCount, accent: 'amber' },
+      { key: 'mediaCount', label: 'Ảnh/video', value: stats.mediaCount, accent: 'blue' },
+      { key: 'materialCount', label: 'Tài liệu', value: stats.materialCount, accent: 'green' },
     ];
     const chartMax = Math.max(1, ...chartItems.map((i) => i.value));
   %>
@@ -60,43 +92,11 @@
     <div class="chart-bar-row">
       <span class="chart-bar-label"><%= item.label %></span>
       <div class="chart-bar-track">
-        <div class="chart-bar-fill" data-stat-bar="<%= item.key %>" style="width: <%= Math.round(item.value / chartMax * 100) %>%;" title="<%= item.label %>: <%= item.value %>"></div>
+        <div class="chart-bar-fill accent-<%= item.accent %>" data-stat-bar="<%= item.key %>" style="width: <%= Math.round(item.value / chartMax * 100) %>%;" title="<%= item.label %>: <%= item.value %>"></div>
       </div>
       <span class="chart-bar-value" data-stat="<%= item.key %>"><%= item.value %></span>
     </div>
   <% }) %>
-</div>
-
-<h2 class="admin-section-heading">Truy cập nhanh</h2>
-<div class="admin-dashboard-grid">
-  <a href="/admin/khoa-hoc" class="admin-tile">
-    <h3>Quản lý khoá học</h3>
-    <p>Tạo, sửa, xoá khoá học và tài liệu đính kèm.</p>
-  </a>
-  <a href="/admin/thu-vien" class="admin-tile">
-    <h3>Thư viện ảnh/video</h3>
-    <p>Quản lý ảnh, video hiển thị ở mục "Hình ảnh hoạt động" trang chủ.</p>
-  </a>
-  <a href="/admin/bai-viet" class="admin-tile">
-    <h3>Quản lý bài viết</h3>
-    <p>Tạo, sửa, xoá bài viết hiển thị ở mục "Tin tức" trang chủ.</p>
-  </a>
-  <a href="/admin/doi-ngu" class="admin-tile">
-    <h3>Ban lãnh đạo &amp; Hội đồng chuyên gia</h3>
-    <p>Thêm, sửa ảnh và thông tin thành viên hiển thị ở trang chủ.</p>
-  </a>
-  <a href="/admin/doi-tac" class="admin-tile">
-    <h3>Đối tác đồng hành</h3>
-    <p>Thêm, sửa logo và thông tin đối tác hiển thị ở trang chủ.</p>
-  </a>
-  <a href="/admin/nguoi-dung" class="admin-tile">
-    <h3>Quản lý người dùng</h3>
-    <p>Cấp hoặc thu hồi quyền quản trị cho tài khoản khác.</p>
-  </a>
-  <a href="/admin/cai-dat" class="admin-tile">
-    <h3>Nội dung website</h3>
-    <p>Logo, ảnh nền trang chủ, ảnh minh hoạ và tiêu đề đầu trang.</p>
-  </a>
 </div>
 
 <script>
@@ -141,5 +141,6 @@
     };
   })();
 </script>
+<% } %>
 
 <%- include('partials/foot') %>

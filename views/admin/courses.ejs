@@ -1,12 +1,18 @@
 <%- include('partials/head', { pageTitle: 'Quản lý khoá học', active: 'khoa-hoc' }) %>
 
-<div class="admin-page-head">
-  <h1 class="page-title">Quản lý khoá học</h1>
+<div class="admin-toolbar">
+  <div class="admin-toolbar-left">
+    <h1 class="page-title">Quản lý khoá học</h1>
+    <form method="GET" class="admin-search-form">
+      <input type="text" name="q" value="<%= q %>" placeholder="Tìm theo tên khoá học...">
+      <button type="submit" class="btn btn-icon" title="Tìm kiếm">🔍</button>
+    </form>
+  </div>
   <a href="/admin/khoa-hoc/moi" class="btn btn-primary">+ Thêm khoá học</a>
 </div>
 
 <% if (courses.length === 0) { %>
-  <p class="empty-state">Chưa có khoá học nào.</p>
+  <p class="empty-state">Không tìm thấy khoá học nào.</p>
 <% } else { %>
   <div class="admin-table-wrap">
     <table class="admin-table">

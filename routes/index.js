@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
   const hero = await getPageContent('home');
   const featuredCourses = await Course.find().sort({ createdAt: -1 }).limit(3).lean();
   const galleryItems = await Media.find().sort({ createdAt: -1 }).limit(4).lean();
-  const latestArticles = await Article.find().sort({ createdAt: -1 }).limit(3).lean();
+  const latestArticles = await Article.find({ published: true }).sort({ createdAt: -1 }).limit(8).lean();
   const teamMembers = await TeamMember.find().sort({ order: 1, createdAt: 1 }).lean();
   const leadershipMembers = teamMembers.filter((m) => m.group === 'leadership');
   const expertMembers = teamMembers.filter((m) => m.group !== 'leadership');
@@ -56,13 +56,13 @@ router.get('/khoa-hoc/:id', async (req, res) => {
 });
 
 router.get('/tin-tuc', async (req, res) => {
-  const articles = await Article.find().sort({ createdAt: -1 }).lean();
+  const articles = await Article.find({ published: true }).sort({ createdAt: -1 }).lean();
   res.render('news', { articles });
 });
 
 router.get('/tin-tuc/:id', async (req, res) => {
   const article = await Article.findById(req.params.id).lean().catch(() => null);
-  if (!article) {
+  if (!article || !article.published) {
     return res.status(404).render('404');
   }
   res.render('article-detail', { article });

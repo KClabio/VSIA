@@ -31,6 +31,11 @@
     <img src="<%= article.image %>" alt="" class="admin-preview-image">
   <% } %>
 
+  <label class="checkbox-label">
+    <input type="checkbox" name="published" <%= (!article || article.published) ? 'checked' : '' %>>
+    Xuất bản ngay (bỏ chọn để lưu dưới dạng bản nháp, không hiển thị công khai)
+  </label>
+
   <div class="admin-form-actions">
     <a href="/admin/bai-viet" class="btn btn-ghost">Huỷ</a>
     <button type="submit" class="btn btn-primary"><%= article ? 'Lưu thay đổi' : 'Tạo bài viết' %></button>

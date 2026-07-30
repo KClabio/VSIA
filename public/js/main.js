@@ -102,17 +102,6 @@ document.querySelectorAll('.team-tabs').forEach((tabs) => {
   });
 });
 
-document.querySelectorAll('.accordion-steps').forEach((group) => {
-  const steps = group.querySelectorAll('.accordion-step');
-  steps.forEach((step) => {
-    step.querySelector('.accordion-step-header')?.addEventListener('click', () => {
-      const isActive = step.classList.contains('active');
-      steps.forEach((s) => s.classList.remove('active'));
-      if (!isActive) step.classList.add('active');
-    });
-  });
-});
-
 const backToTop = document.getElementById('backToTop');
 if (backToTop) {
   window.addEventListener('scroll', () => {
@@ -146,17 +135,30 @@ if (window.IntersectionObserver) {
   document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
 }
 
-// Tab "Lĩnh vực hoạt động" (trang chủ)
-document.querySelectorAll('.biz-tabs').forEach((tabs) => {
-  const container = tabs.parentElement;
-  const buttons = tabs.querySelectorAll('[data-biz-tab]');
-  const panels = container.querySelectorAll('[data-biz-panel]');
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const target = btn.getAttribute('data-biz-tab');
-      buttons.forEach((b) => b.classList.toggle('active', b === btn));
-      panels.forEach((p) => p.classList.toggle('on', p.getAttribute('data-biz-panel') === target));
+// Hiệu ứng chiều sâu (3D depth / immersive scroll) cho từng section khi cuộn tới
+// Bỏ qua section đầu tiên (hero) để không bị ẩn khi vừa tải trang
+document.querySelectorAll('section.section').forEach((sec) => sec.classList.add('depth-section'));
+if (window.IntersectionObserver) {
+  const ioDepth = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('depth-in');
+        ioDepth.unobserve(entry.target);
+      }
     });
+  }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.depth-section').forEach((el) => ioDepth.observe(el));
+} else {
+  document.querySelectorAll('.depth-section').forEach((el) => el.classList.add('depth-in'));
+}
+
+// Accordion "Lĩnh vực hoạt động" (trang chủ)
+document.querySelectorAll('.linhvuc-toggle').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const card = btn.closest('.linhvuc-card');
+    const open = card.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+    btn.querySelector('.linhvuc-toggle-label').textContent = open ? 'Thu gọn' : 'Xem chi tiết';
   });
 });
 
@@ -267,17 +269,17 @@ if (chatToggleBtn && chatPanel) {
 }
 
 // Modal đăng ký tư vấn
-const contactToggleBtn = document.getElementById('contactToggleBtn');
+const contactToggleBtns = document.querySelectorAll('#contactToggleBtn, [data-open-contact]');
 const contactOverlay = document.getElementById('contactOverlay');
 const contactModalClose = document.getElementById('contactModalClose');
 const contactForm = document.getElementById('contactForm');
 const contactFormMsg = document.getElementById('contactFormMsg');
 
-if (contactToggleBtn && contactOverlay) {
-  const openContactModal = () => contactOverlay.classList.add('open');
+if (contactToggleBtns.length && contactOverlay) {
+  const openContactModal = (e) => { e.preventDefault(); contactOverlay.classList.add('open'); };
   const closeContactModal = () => contactOverlay.classList.remove('open');
 
-  contactToggleBtn.addEventListener('click', openContactModal);
+  contactToggleBtns.forEach((btn) => btn.addEventListener('click', openContactModal));
   contactModalClose?.addEventListener('click', closeContactModal);
   contactOverlay.addEventListener('click', (e) => {
     if (e.target === contactOverlay) closeContactModal();

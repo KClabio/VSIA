@@ -1,12 +1,18 @@
 <%- include('partials/head', { pageTitle: 'Liên hệ tư vấn', active: 'lien-he' }) %>
 
-<div class="admin-page-head">
-  <h1 class="page-title">Yêu cầu liên hệ tư vấn</h1>
+<div class="admin-toolbar">
+  <div class="admin-toolbar-left">
+    <h1 class="page-title">Yêu cầu liên hệ tư vấn</h1>
+    <form method="GET" class="admin-search-form">
+      <input type="text" name="q" value="<%= q %>" placeholder="Tìm theo tên, liên hệ, nội dung...">
+      <button type="submit" class="btn btn-icon" title="Tìm kiếm">🔍</button>
+    </form>
+  </div>
 </div>
 <p class="section-subtitle" style="margin-bottom:24px; text-align:left;">Danh sách người dùng gửi yêu cầu tư vấn từ nút nổi trên trang web.</p>
 
 <% if (requests.length === 0) { %>
-  <p class="empty-state">Chưa có yêu cầu tư vấn nào.</p>
+  <p class="empty-state">Không tìm thấy yêu cầu tư vấn nào.</p>
 <% } else { %>
   <div class="admin-table-wrap">
     <table class="admin-table">
@@ -28,7 +34,7 @@
             <td class="admin-table-truncate" title="<%= r.message %>"><%= r.message %></td>
             <td><%= new Date(r.createdAt).toLocaleString('vi-VN') %></td>
             <td>
-              <span class="role-badge <%= r.status === 'da_lien_he' ? 'role-badge-admin' : '' %>">
+              <span class="badge <%= r.status === 'da_lien_he' ? 'badge-success' : 'badge-warning' %>">
                 <%= r.status === 'da_lien_he' ? 'Đã liên hệ' : 'Mới' %>
               </span>
             </td>

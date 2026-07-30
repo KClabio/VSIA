@@ -1,12 +1,78 @@
 <%- include('partials/header', { title: 'Khoá học - VSIA' }) %>
 
+<section class="page-hero">
+  <div class="page-hero-bg <%= bizRoboticsImage ? 'has-photo' : '' %>" <% if (bizRoboticsImage) { %>style="background-image: url('<%= bizRoboticsImage %>');"<% } %>></div>
+  <% if (bizRoboticsImage) { %><div class="page-hero-overlay"></div><% } %>
+  <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
+  <div class="wrap page-hero-inner">
+    <span class="eyebrow">Chương trình đào tạo</span>
+    <h1>Khoá học đào tạo STEM</h1>
+    <p class="sub">Các khoá tập huấn, bồi dưỡng giáo viên STEM bài bản, từ kỹ thuật thiết bị đến hướng dẫn học sinh nghiên cứu khoa học.</p>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">CÁC CHƯƠNG TRÌNH TẬP HUẤN VÀ ĐÀO TẠO GIÁO VIÊN</h2>
+    <p class="section-subtitle">Lộ trình cơ bản đến chuyên sâu, từ kỹ thuật thiết bị đến hướng dẫn học sinh nghiên cứu khoa học.</p>
+
+    <div class="tl-steps">
+      <div class="tl-step reveal">
+        <div class="tl-num">1</div>
+        <div class="tl-content">
+          <div class="tl-content-head">
+            <div class="tl-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.83 2.83-2.83-.7-.7-2.83L14.7 6.3Z"/></svg></div>
+            <h3>Tập huấn đào tạo kỹ thuật</h3>
+          </div>
+          <p>Hướng dẫn sử dụng, vận hành và bảo trì thiết bị STEM, Robotics, AI trong phòng thực hành.</p>
+        </div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-num">2</div>
+        <div class="tl-content">
+          <div class="tl-content-head">
+            <div class="tl-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg></div>
+            <h3>Tổng quan giáo dục STEM trong Chương trình GDPT</h3>
+          </div>
+          <p>Trang bị kiến thức nền tảng về giáo dục STEM gắn với Chương trình giáo dục phổ thông 2018.</p>
+        </div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-num">3</div>
+        <div class="tl-content">
+          <div class="tl-content-head">
+            <div class="tl-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v5.5L4.8 19a1.4 1.4 0 0 0 1.2 2h12a1.4 1.4 0 0 0 1.2-2L14 8.5V3"/><path d="M7.2 15h9.6"/></svg></div>
+            <h3>Thực hành xây dựng và triển khai chủ đề dạy học STEM</h3>
+          </div>
+          <p>Thiết kế và tổ chức bài học STEM theo mô hình 5E/6E, gắn với thực tiễn lớp học.</p>
+        </div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-num">4</div>
+        <div class="tl-content">
+          <div class="tl-content-head">
+            <div class="tl-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m21 21-4.3-4.3"/></svg></div>
+            <h3>Nghiên cứu KHKT trong Giáo dục phổ thông</h3>
+          </div>
+          <p>Trang bị phương pháp hướng dẫn học sinh nghiên cứu khoa học kỹ thuật bài bản.</p>
+        </div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-num">5</div>
+        <div class="tl-content">
+          <div class="tl-content-head">
+            <div class="tl-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5"/></svg></div>
+            <h3>Hướng dẫn học sinh thực hiện đề tài, dự án nghiên cứu KHKT</h3>
+          </div>
+          <p>Đồng hành cùng giáo viên hướng dẫn học sinh triển khai đề tài, dự thi từ cấp trường đến quốc gia.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section">
   <div class="container">
-    <div class="center">
-      <span class="eyebrow">Chương trình đào tạo</span>
-      <h1 class="page-title" style="margin-top:16px;">Khoá học đào tạo STEM</h1>
-    </div>
-
     <% if (courses.length === 0) { %>
       <p class="empty-state">Chưa có khoá học nào. Chạy <code>node seed.js</code> để thêm dữ liệu mẫu.</p>
     <% } else { %>

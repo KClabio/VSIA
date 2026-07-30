@@ -22,22 +22,21 @@
           <td><%= u.email %></td>
           <td>
             <span class="role-badge <%= u.role === 'admin' ? 'role-badge-admin' : '' %>">
-              <%= u.role === 'admin' ? 'Quản trị viên' : 'Giáo viên' %>
+              <%= ROLE_LABELS[u.role] || u.role %>
             </span>
           </td>
           <td><%= new Date(u.createdAt).toLocaleDateString('vi-VN') %></td>
           <td class="admin-table-actions">
             <% if (String(u._id) === String(user._id)) { %>
               <span class="empty-state">(Tài khoản của bạn)</span>
-            <% } else if (u.role === 'admin') { %>
-              <form action="/admin/nguoi-dung/<%= u._id %>/vai-tro" method="POST" class="inline-form" onsubmit="return confirm('Bỏ quyền quản trị của tài khoản này?');">
-                <input type="hidden" name="role" value="giaovien">
-                <button type="submit" class="btn btn-icon btn-danger">Bỏ quyền admin</button>
-              </form>
             <% } else { %>
-              <form action="/admin/nguoi-dung/<%= u._id %>/vai-tro" method="POST" class="inline-form" onsubmit="return confirm('Cấp quyền quản trị cho tài khoản này?');">
-                <input type="hidden" name="role" value="admin">
-                <button type="submit" class="btn btn-icon">Cấp quyền admin</button>
+              <form action="/admin/nguoi-dung/<%= u._id %>/vai-tro" method="POST" class="inline-form" onsubmit="return confirm('Đổi vai trò của tài khoản này?');">
+                <select name="role">
+                  <% ROLES.forEach(r => { %>
+                    <option value="<%= r %>" <%= u.role === r ? 'selected' : '' %>><%= ROLE_LABELS[r] %></option>
+                  <% }) %>
+                </select>
+                <button type="submit" class="btn btn-icon">Cập nhật</button>
               </form>
             <% } %>
           </td>

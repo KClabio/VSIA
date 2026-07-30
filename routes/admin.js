@@ -7,10 +7,12 @@ const Article = require('../models/Article');
 const TeamMember = require('../models/TeamMember');
 const Partner = require('../models/Partner');
 const User = require('../models/User');
-const { requireAuth, requireAdmin } = require('../middleware/auth');
+const { requireAuth, requireStaff, requireModule } = require('../middleware/auth');
+const { ROLES } = require('../lib/roles');
 const { uploadImage, uploadVideo, uploadCourseFiles, friendlyUploadError } = require('../middleware/upload');
-const { computeStats, addClient, removeClient, broadcastStats } = require('../lib/stats');
+const { computeStats, computeDashboardCards, addClient, removeClient, broadcastStats } = require('../lib/stats');
 const { unlinkUploaded } = require('../lib/files');
+const { escapeRegExp } = require('../lib/search');
 const { getSiteSettings } = require('../lib/settings');
 const { getAllPageContents, PAGE_DEFAULTS } = require('../lib/pageContent');
 const PageContent = require('../models/PageContent');
@@ -18,7 +20,17 @@ const ContactRequest = require('../models/ContactRequest');
 const Enrollment = require('../models/Enrollment');
 const { courseStats } = require('../lib/courseStats');
 
-router.use(requireAuth, requireAdmin);
+router.use(requireAuth, requireStaff);
+
+router.use('/khoa-hoc', requireModule('khoa-hoc'));
+router.use('/tien-do', requireModule('tien-do'));
+router.use('/thu-vien', requireModule('thu-vien'));
+router.use('/bai-viet', requireModule('bai-viet'));
+router.use('/doi-ngu', requireModule('doi-ngu'));
+router.use('/doi-tac', requireModule('doi-tac'));
+router.use('/nguoi-dung', requireModule('nguoi-dung'));
+router.use('/lien-he', requireModule('lien-he'));
+router.use('/cai-dat', requireModule('cai-dat'));
 
 function courseFieldsFromBody(body) {
   const isFree = body.isFree === 'on';
@@ -31,17 +43,21 @@ function courseFieldsFromBody(body) {
     price: isFree ? 0 : Number(body.price) || 0,
     rating: Number(body.rating) || 0,
     instructor: body.instructor || '',
+    instructorUser: body.instructorUser || null,
     studyPeriod: body.studyPeriod || '',
     examDate: body.examDate || '',
   };
 }
 
 router.get('/', async (req, res) => {
-  const stats = await computeStats();
-  res.render('admin/dashboard', { active: 'dashboard', stats });
+  const { cards, showContentChart, stats } = await computeDashboardCards(req.user);
+  res.render('admin/dashboard', { active: 'dashboard', cards, showContentChart, stats });
 });
 
-router.get('/stats-stream', async (req, res) => {
+router.get('/stats-stream', (req, res, next) => {
+  if (req.user.role !== 'admin') return res.status(403).render('403');
+  next();
+}, async (req, res) => {
   res.set({
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
@@ -58,18 +74,22 @@ router.get('/stats-stream', async (req, res) => {
 // --- Khoá học ---
 
 router.get('/khoa-hoc', async (req, res) => {
-  const courses = await Course.find().sort({ createdAt: -1 }).lean();
-  res.render('admin/courses', { courses, active: 'khoa-hoc' });
+  const q = (req.query.q || '').trim();
+  const filter = q ? { title: new RegExp(escapeRegExp(q), 'i') } : {};
+  const courses = await Course.find(filter).sort({ createdAt: -1 }).lean();
+  res.render('admin/courses', { courses, active: 'khoa-hoc', q });
 });
 
-router.get('/khoa-hoc/moi', (req, res) => {
-  res.render('admin/course-form', { course: null, error: null, active: 'khoa-hoc' });
+router.get('/khoa-hoc/moi', async (req, res) => {
+  const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
+  res.render('admin/course-form', { course: null, error: null, active: 'khoa-hoc', teachers });
 });
 
 router.post('/khoa-hoc/moi', (req, res) => {
   uploadCourseFiles(req, res, async (err) => {
     if (err) {
-      return res.render('admin/course-form', { course: null, error: friendlyUploadError(err), active: 'khoa-hoc' });
+      const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
+      return res.render('admin/course-form', { course: null, error: friendlyUploadError(err), active: 'khoa-hoc', teachers });
     }
 
     const image = req.files?.image?.[0] ? `/uploads/images/${req.files.image[0].filename}` : null;
@@ -87,7 +107,8 @@ router.post('/khoa-hoc/moi', (req, res) => {
 router.get('/khoa-hoc/:id/sua', async (req, res) => {
   const course = await Course.findById(req.params.id).lean().catch(() => null);
   if (!course) return res.status(404).render('404');
-  res.render('admin/course-form', { course, error: null });
+  const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
+  res.render('admin/course-form', { course, error: null, active: 'khoa-hoc', teachers });
 });
 
 router.post('/khoa-hoc/:id/sua', (req, res) => {
@@ -96,7 +117,8 @@ router.post('/khoa-hoc/:id/sua', (req, res) => {
     if (!course) return res.status(404).render('404');
 
     if (err) {
-      return res.render('admin/course-form', { course: course.toObject(), error: friendlyUploadError(err) });
+      const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
+      return res.render('admin/course-form', { course: course.toObject(), error: friendlyUploadError(err), active: 'khoa-hoc', teachers });
     }
 
     Object.assign(course, courseFieldsFromBody(req.body));
@@ -474,8 +496,12 @@ function sanitizeSourceUrl(raw) {
 }
 
 router.get('/bai-viet', async (req, res) => {
-  const articles = await Article.find().sort({ createdAt: -1 }).lean();
-  res.render('admin/articles', { articles, active: 'bai-viet' });
+  const q = (req.query.q || '').trim();
+  const filter = q
+    ? { $or: [{ title: new RegExp(escapeRegExp(q), 'i') }, { summary: new RegExp(escapeRegExp(q), 'i') }] }
+    : {};
+  const articles = await Article.find(filter).sort({ createdAt: -1 }).lean();
+  res.render('admin/articles', { articles, active: 'bai-viet', q });
 });
 
 router.get('/bai-viet/moi', (req, res) => {
@@ -495,6 +521,7 @@ router.post('/bai-viet/moi', (req, res) => {
       content: req.body.content,
       image,
       sourceUrl: sanitizeSourceUrl(req.body.sourceUrl),
+      published: req.body.published === 'on',
     });
     await broadcastStats();
     res.redirect('/admin/bai-viet');
@@ -520,6 +547,7 @@ router.post('/bai-viet/:id/sua', (req, res) => {
     article.summary = req.body.summary;
     article.content = req.body.content;
     article.sourceUrl = sanitizeSourceUrl(req.body.sourceUrl);
+    article.published = req.body.published === 'on';
 
     if (req.file) {
       unlinkUploaded(article.image);
@@ -549,8 +577,10 @@ function parseAchievements(raw) {
 }
 
 router.get('/doi-ngu', async (req, res) => {
-  const teamMembers = await TeamMember.find().sort({ order: 1, createdAt: 1 }).lean();
-  res.render('admin/team', { teamMembers, active: 'doi-ngu' });
+  const q = (req.query.q || '').trim();
+  const filter = q ? { name: new RegExp(escapeRegExp(q), 'i') } : {};
+  const teamMembers = await TeamMember.find(filter).sort({ order: 1, createdAt: 1 }).lean();
+  res.render('admin/team', { teamMembers, active: 'doi-ngu', q });
 });
 
 router.get('/doi-ngu/moi', (req, res) => {
@@ -623,8 +653,10 @@ router.post('/doi-ngu/:id/xoa', async (req, res) => {
 // --- Đối tác đồng hành ---
 
 router.get('/doi-tac', async (req, res) => {
-  const partners = await Partner.find().sort({ order: 1, createdAt: 1 }).lean();
-  res.render('admin/partners', { partners, active: 'doi-tac' });
+  const q = (req.query.q || '').trim();
+  const filter = q ? { name: new RegExp(escapeRegExp(q), 'i') } : {};
+  const partners = await Partner.find(filter).sort({ order: 1, createdAt: 1 }).lean();
+  res.render('admin/partners', { partners, active: 'doi-tac', q });
 });
 
 router.get('/doi-tac/moi', (req, res) => {
@@ -696,7 +728,7 @@ router.get('/nguoi-dung', async (req, res) => {
 router.post('/nguoi-dung/:id/vai-tro', async (req, res) => {
   const { role } = req.body;
 
-  if (!['admin', 'giaovien'].includes(role)) {
+  if (!ROLES.includes(role)) {
     const users = await User.find().select('-passwordHash').sort({ createdAt: -1 }).lean();
     return res.render('admin/users', { users, error: 'Vai trò không hợp lệ.' });
   }
@@ -714,8 +746,18 @@ router.post('/nguoi-dung/:id/vai-tro', async (req, res) => {
 // --- Liên hệ tư vấn ---
 
 router.get('/lien-he', async (req, res) => {
-  const requests = await ContactRequest.find().sort({ createdAt: -1 }).lean();
-  res.render('admin/contacts', { requests, active: 'lien-he' });
+  const q = (req.query.q || '').trim();
+  const filter = q
+    ? {
+        $or: [
+          { name: new RegExp(escapeRegExp(q), 'i') },
+          { contact: new RegExp(escapeRegExp(q), 'i') },
+          { message: new RegExp(escapeRegExp(q), 'i') },
+        ],
+      }
+    : {};
+  const requests = await ContactRequest.find(filter).sort({ createdAt: -1 }).lean();
+  res.render('admin/contacts', { requests, active: 'lien-he', q });
 });
 
 router.post('/lien-he/:id/trang-thai', async (req, res) => {

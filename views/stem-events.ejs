@@ -1,6 +1,8 @@
 <%- include('partials/header', { title: 'Ngày hội & Cuộc thi STEM - VSIA' }) %>
 
 <section class="page-hero">
+  <div class="page-hero-bg <%= bizEventsImage ? 'has-photo' : '' %>" <% if (bizEventsImage) { %>style="background-image: url('<%= bizEventsImage %>');"<% } %>></div>
+  <% if (bizEventsImage) { %><div class="page-hero-overlay"></div><% } %>
   <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
   <div class="wrap page-hero-inner">
     <span class="eyebrow"><%= hero.heroBadge %></span>
@@ -15,18 +17,26 @@
 <section class="section">
   <div class="container">
     <h2 class="section-title">HÌNH THỨC TỔ CHỨC</h2>
-    <p class="section-subtitle">VSIA đồng hành cùng nhà trường tổ chức các hoạt động STEM ngoại khoá, tạo sân chơi bổ ích cho học sinh.</p>
+    <p class="section-subtitle">VSIA đảm nhận vai trò tư vấn chuyên môn, tổ chức và thẩm định các sự kiện, cuộc thi khoa học kỹ thuật, AI và Robotics với quy mô từ cấp cơ sở đến cấp quốc gia, quốc tế.</p>
 
     <div class="info-grid">
-      <div class="info-card">
+      <div class="info-card reveal">
+        <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 22V4M4 4h14l-2 4 2 4H4"/></svg></div>
         <h3>Ngày hội trải nghiệm STEM</h3>
         <p>Các gian trải nghiệm Robotics, lập trình, khoa học vui... để học sinh toàn trường tham gia trực tiếp.</p>
       </div>
-      <div class="info-card">
+      <div class="info-card reveal">
+        <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.85 1.03.85 1.7v.5h5.5v-.5c0-.67.35-1.3.85-1.7A6 6 0 0 0 12 3Z"/></svg></div>
         <h3>Cuộc thi sáng tạo theo chủ đề</h3>
         <p>Học sinh làm việc nhóm, thực hiện sản phẩm STEM theo chủ đề do nhà trường và VSIA thống nhất.</p>
       </div>
-      <div class="info-card">
+      <div class="info-card reveal">
+        <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="m9 13 2 2 4-4"/></svg></div>
+        <h3>Thẩm định &amp; cố vấn chuyên môn</h3>
+        <p>Đảm nhận vai trò giám khảo, hội đồng cố vấn cho các cuộc thi khoa học kỹ thuật, AI, Robotics từ cấp cơ sở đến quốc gia, quốc tế.</p>
+      </div>
+      <div class="info-card reveal">
+        <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 5h3a2 2 0 0 1-2 4M7 5H4a2 2 0 0 0 2 4"/></svg></div>
         <h3>Trưng bày &amp; chung kết trao giải</h3>
         <p>Trưng bày sản phẩm dự thi, chấm giải và trao giải nhằm khích lệ tinh thần sáng tạo của học sinh.</p>
       </div>

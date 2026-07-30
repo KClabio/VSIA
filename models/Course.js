@@ -10,6 +10,7 @@ const courseSchema = new mongoose.Schema({
   rating: { type: Number, default: 0, min: 0, max: 5 },
   image: { type: String, default: null },
   instructor: { type: String, default: '' },
+  instructorUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
   studyPeriod: { type: String, default: '' },
   examDate: { type: String, default: '' },
   materials: [{

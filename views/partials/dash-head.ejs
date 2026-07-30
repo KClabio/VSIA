@@ -46,7 +46,7 @@
     <div class="dash-side-foot">
       <a href="/ho-so" class="dash-user">
         <span class="dash-user-av"><% if (user.avatar) { %><img src="<%= user.avatar %>" alt=""><% } else { %><%= user.name.charAt(0).toUpperCase() %><% } %></span>
-        <span><span class="dash-user-nm"><%= user.name %></span><span class="dash-user-rl"><%= user.role === 'admin' ? 'Quản trị viên' : 'Giáo viên' %></span></span>
+        <span><span class="dash-user-nm"><%= user.name %></span><span class="dash-user-rl"><%= roleLabel %></span></span>
       </a>
     </div>
   </aside>

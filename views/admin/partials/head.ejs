@@ -20,36 +20,70 @@
     <aside class="admin-sidebar" id="adminSidebar">
       <a href="/admin" class="logo admin-sidebar-logo"><%- include('../../partials/logo') %></a>
       <nav class="admin-sidebar-nav">
+        <% if (canAccessModule('dashboard')) { %>
+        <p class="admin-nav-section-title">Tổng quan</p>
         <a href="/admin" class="<%= active === 'dashboard' ? 'active' : '' %>">
           <span class="admin-nav-icon">▦</span> Dashboard
         </a>
+        <% } %>
+
+        <% if (canAccessModule('khoa-hoc') || canAccessModule('tien-do')) { %>
+        <p class="admin-nav-section-title">Quản lý Đào tạo</p>
+        <% if (canAccessModule('khoa-hoc')) { %>
         <a href="/admin/khoa-hoc" class="<%= active === 'khoa-hoc' ? 'active' : '' %>">
           <span class="admin-nav-icon">📚</span> Khoá học
         </a>
+        <% } %>
+        <% if (canAccessModule('tien-do')) { %>
         <a href="/admin/tien-do" class="<%= active === 'tien-do' ? 'active' : '' %>">
           <span class="admin-nav-icon">📈</span> Tiến độ học tập
         </a>
+        <% } %>
+        <% } %>
+
+        <% if (canAccessModule('bai-viet') || canAccessModule('thu-vien') || canAccessModule('doi-ngu') || canAccessModule('doi-tac')) { %>
+        <p class="admin-nav-section-title">CMS &amp; Truyền thông</p>
+        <% if (canAccessModule('bai-viet')) { %>
+        <a href="/admin/bai-viet" class="<%= active === 'bai-viet' ? 'active' : '' %>">
+          <span class="admin-nav-icon">📰</span> Bài viết &amp; Tin tức
+        </a>
+        <% } %>
+        <% if (canAccessModule('thu-vien')) { %>
         <a href="/admin/thu-vien" class="<%= active === 'thu-vien' ? 'active' : '' %>">
           <span class="admin-nav-icon">🖼</span> Thư viện ảnh/video
         </a>
-        <a href="/admin/bai-viet" class="<%= active === 'bai-viet' ? 'active' : '' %>">
-          <span class="admin-nav-icon">📰</span> Bài viết
-        </a>
+        <% } %>
+        <% if (canAccessModule('doi-ngu')) { %>
         <a href="/admin/doi-ngu" class="<%= active === 'doi-ngu' ? 'active' : '' %>">
-          <span class="admin-nav-icon">👤</span> Đội ngũ
+          <span class="admin-nav-icon">👤</span> Đội ngũ chuyên gia
         </a>
+        <% } %>
+        <% if (canAccessModule('doi-tac')) { %>
         <a href="/admin/doi-tac" class="<%= active === 'doi-tac' ? 'active' : '' %>">
-          <span class="admin-nav-icon">🤝</span> Đối tác
+          <span class="admin-nav-icon">🤝</span> Đối tác đồng hành
         </a>
-        <a href="/admin/nguoi-dung" class="<%= active === 'nguoi-dung' ? 'active' : '' %>">
-          <span class="admin-nav-icon">👥</span> Người dùng
-        </a>
+        <% } %>
+        <% } %>
+
+        <% if (canAccessModule('lien-he') || canAccessModule('nguoi-dung')) { %>
+        <p class="admin-nav-section-title">Khách hàng &amp; Người dùng</p>
+        <% if (canAccessModule('lien-he')) { %>
         <a href="/admin/lien-he" class="<%= active === 'lien-he' ? 'active' : '' %>">
           <span class="admin-nav-icon">💬</span> Liên hệ tư vấn
         </a>
+        <% } %>
+        <% if (canAccessModule('nguoi-dung')) { %>
+        <a href="/admin/nguoi-dung" class="<%= active === 'nguoi-dung' ? 'active' : '' %>">
+          <span class="admin-nav-icon">👥</span> Tài khoản hệ thống
+        </a>
+        <% } %>
+        <% } %>
+
+        <% if (canAccessModule('cai-dat')) { %>
+        <p class="admin-nav-section-title">Hệ thống</p>
         <div class="admin-nav-group <%= active === 'cai-dat' ? 'open' : '' %>">
           <a href="/admin/cai-dat" class="<%= active === 'cai-dat' ? 'active' : '' %>">
-            <span class="admin-nav-icon">⚙️</span> Nội dung website
+            <span class="admin-nav-icon">⚙️</span> Cài đặt
           </a>
           <% if (active === 'cai-dat') { %>
             <div class="admin-nav-submenu">
@@ -61,6 +95,7 @@
             </div>
           <% } %>
         </div>
+        <% } %>
       </nav>
 
       <a href="/" class="admin-sidebar-home-link">

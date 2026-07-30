@@ -38,9 +38,19 @@
     </label>
   </div>
 
-  <label>Giảng viên phụ trách
-    <input type="text" name="instructor" placeholder="Vd: TS. Lê Thị Tú Anh" value="<%= course ? course.instructor : '' %>">
-  </label>
+  <div class="admin-form-row">
+    <label>Giảng viên phụ trách (tên hiển thị công khai)
+      <input type="text" name="instructor" placeholder="Vd: TS. Lê Thị Tú Anh" value="<%= course ? course.instructor : '' %>">
+    </label>
+    <label>Gán tài khoản giáo viên (để tính thống kê)
+      <select name="instructorUser">
+        <option value="">— Chưa gán —</option>
+        <% teachers.forEach(t => { %>
+          <option value="<%= t._id %>" <%= (course && course.instructorUser && String(course.instructorUser) === String(t._id)) ? 'selected' : '' %>><%= t.name %></option>
+        <% }) %>
+      </select>
+    </label>
+  </div>
 
   <div class="admin-form-row">
     <label>Thời gian học

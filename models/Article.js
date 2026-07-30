@@ -6,6 +6,7 @@ const articleSchema = new mongoose.Schema({
   content: { type: String, required: true },
   image: { type: String, default: null },
   sourceUrl: { type: String, default: null, trim: true },
+  published: { type: Boolean, default: true },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Article', articleSchema);

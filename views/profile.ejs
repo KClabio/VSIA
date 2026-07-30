@@ -13,7 +13,7 @@
     </div>
     <div>
       <span class="role-badge <%= user.role === 'admin' ? 'role-badge-admin' : '' %> profile-role-badge">
-        <%= user.role === 'admin' ? 'Quản trị viên' : 'Giáo viên' %>
+        <%= roleLabel %>
       </span>
       <h1><%= user.name %></h1>
       <p><%= user.email %></p>

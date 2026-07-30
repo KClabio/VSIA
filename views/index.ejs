@@ -7,11 +7,11 @@
   <div class="hero-home-inner">
     <div class="hero-home-copy">
       <span class="eyebrow"><%= hero.heroBadge %></span>
-      <h1><%= hero.heroTitleLine1 %><br><em><%= hero.heroTitleLine2 %></em></h1>
-      <p class="sub"><%= hero.heroSubtitle %></p>
+      <h1 class="hero-wordmark"><%= hero.heroTitleLine1 %></h1>
+      <p class="sub sub-lg"><%= hero.heroSubtitle %></p>
       <div class="hero-home-cta">
-        <a href="<%= hero.heroCtaLink %>" class="btn btn-primary"><%= hero.heroCtaText %> →</a>
-        <a href="/khoa-hoc" class="btn btn-ghost">Khoá học</a>
+        <button type="button" class="btn btn-primary btn-lg" data-open-contact>Liên hệ tư vấn ngay →</button>
+        <a href="/khoa-hoc" class="btn btn-ghost btn-lg">Khoá học</a>
       </div>
       <div class="hero-home-stats">
         <div class="s">
@@ -96,79 +96,88 @@
   </div>
 </div>
 
-<section class="section about-us-section">
+<section class="section about-us-section" id="ve-vsia">
   <div class="about-us-deco-bg" aria-hidden="true"></div>
   <div class="wrap" style="position:relative; z-index:2;">
     <div class="center reveal">
-      <span class="eyebrow">Về chúng tôi</span>
+      <span class="eyebrow">Về VSIA</span>
       <h2 class="h-sec">Sứ mệnh · Tầm nhìn · Giá trị cốt lõi</h2>
     </div>
-    <div class="about-us-grid" style="margin-top:44px;">
-      <div class="about-us-card about-us-mission reveal">
-        <div class="about-us-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V4a1 1 0 0 1 1-1h11l-2 5 2 5H6a1 1 0 0 0-1 1v8"/></svg></div>
-        <h3>Sứ mệnh</h3>
-        <p>VSIA mang sứ mệnh phát triển giáo dục STEM bền vững tại Việt Nam và vươn tầm quốc tế. Chúng tôi đồng hành cùng các địa phương, nhà trường, doanh nghiệp, các thầy cô giáo và học sinh trong việc phát triển tư duy sáng tạo, năng lực thực hành và kỹ năng hội nhập toàn cầu.</p>
-        <div class="about-us-deco"><svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M4 21V4a1 1 0 0 1 1-1h11l-2 5 2 5H6a1 1 0 0 0-1 1v8"/></svg></div>
-      </div>
-      <div class="about-us-card reveal">
-        <div class="about-us-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3.2"/></svg></div>
-        <h3>Tầm nhìn</h3>
-        <p>Dẫn đầu đổi mới giáo dục STEM tại Việt Nam và vươn tầm quốc tế.</p>
-      </div>
-      <div class="about-us-card reveal">
-        <div class="about-us-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z"/></svg></div>
-        <h3>Giá trị cốt lõi</h3>
-        <div class="about-us-tags">
-          <span>Đổi mới sáng tạo</span>
-          <span>Thực hành hiệu quả</span>
-          <span>Đồng hành bền vững</span>
-          <span>Phát triển con người</span>
+
+    <div class="about-vsia-grid" style="margin-top:44px;">
+      <div class="av-card reveal">
+        <div class="av-item">
+          <div class="av-item-head">
+            <div class="av-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></div>
+            <h3><span class="av-num">1.</span> Sứ mệnh</h3>
+          </div>
+          <p>Kiến tạo hệ sinh thái giáo dục STEM cho nhà trường, giáo viên và học sinh Việt Nam, nuôi dưỡng tư duy sáng tạo, năng lực thực hành và bản lĩnh hội nhập.</p>
+        </div>
+
+        <div class="av-divider"></div>
+
+        <div class="av-item">
+          <div class="av-item-head">
+            <div class="av-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3.2"/></svg></div>
+            <h3><span class="av-num">2.</span> Tầm nhìn</h3>
+          </div>
+          <p>Trở thành học viện tiên phong trong giáo dục STEM và công nghệ số tại Việt Nam, tạo ra giá trị bền vững và vươn tầm tri thức quốc tế.</p>
+        </div>
+
+        <div class="av-divider"></div>
+
+        <div class="av-item">
+          <div class="av-item-head">
+            <h3><span class="av-num">3.</span> Giá trị cốt lõi</h3>
+          </div>
+          <div class="av-values-grid">
+            <div class="av-value">
+              <div class="av-value-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.85 1.03.85 1.7v.5h5.5v-.5c0-.67.35-1.3.85-1.7A6 6 0 0 0 12 3Z"/></svg></div>
+              <span>Đổi mới &amp; Sáng tạo</span>
+            </div>
+            <div class="av-value">
+              <div class="av-value-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.83 2.83-2.83-.7-.7-2.83L14.7 6.3Z"/></svg></div>
+              <span>Chất lượng &amp; Hiệu quả</span>
+            </div>
+            <div class="av-value">
+              <div class="av-value-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8.5 13.5 5 17l2 2 3.5-3.5M17 12l-2.5 2.5M6 8l3-3 3 3-3 3-3-3ZM17 6l-3 3 3 3 3-3-3-3Z"/></svg></div>
+              <span>Tận tâm &amp; Đồng hành</span>
+            </div>
+            <div class="av-value">
+              <div class="av-value-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+              <span>Trách nhiệm &amp; Nhân văn</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<section class="section" id="giai-phap-teaser">
-  <div class="wrap about-grid">
-    <div class="about-media reveal">
-      <div class="imgph">
-        <% if (solutionImage) { %>
-          <img src="<%= solutionImage %>" alt="Ảnh hoạt động STEM VSIA">
-        <% } else { %>
-          <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
-          <div class="cam"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>Ảnh hoạt động STEM</div>
-        <% } %>
+      <div class="why-vsia-card reveal">
+        <h3 class="why-vsia-title">Vì sao chọn VSIA?</h3>
+
+        <div class="why-item">
+          <div class="why-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 11 4.6-2.3 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <div class="why-body">
+            <h4>Năng lực quản trị dự án cấp quốc gia</h4>
+            <p>Là đơn vị điều phối Chương trình tập huấn STEM Innovation Petrovietnam, VSIA khẳng định uy tín và năng lực triển khai các dự án giáo dục quy mô lớn theo tiêu chuẩn khắt khe.</p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <div class="why-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m18 8 .9 1.9 2.1.3-1.5 1.5.35 2.1-1.85-1-1.85 1 .35-2.1L15 10.2l2.1-.3L18 8Z"/></svg></div>
+          <div class="why-body">
+            <h4>Hội đồng cố vấn và khoa học</h4>
+            <p>Mọi chương trình đào tạo và giải pháp của VSIA đều được bảo chứng bởi Hội đồng cố vấn gồm các giáo sư, phó giáo sư, tiến sĩ và thạc sĩ giàu kinh nghiệm, đảm bảo chiều sâu học thuật và cập nhật xu hướng quốc tế.</p>
+          </div>
+        </div>
+
+        <div class="why-item">
+          <div class="why-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h2a1 1 0 0 1 1 1v1.2a1.5 1.5 0 0 0 2.6 1l.85-.85a1 1 0 0 1 1.4 0l1.4 1.4a1 1 0 0 1 0 1.4l-.85.85a1.5 1.5 0 0 0 1 2.6H19a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-1.2a1.5 1.5 0 0 0-1 2.6l.85.85a1 1 0 0 1 0 1.4l-1.4 1.4a1 1 0 0 1-1.4 0l-.85-.85a1.5 1.5 0 0 0-2.6 1V21a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-1.2a1.5 1.5 0 0 0-2.6-1l-.85.85a1 1 0 0 1-1.4 0l-1.4-1.4a1 1 0 0 1 0-1.4l.85-.85a1.5 1.5 0 0 0-1-2.6H1a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h1.2a1.5 1.5 0 0 0 1-2.6l-.85-.85a1 1 0 0 1 0-1.4l1.4-1.4a1 1 0 0 1 1.4 0l.85.85a1.5 1.5 0 0 0 2.6-1V4a1 1 0 0 1 1-1Z" opacity="0"/><path d="M4 8v8l8 4 8-4V8l-8-4-8 4Z"/><path d="M4 8l8 4 8-4M12 12v8"/></svg></div>
+          <div class="why-body">
+            <h4>Hệ sinh thái giải pháp đồng bộ</h4>
+            <p>VSIA không chỉ cung cấp công cụ mà còn giải quyết bài toán giáo dục một cách triệt để thông qua mô hình tích hợp: Thiết kế không gian - Xây dựng chương trình - Đào tạo con người - Vận hành hiệu quả.</p>
+          </div>
+        </div>
       </div>
-      <div class="badge"><div class="n">2025–26</div><div class="l">Đồng hành cùng STEM Innovation PetroVietnam</div></div>
-    </div>
-    <div class="reveal">
-      <span class="eyebrow">Về VSIA</span>
-      <h2 class="h-sec">Giải pháp giáo dục STEM tổng thể &amp; toàn diện</h2>
-      <p class="lead-new">Từ tư vấn thiết kế phòng Lab đến chương trình đào tạo và tổ chức ngày hội – cuộc thi STEM, VSIA đồng hành cùng địa phương và nhà trường xây dựng phong trào giáo dục STEM bền vững.</p>
-      <div class="services-list">
-        <button type="button" class="service-pill active reveal">
-          <span class="service-pill-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3v2h6V3M8 9h8M8 13h8M8 17h5"/></svg></span>
-          <span class="service-pill-text">Tư vấn xây dựng chương trình Giáo dục STEM</span>
-        </button>
-        <button type="button" class="service-pill reveal">
-          <span class="service-pill-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-          <span class="service-pill-text">Đào tạo và phát triển năng lực giảng dạy cho giáo viên</span>
-        </button>
-        <button type="button" class="service-pill reveal">
-          <span class="service-pill-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 5h3a2 2 0 0 1-2 4M7 5H4a2 2 0 0 0 2 4"/></svg></span>
-          <span class="service-pill-text">Tổ chức cuộc thi, sự kiện giáo dục STEM cho giáo viên, học sinh</span>
-        </button>
-        <button type="button" class="service-pill reveal">
-          <span class="service-pill-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 3h6M10 3v5.5L4.8 19a1.4 1.4 0 0 0 1.2 2h12a1.4 1.4 0 0 0 1.2-2L14 8.5V3"/><path d="M7.2 15h9.6"/></svg></span>
-          <span class="service-pill-text">Tư vấn thiết kế và vận hành Phòng thực hành giáo dục STEM</span>
-        </button>
-        <button type="button" class="service-pill reveal">
-          <span class="service-pill-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg></span>
-          <span class="service-pill-text">Kết nối quốc tế</span>
-        </button>
-      </div>
-      <a href="/#lien-he" class="btn btn-dark btn-lg" style="margin-top:32px">Liên hệ tư vấn</a>
     </div>
   </div>
 </section>
@@ -179,59 +188,74 @@
       <span class="eyebrow">Lĩnh vực hoạt động</span>
     </div>
     <div class="biz-mask reveal"><div class="bigword">STEM</div></div>
-    <div class="biz-tabs reveal">
-      <button type="button" class="biz-tab active" data-biz-tab="0">Tư vấn phòng Lab</button>
-      <button type="button" class="biz-tab" data-biz-tab="1">Đào tạo giáo viên</button>
-      <button type="button" class="biz-tab" data-biz-tab="2">Ngày hội &amp; Cuộc thi</button>
-      <button type="button" class="biz-tab" data-biz-tab="3">Robotics AI</button>
-    </div>
-    <div class="biz-panels reveal">
-      <div class="biz-panel on" data-biz-panel="0">
-        <div class="imgph">
-          <% if (bizLabImage) { %><img src="<%= bizLabImage %>" alt="Phòng Lab STEM">
-          <% } else { %><div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div><div class="cam"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>Ảnh phòng STEM Lab</div><% } %>
+
+    <div class="linhvuc-grid">
+      <div class="linhvuc-card lv-1 reveal">
+        <div class="linhvuc-media">
+          <div class="imgph">
+            <% if (bizTeacherImage) { %><img src="<%= bizTeacherImage %>" alt="Đào tạo & bồi dưỡng giáo viên STEM">
+            <% } else { %><div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div><div class="cam"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>Ảnh tập huấn giáo viên</div><% } %>
+          </div>
+          <div class="linhvuc-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
         </div>
-        <div>
-          <h3>Tư vấn &amp; thi công phòng Lab STEM</h3>
-          <p>Không gian trải nghiệm sáng tạo, kết hợp lý thuyết và thực hành với đầy đủ thiết bị hiện đại.</p>
-          <ul><li>Khảo sát, tư vấn &amp; lập dự toán</li><li>Thiết kế và thi công trọn gói</li><li>Máy in 3D, Robot VEX, cảm biến IoT</li><li>Chương trình vận hành gắn với phòng Lab</li></ul>
-          <a class="more" href="/tu-van-phong-lab">Xem chi tiết →</a>
-        </div>
-      </div>
-      <div class="biz-panel" data-biz-panel="1">
-        <div class="imgph">
-          <% if (bizTeacherImage) { %><img src="<%= bizTeacherImage %>" alt="Đào tạo giáo viên STEM">
-          <% } else { %><div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div><div class="cam"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>Ảnh tập huấn giáo viên</div><% } %>
-        </div>
-        <div>
-          <h3>Đào tạo &amp; bồi dưỡng giáo viên STEM</h3>
-          <p>Trang bị năng lực giảng dạy STEM hiệu quả, bài bản, tiết kiệm thời gian chuẩn bị.</p>
-          <ul><li>Tập huấn trực tiếp &amp; hội thảo trực tuyến</li><li>Học liệu, giáo án STEM chuẩn hoá</li><li>Hướng dẫn sử dụng thiết bị &amp; bộ KIT</li><li>Đồng hành, hỗ trợ chuyên môn liên tục</li></ul>
-          <a class="more" href="/khoa-hoc">Xem chi tiết →</a>
+        <div class="linhvuc-body">
+          <h3>Đào tạo &amp; Bồi dưỡng GV</h3>
+          <button type="button" class="linhvuc-toggle" aria-expanded="false">
+            <span class="linhvuc-toggle-label">Xem chi tiết</span>
+            <svg class="linhvuc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="linhvuc-detail">
+            <div class="linhvuc-detail-inner">
+              <p><strong>Nội dung cung cấp:</strong> Tổ chức các chương trình tập huấn nâng cao năng lực sư phạm và phương pháp giảng dạy STEM (Khoa học, Công nghệ, Kĩ thuật, Toán) cùng AI, Robotics cho đội ngũ cán bộ quản lý và giáo viên; chuyển giao công nghệ giáo dục hiện đại.</p>
+              <a href="/khoa-hoc" class="linhvuc-more">Xem khoá đào tạo →</a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="biz-panel" data-biz-panel="2">
-        <div class="imgph">
-          <% if (bizEventsImage) { %><img src="<%= bizEventsImage %>" alt="Ngày hội STEM">
-          <% } else { %><div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div><div class="cam"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>Ảnh ngày hội STEM</div><% } %>
+
+      <div class="linhvuc-card lv-2 reveal">
+        <div class="linhvuc-media">
+          <div class="imgph">
+            <% if (bizEventsImage) { %><img src="<%= bizEventsImage %>" alt="Tổ chức & thẩm định sự kiện, cuộc thi STEM">
+            <% } else { %><div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div><div class="cam"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>Ảnh ngày hội STEM</div><% } %>
+          </div>
+          <div class="linhvuc-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 5h3a2 2 0 0 1-2 4M7 5H4a2 2 0 0 0 2 4"/></svg></div>
         </div>
-        <div>
-          <h3>Tổ chức ngày hội &amp; cuộc thi STEM</h3>
-          <p>Thúc đẩy phong trào thi đua sáng tạo tại địa phương và nhà trường.</p>
-          <ul><li>Ngày hội STEM cấp trường &amp; địa phương</li><li>Cuộc thi Robotics &amp; Khoa học Kỹ thuật</li><li>Kết nối cuộc thi quốc gia, quốc tế</li><li>Truyền thông &amp; lan toả phong trào</li></ul>
-          <a class="more" href="/ngay-hoi-cuoc-thi">Xem chi tiết →</a>
+        <div class="linhvuc-body">
+          <h3>Tổ chức &amp; Thẩm định sự kiện</h3>
+          <button type="button" class="linhvuc-toggle" aria-expanded="false">
+            <span class="linhvuc-toggle-label">Xem chi tiết</span>
+            <svg class="linhvuc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="linhvuc-detail">
+            <div class="linhvuc-detail-inner">
+              <p><strong>Nội dung cung cấp:</strong> Đảm nhận vai trò tư vấn chuyên môn, tổ chức và thẩm định các sự kiện khoa học, ngày hội sáng tạo và các cuộc thi khoa học, kĩ thuật, AI và Robotics, với quy mô từ cấp cơ sở đến cấp quốc gia, quốc tế.</p>
+              <a href="/ngay-hoi-cuoc-thi" class="linhvuc-more">Xem ngày hội & cuộc thi →</a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="biz-panel" data-biz-panel="3">
-        <div class="imgph">
-          <% if (bizRoboticsImage) { %><img src="<%= bizRoboticsImage %>" alt="STEM AI Robotics">
-          <% } else { %><div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div><div class="cam"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>Ảnh lớp Robotics</div><% } %>
+
+      <div class="linhvuc-card lv-3 reveal">
+        <div class="linhvuc-media">
+          <div class="imgph">
+            <% if (bizLabImage) { %><img src="<%= bizLabImage %>" alt="Thiết kế & chuyển giao chương trình giáo dục STEM">
+            <% } else { %><div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div><div class="cam"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>Ảnh phòng STEM Lab</div><% } %>
+          </div>
+          <div class="linhvuc-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v5.5L4.8 19a1.4 1.4 0 0 0 1.2 2h12a1.4 1.4 0 0 0 1.2-2L14 8.5V3"/><path d="M7.2 15h9.6"/></svg></div>
         </div>
-        <div>
-          <h3>STEM AI Robotics</h3>
-          <p>Chương trình học robot và trí tuệ nhân tạo, phát triển tư duy thiết kế và lập trình.</p>
-          <ul><li>Hệ thống Robot VEX chuẩn quốc tế</li><li>Tư duy thiết kế &amp; lập trình</li><li>Làm việc nhóm, giải quyết vấn đề</li><li>Chuẩn bị cho các sân chơi Robotics</li></ul>
-          <a class="more" href="/giai-phap#giai-phap-4-phan">Xem chi tiết →</a>
+        <div class="linhvuc-body">
+          <h3>Thiết kế chương trình giáo dục</h3>
+          <button type="button" class="linhvuc-toggle" aria-expanded="false">
+            <span class="linhvuc-toggle-label">Xem chi tiết</span>
+            <svg class="linhvuc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="linhvuc-detail">
+            <div class="linhvuc-detail-inner">
+              <p><strong>Nội dung cung cấp:</strong> Cung cấp giải pháp tổng thể cho nhà trường và doanh nghiệp: quy hoạch không gian học tập vật lý (Phòng thực hành STEM), xây dựng khung chương trình và học liệu tối ưu.</p>
+              <a href="/tu-van-phong-lab" class="linhvuc-more">Xem tư vấn phòng Lab →</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -258,45 +282,6 @@
 
     <div class="section-cta">
       <a href="/khoa-hoc" class="btn btn-primary">Xem tất cả</a>
-    </div>
-  </div>
-</section>
-
-<section class="section highlight">
-  <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
-  <div class="wrap hl-inner">
-    <div class="reveal">
-      <span class="eyebrow">Dự án nổi bật</span>
-      <h2>Chương trình STEM Innovation PetroVietnam</h2>
-      <p class="lead-new">VSIA là đơn vị đào tạo giáo viên và đối tác chiến lược của Tập đoàn Công nghiệp – Năng lượng Quốc gia Việt Nam trong chương trình STEM quy mô toàn quốc.</p>
-      <a href="/tin-tuc" class="btn btn-ghost" style="margin-top:26px">Xem tin tức →</a>
-    </div>
-    <div class="hl-tl reveal">
-      <div class="hl-item"><div class="y">2025</div><div><h4>Đơn vị đào tạo giáo viên</h4><p>Triển khai đào tạo giáo viên cho Chương trình STEM Innovation PetroVietnam.</p></div></div>
-      <div class="hl-item"><div class="y">2026</div><div><h4>Đối tác chiến lược</h4><p>Đồng hành triển khai Kế hoạch Chương trình STEM Innovation PetroVietnam 2026.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="tin-tuc">
-  <div class="wrap">
-    <div class="center reveal">
-      <span class="eyebrow">Tin tức &amp; bài viết</span>
-      <h2 class="h-sec">Cập nhật hoạt động của VSIA</h2>
-    </div>
-
-    <% if (latestArticles.length === 0) { %>
-      <p class="empty-state" style="margin-top:44px;">Chưa có bài viết nào.</p>
-    <% } else { %>
-      <div class="article-grid" style="margin-top:44px;">
-        <% latestArticles.forEach(article => { %>
-          <div class="reveal"><%- include('partials/article-card', { article }) %></div>
-        <% }) %>
-      </div>
-    <% } %>
-
-    <div class="section-cta">
-      <a href="/tin-tuc" class="btn btn-primary">Xem tất cả</a>
     </div>
   </div>
 </section>
@@ -331,6 +316,33 @@
         <a href="/hinh-anh" class="btn btn-primary">Xem tất cả →</a>
       </div>
     <% } %>
+  </div>
+</section>
+
+<section class="section" id="tin-tuc">
+  <div class="wrap">
+    <div class="center reveal">
+      <span class="eyebrow">Tin tức &amp; bài viết</span>
+      <h2 class="h-sec">Hoạt động nổi bật</h2>
+    </div>
+
+    <% if (latestArticles.length === 0) { %>
+      <p class="empty-state" style="margin-top:44px;">Chưa có bài viết nào.</p>
+    <% } else { %>
+      <div class="carousel article-carousel reveal" style="margin-top:44px;">
+        <button type="button" class="carousel-btn" data-carousel-prev aria-label="Bài trước">‹</button>
+        <div class="carousel-track">
+          <% latestArticles.forEach(article => { %>
+            <div class="article-carousel-item"><%- include('partials/article-card', { article }) %></div>
+          <% }) %>
+        </div>
+        <button type="button" class="carousel-btn" data-carousel-next aria-label="Bài tiếp theo">›</button>
+      </div>
+    <% } %>
+
+    <div class="section-cta">
+      <a href="/tin-tuc" class="btn btn-primary">Xem tất cả</a>
+    </div>
   </div>
 </section>
 

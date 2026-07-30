@@ -1,12 +1,18 @@
 <%- include('partials/head', { pageTitle: 'Quản lý bài viết', active: 'bai-viet' }) %>
 
-<div class="admin-page-head">
-  <h1 class="page-title">Quản lý bài viết</h1>
+<div class="admin-toolbar">
+  <div class="admin-toolbar-left">
+    <h1 class="page-title">Quản lý bài viết</h1>
+    <form method="GET" class="admin-search-form">
+      <input type="text" name="q" value="<%= q %>" placeholder="Tìm theo tiêu đề, tóm tắt...">
+      <button type="submit" class="btn btn-icon" title="Tìm kiếm">🔍</button>
+    </form>
+  </div>
   <a href="/admin/bai-viet/moi" class="btn btn-primary">+ Thêm bài viết</a>
 </div>
 
 <% if (articles.length === 0) { %>
-  <p class="empty-state">Chưa có bài viết nào.</p>
+  <p class="empty-state">Không tìm thấy bài viết nào.</p>
 <% } else { %>
   <div class="admin-table-wrap">
     <table class="admin-table">
@@ -14,6 +20,7 @@
         <tr>
           <th>Tiêu đề</th>
           <th>Tóm tắt</th>
+          <th>Trạng thái</th>
           <th>Ngày đăng</th>
           <th></th>
         </tr>
@@ -23,6 +30,11 @@
           <tr>
             <td class="admin-table-truncate" style="max-width:220px;" title="<%= article.title %>"><%= article.title %></td>
             <td class="admin-table-truncate" title="<%= article.summary %>"><%= article.summary %></td>
+            <td>
+              <span class="badge <%= article.published ? 'badge-success' : 'badge-neutral' %>">
+                <%= article.published ? 'Đã xuất bản' : 'Bản nháp' %>
+              </span>
+            </td>
             <td><%= new Date(article.createdAt).toLocaleDateString('vi-VN') %></td>
             <td class="admin-table-actions">
               <a href="/tin-tuc/<%= article._id %>" class="btn btn-icon" title="Xem trên trang công khai">👁 Xem</a>
