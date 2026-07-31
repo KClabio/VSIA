@@ -1,4 +1,4 @@
-<details class="settings-sub-block">
+<details class="settings-sub-block" <% if (typeof id !== 'undefined' && id) { %>id="<%= id %>"<% } %>>
   <summary><%= label %></summary>
   <div class="settings-sub-form">
     <% if (typeof hint !== 'undefined' && hint) { %>

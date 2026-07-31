@@ -73,8 +73,8 @@
     <summary>📷 Ảnh khu vực "Lĩnh vực hoạt động"</summary>
     <div class="settings-page-form">
       <p class="section-subtitle" style="margin-bottom:20px; text-align:left;">Ảnh minh hoạ cho 2 tab còn lại trên trang chủ. Chưa có ảnh sẽ hiện hoạ tiết thay thế.</p>
-      <%- include('partials/settings-image-block', { label: 'Đào tạo giáo viên', value: settings.bizTeacherImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/teacher', deleteUrl: '/admin/cai-dat/anh-linh-vuc/teacher/xoa' }) %>
-      <%- include('partials/settings-image-block', { label: 'Robotics AI', hint: 'Ảnh này cũng được dùng làm ảnh banner đầu trang Khoá học.', value: settings.bizRoboticsImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/robotics', deleteUrl: '/admin/cai-dat/anh-linh-vuc/robotics/xoa' }) %>
+      <%- include('partials/settings-image-block', { id: 'img-teacher', label: 'Đào tạo giáo viên', value: settings.bizTeacherImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/teacher', deleteUrl: '/admin/cai-dat/anh-linh-vuc/teacher/xoa' }) %>
+      <%- include('partials/settings-image-block', { id: 'img-robotics', label: 'Robotics AI', hint: 'Ảnh này cũng được dùng làm ảnh banner đầu trang Khoá học.', value: settings.bizRoboticsImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/robotics', deleteUrl: '/admin/cai-dat/anh-linh-vuc/robotics/xoa' }) %>
     </div>
   </details>
 
@@ -85,7 +85,7 @@
   <details class="settings-page-block" id="solution-hero-image">
     <summary>🌄 Ảnh banner đầu trang Giải pháp</summary>
     <div class="settings-page-form">
-      <%- include('partials/settings-image-block', { label: 'Ảnh banner', value: settings.solutionHeroImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/solution-hero', deleteUrl: '/admin/cai-dat/anh-linh-vuc/solution-hero/xoa' }) %>
+      <%- include('partials/settings-image-block', { id: 'img-solution-hero', label: 'Ảnh banner', value: settings.solutionHeroImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/solution-hero', deleteUrl: '/admin/cai-dat/anh-linh-vuc/solution-hero/xoa' }) %>
     </div>
   </details>
 
@@ -150,10 +150,10 @@
     <summary>🌱 Ảnh khối "Hệ sinh thái giáo dục STEM"</summary>
     <div class="settings-page-form">
       <p class="section-subtitle" style="margin-bottom:20px; text-align:left;">Ảnh cho từng thẻ trong khối 4 thẻ "Hệ sinh thái". Chưa có ảnh sẽ hiện icon thay thế.</p>
-      <%- include('partials/settings-image-block', { label: 'Xây dựng phong trào', value: settings.ecoMovementImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/eco-movement', deleteUrl: '/admin/cai-dat/anh-linh-vuc/eco-movement/xoa' }) %>
-      <%- include('partials/settings-image-block', { label: 'Đầu tư trang thiết bị', value: settings.ecoEquipmentImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/eco-equipment', deleteUrl: '/admin/cai-dat/anh-linh-vuc/eco-equipment/xoa' }) %>
-      <%- include('partials/settings-image-block', { label: 'Các cuộc thi', value: settings.ecoCompetitionImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/eco-competition', deleteUrl: '/admin/cai-dat/anh-linh-vuc/eco-competition/xoa' }) %>
-      <%- include('partials/settings-image-block', { label: 'Tập huấn, đào tạo giáo viên', value: settings.ecoTrainingImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/eco-training', deleteUrl: '/admin/cai-dat/anh-linh-vuc/eco-training/xoa' }) %>
+      <%- include('partials/settings-image-block', { id: 'img-eco-movement', label: 'Xây dựng phong trào', value: settings.ecoMovementImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/eco-movement', deleteUrl: '/admin/cai-dat/anh-linh-vuc/eco-movement/xoa' }) %>
+      <%- include('partials/settings-image-block', { id: 'img-eco-equipment', label: 'Đầu tư trang thiết bị', value: settings.ecoEquipmentImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/eco-equipment', deleteUrl: '/admin/cai-dat/anh-linh-vuc/eco-equipment/xoa' }) %>
+      <%- include('partials/settings-image-block', { id: 'img-eco-competition', label: 'Các cuộc thi', value: settings.ecoCompetitionImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/eco-competition', deleteUrl: '/admin/cai-dat/anh-linh-vuc/eco-competition/xoa' }) %>
+      <%- include('partials/settings-image-block', { id: 'img-eco-training', label: 'Tập huấn, đào tạo giáo viên', value: settings.ecoTrainingImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/eco-training', deleteUrl: '/admin/cai-dat/anh-linh-vuc/eco-training/xoa' }) %>
     </div>
   </details>
 
@@ -164,7 +164,7 @@
   <details class="settings-page-block" id="lab-image">
     <summary>🌄 Ảnh banner đầu trang</summary>
     <div class="settings-page-form">
-      <%- include('partials/settings-image-block', { label: 'Ảnh banner', hint: 'Ảnh này cũng hiện ở thẻ "Tư vấn phòng Lab" trên trang chủ.', value: settings.bizLabImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/lab', deleteUrl: '/admin/cai-dat/anh-linh-vuc/lab/xoa' }) %>
+      <%- include('partials/settings-image-block', { id: 'img-lab', label: 'Ảnh banner', hint: 'Ảnh này cũng hiện ở thẻ "Tư vấn phòng Lab" trên trang chủ.', value: settings.bizLabImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/lab', deleteUrl: '/admin/cai-dat/anh-linh-vuc/lab/xoa' }) %>
     </div>
   </details>
 
@@ -175,7 +175,7 @@
   <details class="settings-page-block" id="events-image">
     <summary>🌄 Ảnh banner đầu trang</summary>
     <div class="settings-page-form">
-      <%- include('partials/settings-image-block', { label: 'Ảnh banner', hint: 'Ảnh này cũng hiện ở thẻ "Ngày hội & Cuộc thi" trên trang chủ.', value: settings.bizEventsImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/events', deleteUrl: '/admin/cai-dat/anh-linh-vuc/events/xoa' }) %>
+      <%- include('partials/settings-image-block', { id: 'img-events', label: 'Ảnh banner', hint: 'Ảnh này cũng hiện ở thẻ "Ngày hội & Cuộc thi" trên trang chủ.', value: settings.bizEventsImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/events', deleteUrl: '/admin/cai-dat/anh-linh-vuc/events/xoa' }) %>
     </div>
   </details>
 
@@ -186,7 +186,7 @@
   <details class="settings-page-block" id="contact-image">
     <summary>🌄 Ảnh banner đầu trang</summary>
     <div class="settings-page-form">
-      <%- include('partials/settings-image-block', { label: 'Ảnh banner', value: settings.contactImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/contact', deleteUrl: '/admin/cai-dat/anh-linh-vuc/contact/xoa' }) %>
+      <%- include('partials/settings-image-block', { id: 'img-contact', label: 'Ảnh banner', value: settings.contactImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/contact', deleteUrl: '/admin/cai-dat/anh-linh-vuc/contact/xoa' }) %>
     </div>
   </details>
 
@@ -201,8 +201,16 @@
       if (!id) return;
       var target = document.getElementById(id);
       if (!target) return;
-      var details = target.tagName === 'DETAILS' ? target : target.querySelector('details');
-      if (details) details.open = true;
+
+      // Mở chính nó (nếu là <details>) và toàn bộ <details> cha bên trên (hỗ trợ accordion lồng nhau).
+      var self = target.tagName === 'DETAILS' ? target : target.querySelector('details');
+      if (self) self.open = true;
+      var ancestor = target.parentElement ? target.parentElement.closest('details') : null;
+      while (ancestor) {
+        ancestor.open = true;
+        ancestor = ancestor.parentElement ? ancestor.parentElement.closest('details') : null;
+      }
+
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     openFromHash();

@@ -842,7 +842,7 @@ router.post('/cai-dat/logo', wrapUpload(uploadImage.single('logo'), async (err, 
   unlinkUploaded(settings.logo);
   settings.logo = fileUrl(req.file, 'images');
   await settings.save();
-  res.redirect('/admin/cai-dat');
+  res.redirect('/admin/cai-dat#logo');
 }));
 
 router.post('/cai-dat/logo/xoa', async (req, res) => {
@@ -850,7 +850,7 @@ router.post('/cai-dat/logo/xoa', async (req, res) => {
   unlinkUploaded(settings.logo);
   settings.logo = null;
   await settings.save();
-  res.redirect('/admin/cai-dat');
+  res.redirect('/admin/cai-dat#logo');
 });
 
 router.post('/cai-dat/anh-hero', wrapUpload(uploadImage.single('heroImage'), async (err, req, res) => {
@@ -884,7 +884,7 @@ router.post('/cai-dat/anh-giai-phap', wrapUpload(uploadImage.single('solutionIma
   unlinkUploaded(settings.solutionImage);
   settings.solutionImage = fileUrl(req.file, 'images');
   await settings.save();
-  res.redirect('/admin/cai-dat');
+  res.redirect('/admin/cai-dat#solution-image');
 }));
 
 router.post('/cai-dat/anh-giai-phap/xoa', async (req, res) => {
@@ -892,7 +892,7 @@ router.post('/cai-dat/anh-giai-phap/xoa', async (req, res) => {
   unlinkUploaded(settings.solutionImage);
   settings.solutionImage = null;
   await settings.save();
-  res.redirect('/admin/cai-dat');
+  res.redirect('/admin/cai-dat#solution-image');
 });
 
 router.post('/cai-dat/anh-du-an', wrapUpload(uploadImage.single('projectImage'), async (err, req, res) => {
@@ -944,7 +944,7 @@ router.post('/cai-dat/anh-linh-vuc/:key', (req, res, next) => {
       unlinkUploaded(settings[field]);
       settings[field] = fileUrl(req.file, 'images');
       await settings.save();
-      res.redirect('/admin/cai-dat');
+      res.redirect('/admin/cai-dat#img-' + req.params.key);
     })().catch(next);
   });
 });
@@ -957,7 +957,7 @@ router.post('/cai-dat/anh-linh-vuc/:key/xoa', async (req, res) => {
   unlinkUploaded(settings[field]);
   settings[field] = null;
   await settings.save();
-  res.redirect('/admin/cai-dat');
+  res.redirect('/admin/cai-dat#img-' + req.params.key);
 });
 
 router.post('/cai-dat/trang/:pageKey', async (req, res) => {
@@ -975,7 +975,7 @@ router.post('/cai-dat/trang/:pageKey', async (req, res) => {
     },
     { upsert: true },
   );
-  res.redirect('/admin/cai-dat');
+  res.redirect('/admin/cai-dat#hero-' + req.params.pageKey);
 });
 
 module.exports = router;
