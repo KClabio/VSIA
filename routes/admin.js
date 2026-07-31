@@ -3,6 +3,7 @@ const router = express.Router();
 
 const Course = require('../models/Course');
 const Media = require('../models/Media');
+const CourseVideo = require('../models/CourseVideo');
 const Article = require('../models/Article');
 const TeamMember = require('../models/TeamMember');
 const Partner = require('../models/Partner');
@@ -25,6 +26,7 @@ router.use(requireAuth, requireStaff);
 router.use('/khoa-hoc', requireModule('khoa-hoc'));
 router.use('/tien-do', requireModule('tien-do'));
 router.use('/thu-vien', requireModule('thu-vien'));
+router.use('/video-khoa-hoc', requireModule('video-khoa-hoc'));
 router.use('/bai-viet', requireModule('bai-viet'));
 router.use('/doi-ngu', requireModule('doi-ngu'));
 router.use('/doi-tac', requireModule('doi-tac'));
@@ -474,6 +476,71 @@ router.post('/thu-vien/:id/xoa', async (req, res) => {
   res.redirect('/admin/thu-vien');
 });
 
+// --- Video bài giảng (trang Khoá học) ---
+
+async function renderCourseVideos(res, error) {
+  const videos = await CourseVideo.find().sort({ featured: -1, order: 1, createdAt: -1 }).lean();
+  res.render('admin/course-videos', { videos, error, active: 'video-khoa-hoc' });
+}
+
+router.get('/video-khoa-hoc', async (req, res) => {
+  await renderCourseVideos(res, null);
+});
+
+router.post('/video-khoa-hoc', wrapUpload(uploadVideo.single('videoFile'), async (err, req, res) => {
+  if (err) return renderCourseVideos(res, friendlyUploadError(err));
+
+  const title = (req.body.title || '').trim();
+  const videoLink = (req.body.videoLink || '').trim();
+  if (!title) return renderCourseVideos(res, 'Vui lòng nhập tiêu đề video.');
+  if (!req.file && !videoLink) return renderCourseVideos(res, 'Vui lòng chọn file video hoặc dán link video (YouTube...).');
+
+  await CourseVideo.create({
+    title,
+    description: (req.body.description || '').trim(),
+    tag: (req.body.tag || '').trim(),
+    featured: req.body.featured === 'on',
+    videoUrl: req.file ? fileUrl(req.file, 'videos') : videoLink,
+    isExternal: !req.file,
+  });
+  res.redirect('/admin/video-khoa-hoc');
+}));
+
+router.post('/video-khoa-hoc/:id/sua', wrapUpload(uploadVideo.single('videoFile'), async (err, req, res) => {
+  if (err) return renderCourseVideos(res, friendlyUploadError(err));
+
+  const video = await CourseVideo.findById(req.params.id).catch(() => null);
+  if (!video) return res.status(404).render('404');
+
+  const title = (req.body.title || '').trim();
+  if (!title) return renderCourseVideos(res, 'Vui lòng nhập tiêu đề video.');
+
+  video.title = title;
+  video.description = (req.body.description || '').trim();
+  video.tag = (req.body.tag || '').trim();
+  video.featured = req.body.featured === 'on';
+
+  const videoLink = (req.body.videoLink || '').trim();
+  if (req.file) {
+    if (!video.isExternal) unlinkUploaded(video.videoUrl);
+    video.videoUrl = fileUrl(req.file, 'videos');
+    video.isExternal = false;
+  } else if (videoLink) {
+    if (!video.isExternal) unlinkUploaded(video.videoUrl);
+    video.videoUrl = videoLink;
+    video.isExternal = true;
+  }
+
+  await video.save();
+  res.redirect('/admin/video-khoa-hoc');
+}));
+
+router.post('/video-khoa-hoc/:id/xoa', async (req, res) => {
+  const video = await CourseVideo.findByIdAndDelete(req.params.id);
+  if (video && !video.isExternal) unlinkUploaded(video.videoUrl);
+  res.redirect('/admin/video-khoa-hoc');
+});
+
 // --- Bài viết ---
 
 function sanitizeSourceUrl(raw) {
@@ -828,12 +895,39 @@ router.post('/cai-dat/anh-giai-phap/xoa', async (req, res) => {
   res.redirect('/admin/cai-dat');
 });
 
+router.post('/cai-dat/anh-du-an', wrapUpload(uploadImage.single('projectImage'), async (err, req, res) => {
+  if (err) return renderSettings(res, friendlyUploadError(err));
+
+  const settings = await getSiteSettings();
+  if (!req.file) return renderSettings(res, 'Vui lòng chọn ảnh.');
+
+  settings.projectImages.push({ url: fileUrl(req.file, 'images') });
+  await settings.save();
+  res.redirect('/admin/cai-dat#project-images');
+}));
+
+router.post('/cai-dat/anh-du-an/:id/xoa', async (req, res) => {
+  const settings = await getSiteSettings();
+  const item = settings.projectImages.id(req.params.id);
+  if (item) {
+    unlinkUploaded(item.url);
+    item.deleteOne();
+    await settings.save();
+  }
+  res.redirect('/admin/cai-dat#project-images');
+});
+
 const BIZ_IMAGE_FIELDS = {
   lab: 'bizLabImage',
   teacher: 'bizTeacherImage',
   events: 'bizEventsImage',
   robotics: 'bizRoboticsImage',
   contact: 'contactImage',
+  'solution-hero': 'solutionHeroImage',
+  'eco-movement': 'ecoMovementImage',
+  'eco-equipment': 'ecoEquipmentImage',
+  'eco-competition': 'ecoCompetitionImage',
+  'eco-training': 'ecoTrainingImage',
 };
 
 router.post('/cai-dat/anh-linh-vuc/:key', (req, res, next) => {

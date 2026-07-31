@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Course = require('../models/Course');
 const Media = require('../models/Media');
+const CourseVideo = require('../models/CourseVideo');
 const Article = require('../models/Article');
 const TeamMember = require('../models/TeamMember');
 const Partner = require('../models/Partner');
@@ -22,11 +23,7 @@ router.get('/', async (req, res) => {
 
 router.get('/giai-phap', async (req, res) => {
   const hero = await getPageContent('giai-phap');
-  const teamMembers = await TeamMember.find().sort({ order: 1, createdAt: 1 }).lean();
-  const leadershipMembers = teamMembers.filter((m) => m.group === 'leadership');
-  const expertMembers = teamMembers.filter((m) => m.group !== 'leadership');
-  const partners = await Partner.find().sort({ order: 1, createdAt: 1 }).lean();
-  res.render('solution', { hero, leadershipMembers, expertMembers, partners });
+  res.render('solution', { hero });
 });
 
 router.get('/tu-van-phong-lab', async (req, res) => {
@@ -46,7 +43,8 @@ router.get('/lien-he', async (req, res) => {
 
 router.get('/khoa-hoc', async (req, res) => {
   const courses = await Course.find().sort({ createdAt: -1 }).lean();
-  res.render('courses', { courses });
+  const courseVideos = await CourseVideo.find().sort({ featured: -1, order: 1, createdAt: -1 }).lean();
+  res.render('courses', { courses, courseVideos });
 });
 
 router.get('/khoa-hoc/:id', async (req, res) => {

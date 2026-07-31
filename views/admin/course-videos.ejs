@@ -1,0 +1,86 @@
+<%- include('partials/head', { pageTitle: 'Video bài giảng', active: 'video-khoa-hoc' }) %>
+
+<div class="admin-page-head">
+  <h1 class="page-title">Video bài giảng</h1>
+  <span class="admin-count-badge"><%= videos.length %> video</span>
+</div>
+<p class="section-subtitle" style="margin-bottom:30px; text-align:left;">Hiển thị ở mục "Video &amp; bài giảng mẫu" trên trang Khoá học. Đánh dấu "Nổi bật" để hiện thẻ lớn đầu lưới.</p>
+
+<% if (error) { %><p class="form-error"><%= error %></p><% } %>
+
+<form method="POST" enctype="multipart/form-data" action="/admin/video-khoa-hoc" class="admin-form" style="max-width:520px; margin-bottom:36px;">
+  <h3>Thêm video mới</h3>
+  <label>Tiêu đề
+    <input type="text" name="title" placeholder="Vd: Mang STEM vào lớp học Robotics" required>
+  </label>
+  <label>Mô tả ngắn
+    <textarea name="description" rows="2" placeholder="Vd: Tổ chức hoạt động thực hành robotics ngay trong tiết học chính khoá."></textarea>
+  </label>
+  <label>Nhãn phân loại
+    <input type="text" name="tag" placeholder="Vd: ROBOTICS, STEM, AI, KỸ THUẬT...">
+  </label>
+  <label>Tải file video lên (mp4/webm/ogg, tối đa 100MB)
+    <input type="file" name="videoFile" accept="video/mp4,video/webm,video/ogg">
+  </label>
+  <label>Hoặc dán link video ngoài (YouTube...) — bỏ trống nếu đã chọn file ở trên
+    <input type="text" name="videoLink" placeholder="https://youtube.com/watch?v=...">
+  </label>
+  <label class="checkbox-label">
+    <input type="checkbox" name="featured"> Đánh dấu nổi bật (hiện thẻ lớn đầu lưới)
+  </label>
+  <div class="admin-form-actions">
+    <button type="submit" class="btn btn-primary">+ Thêm video</button>
+  </div>
+</form>
+
+<% if (videos.length === 0) { %>
+  <p class="empty-state">Chưa có video nào. Dùng form phía trên để thêm.</p>
+<% } else { %>
+  <div class="admin-media-grid">
+    <% videos.forEach(item => { %>
+      <div class="admin-media-card">
+        <% if (item.isExternal) { %>
+          <div class="admin-media-card-external"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z"/></svg><span>Link ngoài</span></div>
+        <% } else { %>
+          <video src="<%= item.videoUrl %>" controls></video>
+        <% } %>
+        <p>
+          <% if (item.featured) { %><span class="admin-badge-featured">★ Nổi bật</span><% } %>
+          <%= item.title %>
+          <% if (item.tag) { %><span class="admin-badge-tag"><%= item.tag %></span><% } %>
+        </p>
+        <div class="admin-media-card-actions">
+          <details class="admin-media-edit">
+            <summary class="btn btn-icon">✏️ Sửa</summary>
+            <form action="/admin/video-khoa-hoc/<%= item._id %>/sua" method="POST" enctype="multipart/form-data" class="admin-media-edit-form">
+              <label>Tiêu đề
+                <input type="text" name="title" value="<%= item.title %>" required>
+              </label>
+              <label>Mô tả ngắn
+                <textarea name="description" rows="2"><%= item.description %></textarea>
+              </label>
+              <label>Nhãn phân loại
+                <input type="text" name="tag" value="<%= item.tag %>">
+              </label>
+              <label>Thay file video (bỏ trống nếu giữ nguyên)
+                <input type="file" name="videoFile" accept="video/mp4,video/webm,video/ogg">
+              </label>
+              <label>Hoặc thay bằng link ngoài
+                <input type="text" name="videoLink" placeholder="https://youtube.com/watch?v=...">
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="featured" <%= item.featured ? 'checked' : '' %>> Nổi bật
+              </label>
+              <button type="submit" class="btn btn-primary btn-block">Lưu thay đổi</button>
+            </form>
+          </details>
+          <form action="/admin/video-khoa-hoc/<%= item._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá video này?');">
+            <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá</button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('partials/foot') %>

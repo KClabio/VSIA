@@ -1,8 +1,27 @@
 <%- include('partials/header', { title: 'Liên hệ - VSIA' }) %>
 
-<%- include('partials/page-banner', { image: contactImage, badge: hero.heroBadge, titleLine1: hero.heroTitleLine1, titleLine2: hero.heroTitleLine2, subtitle: hero.heroSubtitle, ctaText: hero.heroCtaText, ctaLink: '#', ctaAttrs: 'data-open-contact' }) %>
+<section class="page-hero">
+  <div class="page-hero-bg">
+    <% if (contactImage) { %><img src="<%= contactImage %>" alt=""><% } %>
+  </div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-inner">
+    <span class="hero-pill"><%= hero.heroBadge %></span>
+    <h1><%= hero.heroTitleLine1 %><% if (hero.heroTitleLine2) { %> <%= hero.heroTitleLine2 %><% } %></h1>
+    <p class="lead"><%= hero.heroSubtitle %></p>
+    <div class="page-hero-ctas">
+      <a class="btn btn-primary" href="#" data-open-contact><%= hero.heroCtaText %></a>
+      <a class="btn btn-ghost" href="#thong-tin-lien-he">Xem thông tin liên hệ</a>
+    </div>
+    <div class="page-hero-badges">
+      <span class="badge-pill">Tư vấn miễn phí buổi đầu</span>
+      <span class="badge-pill">Đồng hành cùng nhà trường toàn quốc</span>
+      <span class="badge-pill">Phản hồi nhanh chóng</span>
+    </div>
+  </div>
+</section>
 
-<section class="section">
+<section class="section" id="thong-tin-lien-he">
   <div class="container">
     <div class="contact-vrec-grid">
       <div class="contact-vrec-left reveal">

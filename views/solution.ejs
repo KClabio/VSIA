@@ -1,54 +1,23 @@
 <%- include('partials/header', { title: 'Giải pháp giáo dục STEM tổng thể - VSIA' }) %>
 
-<%- include('partials/page-banner', { image: null, badge: hero.heroBadge, titleLine1: hero.heroTitleLine1, titleLine2: hero.heroTitleLine2, subtitle: hero.heroSubtitle, ctaText: hero.heroCtaText, ctaLink: hero.heroCtaLink, ctaAttrs: 'data-open-contact' }) %>
-
-<section class="section team-section">
-  <div class="container">
-    <h2 class="section-title">BAN LÃNH ĐẠO &amp; HỘI ĐỒNG CHUYÊN GIA</h2>
-    <p class="section-subtitle">Đội ngũ điều hành và cố vấn chuyên môn đồng hành cùng VSIA trong các chương trình giáo dục STEM.</p>
-
-    <div class="team-tabs" role="tablist">
-      <button type="button" class="team-tab active" data-team-tab="leadership">Ban lãnh đạo</button>
-      <button type="button" class="team-tab" data-team-tab="expert">Hội đồng chuyên gia</button>
-    </div>
-
-    <div class="team-panel active" data-team-panel="leadership">
-      <% if (leadershipMembers.length === 0) { %>
-        <p class="empty-state">Chưa có thông tin Ban lãnh đạo. Thêm ở trang quản trị (<code>/admin/doi-ngu</code>).</p>
-      <% } else { %>
-        <% leadershipMembers.forEach(member => { %>
-          <%- include('partials/leadership-spotlight', { member }) %>
-        <% }) %>
-      <% } %>
-    </div>
-
-    <div class="team-panel" data-team-panel="expert">
-      <% if (expertMembers.length === 0) { %>
-        <p class="empty-state">Chưa có thông tin Hội đồng chuyên gia. Thêm ở trang quản trị (<code>/admin/doi-ngu</code>).</p>
-      <% } else { %>
-        <div class="people-grid">
-          <% expertMembers.forEach(member => { %>
-            <%- include('partials/person-card', { member }) %>
-          <% }) %>
-        </div>
-      <% } %>
-    </div>
+<section class="page-hero">
+  <div class="page-hero-bg">
+    <% if (solutionHeroImage) { %><img src="<%= solutionHeroImage %>" alt=""><% } %>
   </div>
-</section>
-
-<section class="section section-alt">
-  <div class="container">
-    <h2 class="section-title">ĐỐI TÁC CỦA VSIA</h2>
-    <p class="section-subtitle">Đồng hành cùng VSIA trong triển khai giáo dục STEM.</p>
-    <% if (partners.length === 0) { %>
-      <p class="empty-state">Chưa có đối tác nào. Thêm ở trang quản trị (<code>/admin/doi-tac</code>).</p>
-    <% } else { %>
-      <div class="plogos">
-        <% partners.forEach(partner => { %>
-          <%- include('partials/partner-tile', { name: partner.name, logo: partner.logo }) %>
-        <% }) %>
-      </div>
-    <% } %>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-inner">
+    <span class="hero-pill"><%= hero.heroBadge %></span>
+    <h1><%= hero.heroTitleLine1 %><% if (hero.heroTitleLine2) { %> <%= hero.heroTitleLine2 %><% } %></h1>
+    <p class="lead"><%= hero.heroSubtitle %></p>
+    <div class="page-hero-ctas">
+      <a class="btn btn-primary" href="#" data-open-contact><%= hero.heroCtaText %></a>
+      <a class="btn btn-ghost" href="#he-sinh-thai">Xem hệ sinh thái</a>
+    </div>
+    <div class="page-hero-badges">
+      <span class="badge-pill">Đồng bộ chương trình – thiết bị – con người</span>
+      <span class="badge-pill">Bám sát Chương trình GDPT 2018</span>
+      <span class="badge-pill">Triển khai từ trường đến tỉnh</span>
+    </div>
   </div>
 </section>
 
@@ -57,12 +26,23 @@
     <h2 class="section-title">GIẢI PHÁP GIÁO DỤC STEM TỔNG THỂ, TOÀN DIỆN</h2>
 
     <div class="solution-showcase">
-      <div class="solution-showcase-image <%= solutionImage ? '' : 'empty' %>">
-        <% if (solutionImage) { %>
-          <img src="<%= solutionImage %>" alt="Giải pháp giáo dục STEM tổng thể VSIA">
-        <% } else { %>
-          <span>Ảnh minh hoạ sẽ hiển thị ở đây<br>(thêm ở trang quản trị &nbsp;<code>/admin/cai-dat</code>)</span>
-        <% } %>
+      <div class="visual-card">
+        <div class="visual-card-bg">
+          <% if (solutionImage) { %><img src="<%= solutionImage %>" alt="Giải pháp giáo dục STEM tổng thể VSIA"><% } %>
+        </div>
+        <div class="visual-card-overlay"></div>
+        <div class="visual-top">
+          <span class="visual-badge">STEM INNOVATION</span>
+        </div>
+        <div class="visual-icons">
+          <div class="vi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6"/></svg></div>
+          <div class="vi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="9" width="16" height="10" rx="2"/><path d="M8 9V6a4 4 0 018 0v3"/></svg></div>
+          <div class="vi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg></div>
+        </div>
+        <div class="visual-bottom">
+          <h3>Chương trình STEM Innovation</h3>
+          <p>Đào tạo giáo viên, chuyển giao chương trình và thiết bị theo mô hình đồng bộ trên toàn quốc.</p>
+        </div>
       </div>
 
       <div class="solution-timeline">
@@ -99,24 +79,45 @@
   </div>
 </section>
 
-<section class="section section-alt">
+<section class="section section-alt" id="he-sinh-thai">
   <div class="container">
     <h2 class="section-title">HỆ SINH THÁI GIÁO DỤC STEM</h2>
+    <p class="section-subtitle">Bốn trụ cột vận hành song song, tạo thành một hệ sinh thái giáo dục STEM bền vững cho nhà trường.</p>
 
-    <div class="info-grid">
-      <div class="info-card">
+    <div class="eco-grid">
+      <div class="eco-card">
+        <% if (ecoMovementImage) { %>
+          <div class="eco-thumb"><img src="<%= ecoMovementImage %>" alt="Xây dựng phong trào"></div>
+        <% } else { %>
+          <div class="eco-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0113 0"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15 20a5 5 0 018.5-3.6"/></svg></div>
+        <% } %>
         <h3>Xây dựng phong trào</h3>
         <p>Giáo viên dạy, học sinh học tập - sáng tạo, phụ huynh đồng hành.</p>
       </div>
-      <div class="info-card">
+      <div class="eco-card">
+        <% if (ecoEquipmentImage) { %>
+          <div class="eco-thumb"><img src="<%= ecoEquipmentImage %>" alt="Đầu tư trang thiết bị"></div>
+        <% } else { %>
+          <div class="eco-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 10h16M10 10v10"/></svg></div>
+        <% } %>
         <h3>Đầu tư trang thiết bị</h3>
         <p>Phòng thực hành STEM (STEM LAB) đạt chuẩn, phù hợp từng cấp học.</p>
       </div>
-      <div class="info-card">
+      <div class="eco-card">
+        <% if (ecoCompetitionImage) { %>
+          <div class="eco-thumb"><img src="<%= ecoCompetitionImage %>" alt="Các cuộc thi"></div>
+        <% } else { %>
+          <div class="eco-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 21h8M12 17v4M6 4h12l-1 6a5 5 0 01-10 0L6 4z"/><path d="M6 6H3a3 3 0 003 3M18 6h3a3 3 0 01-3 3"/></svg></div>
+        <% } %>
         <h3>Các cuộc thi</h3>
         <p>Tổ chức cuộc thi tại địa phương, tham gia cuộc thi quốc gia, quốc tế.</p>
       </div>
-      <div class="info-card">
+      <div class="eco-card">
+        <% if (ecoTrainingImage) { %>
+          <div class="eco-thumb"><img src="<%= ecoTrainingImage %>" alt="Tập huấn, đào tạo giáo viên"></div>
+        <% } else { %>
+          <div class="eco-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></div>
+        <% } %>
         <h3>Tập huấn, đào tạo giáo viên</h3>
         <p>Nâng cao năng lực giảng dạy STEM, tinh thần đổi mới sáng tạo.</p>
       </div>
@@ -124,22 +125,37 @@
   </div>
 </section>
 
-<section class="section highlight">
-  <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
-  <div class="wrap hl-inner">
-    <div>
-      <span class="eyebrow">Dự án nổi bật</span>
-      <h2>STEM Innovation PetroVietnam</h2>
-      <p class="lead-new">VSIA là đơn vị đào tạo giáo viên và đối tác chiến lược của Tập đoàn Công nghiệp – Năng lượng Quốc gia Việt Nam trong chương trình STEM quy mô toàn quốc.</p>
-      <a href="mailto:taphuan@vsia.edu.vn" class="btn btn-ghost" style="margin-top:26px" data-open-contact>Liên hệ hợp tác cùng VSIA →</a>
-    </div>
-    <div class="hl-tl">
-      <div class="hl-item"><div class="y">2025</div><div><h4>Đơn vị đào tạo giáo viên</h4><p>VSIA là đơn vị triển khai đào tạo giáo viên cho Chương trình STEM Innovation PetroVietnam do Tập đoàn Công nghiệp - Năng lượng Quốc gia Việt Nam tài trợ.</p></div></div>
-      <div class="hl-item"><div class="y">2026</div><div><h4>Đối tác chiến lược</h4><p>VSIA tiếp tục là đối tác chiến lược của PetroVietnam triển khai Kế hoạch Chương trình STEM Innovation PetroVietnam 2026.</p></div></div>
-      <div class="hl-item"><div class="y">05</div><div><h4>Chuyên môn &amp; Điều phối</h4><p>Trực tiếp điều phối 5 sự kiện tập huấn trực tiếp và 21 hội thảo trực tuyến của Chương trình.</p></div></div>
-      <div class="hl-item"><div class="y">09+</div><div><h4>Kết nối &amp; Lan toả</h4><p>Kênh kết nối trực tiếp với địa phương và nhà trường, thúc đẩy phong trào giáo dục STEM.</p></div></div>
+<% if (projectImages && projectImages.length > 0) { %>
+<section class="section project-highlight">
+  <div class="container">
+    <h2 class="project-highlight-title">DỰ ÁN NỔI BẬT</h2>
+    <p class="project-highlight-lead">VSIA là đơn vị triển khai<br><strong>CHƯƠNG TRÌNH TẬP HUẤN STEM INNOVATION PETROVIETNAM</strong></p>
+
+    <div class="project-gallery">
+      <% projectImages.forEach((img, i) => { %>
+        <div class="project-gallery-item reveal">
+          <img src="<%= img.url %>" alt="Dự án nổi bật VSIA <%= i + 1 %>" loading="lazy">
+        </div>
+      <% }) %>
     </div>
   </div>
 </section>
+<% } %>
+
+<section class="section section-alt">
+  <div class="container">
+    <%- include('partials/training-roadmap') %>
+  </div>
+</section>
+
+<div class="cta-strip">
+  <div class="cta-strip-inner">
+    <div>
+      <h3>Địa phương hoặc nhà trường bạn muốn xây dựng phong trào STEM?</h3>
+      <p>VSIA tư vấn mô hình triển khai phù hợp với điều kiện thực tế — từ chương trình, thiết bị đến con người.</p>
+    </div>
+    <a class="btn btn-white" href="#" data-open-contact>Liên hệ hợp tác</a>
+  </div>
+</div>
 
 <%- include('partials/footer') %>

@@ -1,10 +1,25 @@
 <%- include('partials/header', { title: 'Tư vấn thiết kế phòng Lab STEM - VSIA' }) %>
 
-<%- include('partials/page-banner', { image: bizLabImage, badge: hero.heroBadge, titleLine1: hero.heroTitleLine1, titleLine2: hero.heroTitleLine2, subtitle: hero.heroSubtitle, ctaText: hero.heroCtaText, ctaLink: hero.heroCtaLink, ctaAttrs: 'data-open-contact' }) %>
-
-<div class="wrap" style="padding: 48px 26px 0;">
-  <p class="section-subtitle" style="margin-bottom:0;">Cung cấp giải pháp tổng thể cho nhà trường và doanh nghiệp: quy hoạch không gian học tập vật lý (Phòng thực hành STEM), xây dựng khung chương trình và học liệu tối ưu.</p>
-</div>
+<section class="page-hero">
+  <div class="page-hero-bg">
+    <% if (bizLabImage) { %><img src="<%= bizLabImage %>" alt=""><% } %>
+  </div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-inner">
+    <span class="hero-pill"><%= hero.heroBadge %></span>
+    <h1><%= hero.heroTitleLine1 %><% if (hero.heroTitleLine2) { %> <%= hero.heroTitleLine2 %><% } %></h1>
+    <p class="lead"><%= hero.heroSubtitle %></p>
+    <div class="page-hero-ctas">
+      <a class="btn btn-primary" href="#" data-open-contact><%= hero.heroCtaText %></a>
+      <a class="btn btn-ghost" href="#dich-vu">Xem dịch vụ</a>
+    </div>
+    <div class="page-hero-badges">
+      <span class="badge-pill">Khảo sát đến vận hành trọn gói</span>
+      <span class="badge-pill">Phù hợp ngân sách &amp; cấp học</span>
+      <span class="badge-pill">Đồng hành lâu dài sau bàn giao</span>
+    </div>
+  </div>
+</section>
 
 <section class="section" id="dich-vu">
   <div class="container">
@@ -51,72 +66,104 @@
     <h2 class="section-title">LỘ TRÌNH TƯ VẤN XÂY DỰNG PHÒNG THỰC HÀNH STEM</h2>
     <p class="section-subtitle">6 bước đồng hành cùng nhà trường, từ khảo sát đến vận hành và kết nối lâu dài.</p>
 
-    <div class="tl-steps">
-      <div class="tl-step reveal">
-        <div class="tl-num">1</div>
-        <div class="tl-content">
-          <h3>Khảo sát thực tế</h3>
-          <ul>
-            <li>Thông tin mặt bằng</li>
-            <li>Tình hình thực tế của nhà trường, đơn vị</li>
-          </ul>
-        </div>
-      </div>
-      <div class="tl-step reveal">
-        <div class="tl-num">2</div>
-        <div class="tl-content">
-          <h3>Tư vấn mô hình phòng STEM phù hợp</h3>
-          <ul>
-            <li>Danh mục thiết bị</li>
-            <li>Thiết kế và bố trí không gian</li>
-          </ul>
-        </div>
-      </div>
-      <div class="tl-step reveal">
-        <div class="tl-num">3</div>
-        <div class="tl-content">
-          <h3>Đồng hành thi công</h3>
-          <ul>
-            <li>Theo sát tiến độ và chất lượng thi công</li>
-            <li>Phối hợp nghiệm thu hạng mục hoàn thiện</li>
-          </ul>
-        </div>
-      </div>
-      <div class="tl-step reveal">
-        <div class="tl-num">4</div>
-        <div class="tl-content">
-          <h3>Tập huấn, đào tạo</h3>
-          <ul>
-            <li>Hướng dẫn sử dụng thiết bị</li>
-            <li>Chương trình giáo dục STEM bám sát CT GDPT và khai thác hiệu quả thiết bị STEM của phòng</li>
-          </ul>
-        </div>
-      </div>
-      <div class="tl-step reveal">
-        <div class="tl-num">5</div>
-        <div class="tl-content">
-          <h3>Chuyển giao quy trình vận hành</h3>
-          <ul>
-            <li>Tư vấn và xây dựng quy trình vận hành, quản lý và kiểm tra, đánh giá phòng STEM</li>
-          </ul>
-        </div>
-      </div>
-      <div class="tl-step reveal">
-        <div class="tl-num">6</div>
-        <div class="tl-content">
-          <h3>Đồng hành và kết nối</h3>
-          <ul>
-            <li>Hỗ trợ vận hành</li>
-            <li>Kết nối các cuộc thi trong nước và chương trình quốc tế</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <div class="path">
+      <div class="path-spine"></div>
 
-    <div class="section-cta">
-      <a href="mailto:taphuan@vsia.edu.vn" class="btn btn-primary" data-open-contact>Liên hệ tư vấn thiết kế</a>
+      <div class="path-row">
+        <div class="path-node left">
+          <div class="path-card reveal">
+            <div class="path-icon tint-blue">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="13" height="17" rx="2" fill="#0a3d66"/><rect x="7.5" y="1.5" width="6" height="3" rx="1" fill="#1a8fd1"/><rect x="6.5" y="8.5" width="8" height="1.6" rx=".8" fill="#fff"/><rect x="6.5" y="12" width="8" height="1.6" rx=".8" fill="#fff"/><circle cx="18.5" cy="18" r="3.4" fill="#d8a13a"/></svg>
+            </div>
+            <h3>Khảo sát thực tế</h3>
+            <p>Thông tin mặt bằng, tình hình thực tế của nhà trường, đơn vị.</p>
+          </div>
+          <div class="path-num">1</div>
+          <div></div>
+        </div>
+      </div>
+
+      <div class="path-row">
+        <div class="path-node right">
+          <div></div>
+          <div class="path-num">2</div>
+          <div class="path-card reveal">
+            <div class="path-icon tint-gold">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="2" fill="#0a3d66"/><rect x="5" y="6" width="6" height="4.5" rx="1" fill="#1a8fd1"/><rect x="13" y="6" width="6" height="4.5" rx="1" fill="#eaf4fb"/><rect x="5" y="12.5" width="14" height="3" rx="1" fill="#d8a13a"/></svg>
+            </div>
+            <h3>Tư vấn mô hình phòng STEM phù hợp</h3>
+            <p>Danh mục thiết bị, thiết kế và bố trí không gian.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="path-row">
+        <div class="path-node left">
+          <div class="path-card reveal">
+            <div class="path-icon tint-blue">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.83 2.83-2.83-.7-.7-2.83L14.7 6.3Z" fill="#0a3d66"/><circle cx="19" cy="5" r="2.4" fill="#1a8fd1"/></svg>
+            </div>
+            <h3>Đồng hành thi công</h3>
+            <p>Theo sát tiến độ, chất lượng thi công; phối hợp nghiệm thu hạng mục hoàn thiện.</p>
+          </div>
+          <div class="path-num">3</div>
+          <div></div>
+        </div>
+      </div>
+
+      <div class="path-row">
+        <div class="path-node right">
+          <div></div>
+          <div class="path-num">4</div>
+          <div class="path-card reveal">
+            <div class="path-icon tint-green">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 8l10 5 10-5-10-5Z" fill="#0a3d66"/><path d="M6 11v5c0 1.6 2.7 3 6 3s6-1.4 6-3v-5" stroke="#1a8fd1" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M21 9v6" stroke="#d8a13a" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Tập huấn, đào tạo</h3>
+            <p>Hướng dẫn sử dụng thiết bị; chương trình giáo dục STEM bám sát CT GDPT, khai thác hiệu quả thiết bị của phòng.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="path-row">
+        <div class="path-node left">
+          <div class="path-card reveal">
+            <div class="path-icon tint-gold">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" fill="#0a3d66"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1" stroke="#1a8fd1" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Chuyển giao quy trình vận hành</h3>
+            <p>Tư vấn và xây dựng quy trình vận hành, quản lý, kiểm tra và đánh giá phòng STEM.</p>
+          </div>
+          <div class="path-num">5</div>
+          <div></div>
+        </div>
+      </div>
+
+      <div class="path-row accent">
+        <div class="path-node right">
+          <div></div>
+          <div class="path-num">6</div>
+          <div class="path-card reveal">
+            <div class="path-icon tint-blue">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke="#0a3d66" stroke-width="2.2" stroke-linecap="round"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke="#1a8fd1" stroke-width="2.2" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Đồng hành và kết nối</h3>
+            <p>Hỗ trợ vận hành; kết nối các cuộc thi trong nước và chương trình quốc tế.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<div class="cta-strip">
+  <div class="cta-strip-inner">
+    <div>
+      <h3>Nhà trường bạn muốn xây dựng phòng thực hành STEM?</h3>
+      <p>VSIA đồng hành từ khảo sát, thiết kế đến vận hành phòng Lab đạt chuẩn, phù hợp ngân sách và cấp học.</p>
+    </div>
+    <a class="btn btn-white" href="#" data-open-contact>Liên hệ tư vấn thiết kế</a>
+  </div>
+</div>
 
 <%- include('partials/footer') %>

@@ -1,0 +1,26 @@
+<details class="settings-sub-block">
+  <summary><%= label %></summary>
+  <div class="settings-sub-form">
+    <% if (typeof hint !== 'undefined' && hint) { %>
+      <p class="section-subtitle" style="margin-bottom:16px; text-align:left;"><%= hint %></p>
+    <% } %>
+    <% if (value) { %>
+      <div class="admin-logo-preview">
+        <img src="<%= value %>" alt="<%= label %>" style="max-height:180px;">
+      </div>
+      <form action="<%= deleteUrl %>" method="POST" class="inline-form" onsubmit="return confirm('Xoá ảnh này?');" style="margin-bottom:16px;">
+        <button type="submit" class="btn btn-ghost">Xoá ảnh</button>
+      </form>
+    <% } else { %>
+      <p class="empty-state" style="text-align:left; margin-bottom:16px;">Chưa có ảnh — đang hiện hoạ tiết thay thế.</p>
+    <% } %>
+    <form method="POST" enctype="multipart/form-data" action="<%= actionUrl %>">
+      <label>Chọn ảnh mới
+        <input type="file" name="image" accept="image/png,image/jpeg,image/webp,image/gif" required>
+      </label>
+      <div class="admin-form-actions">
+        <button type="submit" class="btn btn-primary"><%= value ? 'Thay ảnh' : 'Tải ảnh lên' %></button>
+      </div>
+    </form>
+  </div>
+</details>

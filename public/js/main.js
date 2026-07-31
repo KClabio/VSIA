@@ -12,6 +12,16 @@ document.getElementById('navToggle')?.addEventListener('click', () => {
   document.getElementById('mainNav')?.classList.toggle('open');
 });
 
+(() => {
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.main-nav a:not(.nav-cta)').forEach((link) => {
+    const href = link.getAttribute('href');
+    if (!href || !href.startsWith('/')) return;
+    const isActive = href === '/' ? currentPath === '/' : (currentPath === href || currentPath.startsWith(href + '/'));
+    if (isActive) link.classList.add('active');
+  });
+})();
+
 document.getElementById('sidebarToggle')?.addEventListener('click', () => {
   document.getElementById('adminSidebar')?.classList.toggle('open');
 });

@@ -1,0 +1,30 @@
+<details class="settings-sub-block">
+  <summary>Nội dung đầu trang (Hero)</summary>
+  <form method="POST" action="/admin/cai-dat/trang/<%= page.key %>" class="settings-sub-form">
+    <label>Badge nhỏ phía trên tiêu đề
+      <input type="text" name="heroBadge" value="<%= page.heroBadge %>">
+    </label>
+    <div class="admin-form-row">
+      <label>Tiêu đề dòng 1
+        <input type="text" name="heroTitleLine1" value="<%= page.heroTitleLine1 %>">
+      </label>
+      <label>Tiêu đề dòng 2
+        <input type="text" name="heroTitleLine2" value="<%= page.heroTitleLine2 %>">
+      </label>
+    </div>
+    <label>Mô tả ngắn
+      <textarea name="heroSubtitle" rows="2"><%= page.heroSubtitle %></textarea>
+    </label>
+    <div class="admin-form-row">
+      <label>Chữ trên nút CTA
+        <input type="text" name="heroCtaText" value="<%= page.heroCtaText %>">
+      </label>
+      <label>Link nút CTA (vd: /khoa-hoc hoặc mailto:...)
+        <input type="text" name="heroCtaLink" value="<%= page.heroCtaLink %>">
+      </label>
+    </div>
+    <div class="admin-form-actions">
+      <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    </div>
+  </form>
+</details>

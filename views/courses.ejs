@@ -1,73 +1,36 @@
 <%- include('partials/header', { title: 'Khoá học - VSIA' }) %>
 
-<%- include('partials/page-banner', { image: bizRoboticsImage, badge: 'Chương trình đào tạo', titleLine1: 'Khoá học đào tạo STEM', subtitle: 'Các khoá tập huấn, bồi dưỡng giáo viên STEM bài bản, từ kỹ thuật thiết bị đến hướng dẫn học sinh nghiên cứu khoa học.', ctaText: 'Đăng ký tư vấn', ctaLink: '#', ctaAttrs: 'data-open-contact' }) %>
-
-<div class="wrap" style="padding: 48px 26px 0;">
-  <p class="section-subtitle" style="margin-bottom:0;">Tổ chức các chương trình tập huấn nâng cao năng lực sư phạm và phương pháp giảng dạy STEM (Khoa học, Công nghệ, Kĩ thuật, Toán) cùng AI, Robotics cho đội ngũ cán bộ quản lý và giáo viên; chuyển giao công nghệ giáo dục hiện đại.</p>
-</div>
-
-<section class="section section-alt">
-  <div class="container">
-    <h2 class="section-title">CÁC CHƯƠNG TRÌNH TẬP HUẤN VÀ ĐÀO TẠO GIÁO VIÊN</h2>
-    <p class="section-subtitle">Lộ trình cơ bản đến chuyên sâu, từ kỹ thuật thiết bị đến hướng dẫn học sinh nghiên cứu khoa học.</p>
-
-    <div class="tl-steps">
-      <div class="tl-step reveal">
-        <div class="tl-num">1</div>
-        <div class="tl-content">
-          <div class="tl-content-head">
-            <div class="tl-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.83 2.83-2.83-.7-.7-2.83L14.7 6.3Z"/></svg></div>
-            <h3>Tập huấn đào tạo kỹ thuật</h3>
-          </div>
-          <p>Hướng dẫn sử dụng, vận hành và bảo trì thiết bị STEM, Robotics, AI trong phòng thực hành.</p>
-        </div>
-      </div>
-      <div class="tl-step reveal">
-        <div class="tl-num">2</div>
-        <div class="tl-content">
-          <div class="tl-content-head">
-            <div class="tl-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg></div>
-            <h3>Tổng quan giáo dục STEM trong Chương trình GDPT</h3>
-          </div>
-          <p>Trang bị kiến thức nền tảng về giáo dục STEM gắn với Chương trình giáo dục phổ thông 2018.</p>
-        </div>
-      </div>
-      <div class="tl-step reveal">
-        <div class="tl-num">3</div>
-        <div class="tl-content">
-          <div class="tl-content-head">
-            <div class="tl-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v5.5L4.8 19a1.4 1.4 0 0 0 1.2 2h12a1.4 1.4 0 0 0 1.2-2L14 8.5V3"/><path d="M7.2 15h9.6"/></svg></div>
-            <h3>Thực hành xây dựng và triển khai chủ đề dạy học STEM</h3>
-          </div>
-          <p>Thiết kế và tổ chức bài học STEM theo mô hình 5E/6E, gắn với thực tiễn lớp học.</p>
-        </div>
-      </div>
-      <div class="tl-step reveal">
-        <div class="tl-num">4</div>
-        <div class="tl-content">
-          <div class="tl-content-head">
-            <div class="tl-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m21 21-4.3-4.3"/></svg></div>
-            <h3>Nghiên cứu KHKT trong Giáo dục phổ thông</h3>
-          </div>
-          <p>Trang bị phương pháp hướng dẫn học sinh nghiên cứu khoa học kỹ thuật bài bản.</p>
-        </div>
-      </div>
-      <div class="tl-step reveal">
-        <div class="tl-num">5</div>
-        <div class="tl-content">
-          <div class="tl-content-head">
-            <div class="tl-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5"/></svg></div>
-            <h3>Hướng dẫn học sinh thực hiện đề tài, dự án nghiên cứu KHKT</h3>
-          </div>
-          <p>Đồng hành cùng giáo viên hướng dẫn học sinh triển khai đề tài, dự thi từ cấp trường đến quốc gia.</p>
-        </div>
-      </div>
+<section class="page-hero">
+  <div class="page-hero-bg">
+    <% if (bizRoboticsImage) { %><img src="<%= bizRoboticsImage %>" alt=""><% } %>
+  </div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-inner">
+    <span class="hero-pill">Chương trình đào tạo VSIA</span>
+    <h1>Đào tạo và bồi dưỡng chuyên môn STEM</h1>
+    <p class="lead">Tập huấn nâng cao năng lực sư phạm và phương pháp giảng dạy STEM — Khoa học, Công nghệ, Kĩ thuật, Toán cùng AI, Robotics — cho cán bộ quản lý và giáo viên phổ thông.</p>
+    <div class="page-hero-ctas">
+      <a class="btn btn-primary" href="#lo-trinh">Xem lộ trình đào tạo</a>
+      <a class="btn btn-ghost" href="#" data-open-contact>Đăng ký tư vấn</a>
     </div>
+    <div class="page-hero-badges">
+      <span class="badge-pill">Bám sát Chương trình GDPT 2018</span>
+      <span class="badge-pill">Cơ bản đến chuyên sâu</span>
+      <span class="badge-pill">Đồng hành cùng Hội đồng Chuyên gia VSIA</span>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="lo-trinh">
+  <div class="container">
+    <%- include('partials/training-roadmap') %>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
+    <h2 class="section-title">KHOÁ HỌC</h2>
+    <p class="section-subtitle">Danh sách các khoá đào tạo, tập huấn STEM hiện có tại VSIA.</p>
     <% if (courses.length === 0) { %>
       <p class="empty-state">Chưa có khoá học nào. Chạy <code>node seed.js</code> để thêm dữ liệu mẫu.</p>
     <% } else { %>
@@ -79,5 +42,33 @@
     <% } %>
   </div>
 </section>
+
+<% if (courseVideos.length > 0) { %>
+<section class="section section-alt" id="thu-vien">
+  <div class="container">
+    <h2 class="section-title">VIDEO &amp; BÀI GIẢNG MẪU</h2>
+    <p class="section-subtitle">Tài nguyên tham khảo dành cho giáo viên đang triển khai chương trình STEM tại trường.</p>
+
+    <div class="video-grid">
+      <% courseVideos.forEach((v, i) => { %>
+        <a class="video-card <%= i === 0 ? 'video-card-featured' : '' %>" href="<%= v.videoUrl %>" target="_blank" rel="noopener">
+          <div class="video-thumb">
+            <div class="video-top-row">
+              <% if (v.tag) { %><span class="video-chip"><%= v.tag %></span><% } else { %><span></span><% } %>
+              <span class="video-play">
+                <svg width="<%= i === 0 ? 22 : 16 %>" height="<%= i === 0 ? 22 : 16 %>" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </div>
+            <div class="video-bottom">
+              <h3><%= v.title %></h3>
+              <% if (v.description) { %><p><%= v.description %></p><% } %>
+            </div>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
 
 <%- include('partials/footer') %>

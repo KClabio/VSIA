@@ -1,8 +1,27 @@
 <%- include('partials/header', { title: 'Ngày hội & Cuộc thi STEM - VSIA' }) %>
 
-<%- include('partials/page-banner', { image: bizEventsImage, badge: hero.heroBadge, titleLine1: hero.heroTitleLine1, titleLine2: hero.heroTitleLine2, subtitle: hero.heroSubtitle, ctaText: hero.heroCtaText, ctaLink: hero.heroCtaLink, ctaAttrs: 'data-open-contact' }) %>
+<section class="page-hero">
+  <div class="page-hero-bg">
+    <% if (bizEventsImage) { %><img src="<%= bizEventsImage %>" alt=""><% } %>
+  </div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-inner">
+    <span class="hero-pill"><%= hero.heroBadge %></span>
+    <h1><%= hero.heroTitleLine1 %><% if (hero.heroTitleLine2) { %> <%= hero.heroTitleLine2 %><% } %></h1>
+    <p class="lead"><%= hero.heroSubtitle %></p>
+    <div class="page-hero-ctas">
+      <a class="btn btn-primary" href="#" data-open-contact><%= hero.heroCtaText %></a>
+      <a class="btn btn-ghost" href="#hinh-thuc">Xem hình thức tổ chức</a>
+    </div>
+    <div class="page-hero-badges">
+      <span class="badge-pill">Từ cấp cơ sở đến quốc gia, quốc tế</span>
+      <span class="badge-pill">Tư vấn chuyên môn &amp; thẩm định</span>
+      <span class="badge-pill">Đồng hành trọn gói tổ chức</span>
+    </div>
+  </div>
+</section>
 
-<section class="section">
+<section class="section" id="hinh-thuc">
   <div class="container">
     <h2 class="section-title">HÌNH THỨC TỔ CHỨC</h2>
     <p class="section-subtitle">VSIA đảm nhận vai trò tư vấn chuyên môn, tổ chức và thẩm định các sự kiện, cuộc thi khoa học kỹ thuật, AI và Robotics với quy mô từ cấp cơ sở đến cấp quốc gia, quốc tế.</p>
@@ -30,14 +49,21 @@
       </div>
     </div>
 
-    <p class="empty-state" style="margin-top: 40px;">
-      Thông tin lịch cụ thể từng ngày hội/cuộc thi sẽ được cập nhật trong thời gian tới. Nếu trường bạn quan tâm tổ chức, hãy liên hệ VSIA để được tư vấn.
-    </p>
-
-    <div class="section-cta">
-      <a href="mailto:taphuan@vsia.edu.vn" class="btn btn-primary" data-open-contact>Liên hệ VSIA</a>
+    <div class="info-note">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+      <p>Thông tin lịch cụ thể từng ngày hội/cuộc thi sẽ được cập nhật trong thời gian tới. Nếu trường bạn quan tâm tổ chức, hãy liên hệ VSIA để được tư vấn.</p>
     </div>
   </div>
 </section>
+
+<div class="cta-strip">
+  <div class="cta-strip-inner">
+    <div>
+      <h3>Trường bạn muốn tổ chức ngày hội hoặc cuộc thi STEM?</h3>
+      <p>VSIA đồng hành tư vấn chuyên môn, tổ chức và thẩm định — từ cấp cơ sở đến cấp quốc gia, quốc tế.</p>
+    </div>
+    <a class="btn btn-white" href="#" data-open-contact>Đăng ký tổ chức tại trường</a>
+  </div>
+</div>
 
 <%- include('partials/footer') %>

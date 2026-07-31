@@ -33,13 +33,14 @@
   <g id="i-search"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></g>
   <g id="i-bell"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></g>
   <g id="i-chev"><polyline points="9 18 15 12 9 6"/></g>
+  <g id="i-play"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z"/></g>
 </defs></svg>
 
 <%
   const ADMIN_BREADCRUMB_GROUP = {
     dashboard: 'Tổng quan',
-    'khoa-hoc': 'Quản lý Đào tạo', 'tien-do': 'Quản lý Đào tạo',
-    'bai-viet': 'CMS & Truyền thông', 'thu-vien': 'CMS & Truyền thông', 'doi-ngu': 'CMS & Truyền thông', 'doi-tac': 'CMS & Truyền thông',
+    'khoa-hoc': 'Đào tạo và bồi dưỡng', 'tien-do': 'Đào tạo và bồi dưỡng', 'video-khoa-hoc': 'Đào tạo và bồi dưỡng',
+    'bai-viet': 'Nội dung & Giới thiệu', 'thu-vien': 'Nội dung & Giới thiệu', 'doi-ngu': 'Nội dung & Giới thiệu', 'doi-tac': 'Nội dung & Giới thiệu',
     'lien-he': 'Khách hàng & Người dùng', 'nguoi-dung': 'Khách hàng & Người dùng',
     'cai-dat': 'Hệ thống',
   };
@@ -60,11 +61,16 @@
         </a>
         <% } %>
 
-        <% if (canAccessModule('khoa-hoc') || canAccessModule('tien-do')) { %>
-        <p class="admin-nav-section-title">Quản lý Đào tạo</p>
+        <% if (canAccessModule('khoa-hoc') || canAccessModule('tien-do') || canAccessModule('video-khoa-hoc')) { %>
+        <p class="admin-nav-section-title">Đào tạo và bồi dưỡng</p>
         <% if (canAccessModule('khoa-hoc')) { %>
         <a href="/admin/khoa-hoc" class="<%= active === 'khoa-hoc' ? 'active' : '' %>">
           <svg class="admin-nav-icon"><use href="#i-book"/></svg> Khoá học
+        </a>
+        <% } %>
+        <% if (canAccessModule('video-khoa-hoc')) { %>
+        <a href="/admin/video-khoa-hoc" class="<%= active === 'video-khoa-hoc' ? 'active' : '' %>">
+          <svg class="admin-nav-icon"><use href="#i-play"/></svg> Video bài giảng
         </a>
         <% } %>
         <% if (canAccessModule('tien-do')) { %>
@@ -75,7 +81,7 @@
         <% } %>
 
         <% if (canAccessModule('bai-viet') || canAccessModule('thu-vien') || canAccessModule('doi-ngu') || canAccessModule('doi-tac')) { %>
-        <p class="admin-nav-section-title">CMS &amp; Truyền thông</p>
+        <p class="admin-nav-section-title">Nội dung &amp; Giới thiệu</p>
         <% if (canAccessModule('bai-viet')) { %>
         <a href="/admin/bai-viet" class="<%= active === 'bai-viet' ? 'active' : '' %>">
           <svg class="admin-nav-icon"><use href="#i-file"/></svg> Bài viết &amp; Tin tức
@@ -114,20 +120,9 @@
 
         <% if (canAccessModule('cai-dat')) { %>
         <p class="admin-nav-section-title">Hệ thống</p>
-        <div class="admin-nav-group <%= active === 'cai-dat' ? 'open' : '' %>">
-          <a href="/admin/cai-dat" class="<%= active === 'cai-dat' ? 'active' : '' %>">
-            <svg class="admin-nav-icon"><use href="#i-gear"/></svg> Cài đặt
-          </a>
-          <% if (active === 'cai-dat') { %>
-            <div class="admin-nav-submenu">
-              <a href="/admin/cai-dat#logo">🖼️ Logo trang web</a>
-              <a href="/admin/cai-dat#hero-image">🌄 Ảnh nền Hero trang chủ</a>
-              <a href="/admin/cai-dat#solution-image">🧩 Ảnh minh hoạ Giải pháp</a>
-              <a href="/admin/cai-dat#biz-images">📷 Ảnh khu vực Lĩnh vực hoạt động</a>
-              <a href="/admin/cai-dat#page-heroes">📝 Nội dung Hero từng trang</a>
-            </div>
-          <% } %>
-        </div>
+        <a href="/admin/cai-dat" class="<%= active === 'cai-dat' ? 'active' : '' %>">
+          <svg class="admin-nav-icon"><use href="#i-gear"/></svg> Cài đặt
+        </a>
         <% } %>
       </nav>
 
