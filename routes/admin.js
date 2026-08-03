@@ -579,6 +579,7 @@ router.post('/bai-viet/moi', wrapUpload(uploadImage.single('image'), async (err,
     summary: req.body.summary,
     content: req.body.content,
     image,
+    category: (req.body.category || '').trim(),
     sourceUrl: sanitizeSourceUrl(req.body.sourceUrl),
     published: req.body.published === 'on',
   });
@@ -603,6 +604,7 @@ router.post('/bai-viet/:id/sua', wrapUpload(uploadImage.single('image'), async (
   article.title = req.body.title;
   article.summary = req.body.summary;
   article.content = req.body.content;
+  article.category = (req.body.category || '').trim();
   article.sourceUrl = sanitizeSourceUrl(req.body.sourceUrl);
   article.published = req.body.published === 'on';
 
@@ -976,6 +978,50 @@ router.post('/cai-dat/trang/:pageKey', async (req, res) => {
     { upsert: true },
   );
   res.redirect('/admin/cai-dat#hero-' + req.params.pageKey);
+});
+
+// --- Tìm kiếm nhanh (thanh admin) ---
+
+router.get('/search', async (req, res) => {
+  const q = (req.query.q || '').trim();
+  if (q.length < 2) return res.json({ results: [] });
+
+  const regex = new RegExp(escapeRegExp(q), 'i');
+  const tasks = [];
+
+  if (res.locals.canAccessModule('khoa-hoc')) {
+    tasks.push(
+      Course.find({ title: regex }).select('title').limit(5).lean()
+        .then((items) => items.map((c) => ({ type: 'Khoá học', title: c.title, url: `/admin/khoa-hoc/${c._id}/sua` }))),
+    );
+  }
+  if (res.locals.canAccessModule('bai-viet')) {
+    tasks.push(
+      Article.find({ title: regex }).select('title').limit(5).lean()
+        .then((items) => items.map((a) => ({ type: 'Bài viết', title: a.title, url: `/admin/bai-viet/${a._id}/sua` }))),
+    );
+  }
+  if (res.locals.canAccessModule('video-khoa-hoc')) {
+    tasks.push(
+      CourseVideo.find({ title: regex }).select('title').limit(5).lean()
+        .then((items) => items.map((v) => ({ type: 'Video bài giảng', title: v.title, url: '/admin/video-khoa-hoc' }))),
+    );
+  }
+  if (res.locals.canAccessModule('doi-ngu')) {
+    tasks.push(
+      TeamMember.find({ name: regex }).select('name').limit(5).lean()
+        .then((items) => items.map((m) => ({ type: 'Đội ngũ', title: m.name, url: `/admin/doi-ngu/${m._id}/sua` }))),
+    );
+  }
+  if (res.locals.canAccessModule('doi-tac')) {
+    tasks.push(
+      Partner.find({ name: regex }).select('name').limit(5).lean()
+        .then((items) => items.map((p) => ({ type: 'Đối tác', title: p.name, url: `/admin/doi-tac/${p._id}/sua` }))),
+    );
+  }
+
+  const grouped = await Promise.all(tasks);
+  res.json({ results: grouped.flat() });
 });
 
 module.exports = router;

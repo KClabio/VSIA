@@ -2096,12 +2096,23 @@ a { text-decoration: none; color: inherit; }
 
 .admin-topbar-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .admin-search-box {
-  display: flex; align-items: center; gap: 8px;
+  position: relative; display: flex; align-items: center; gap: 8px;
   background: var(--adm-panel); border: 1px solid var(--adm-border);
   border-radius: 10px; padding: 8px 12px; width: 210px; color: var(--adm-muted);
 }
 .admin-search-box input { border: none; outline: none; font-size: 13px; font-family: inherit; width: 100%; background: transparent; color: var(--adm-ink); }
 .admin-search-ic { width: 15px; height: 15px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+.admin-search-results {
+  display: none; position: absolute; top: calc(100% + 8px); left: 0; width: 320px; max-height: 380px; overflow-y: auto;
+  background: var(--adm-panel); border: 1px solid var(--adm-border); border-radius: 12px; box-shadow: var(--adm-shadow);
+  padding: 8px; z-index: 200;
+}
+.admin-search-box.open .admin-search-results { display: block; }
+.admin-search-group-title { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--adm-muted); padding: 8px 10px 4px; }
+.admin-search-result { display: block; padding: 8px 10px; border-radius: 8px; font-size: 13px; color: var(--adm-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.admin-search-result:hover { background: var(--adm-bg); }
+.admin-search-empty { padding: 14px 10px; font-size: 13px; color: var(--adm-muted); text-align: center; }
 .admin-icon-btn {
   width: 36px; height: 36px; border-radius: 10px; background: var(--adm-panel); border: 1px solid var(--adm-border);
   display: flex; align-items: center; justify-content: center; color: var(--adm-ink-2); cursor: pointer; flex-shrink: 0;

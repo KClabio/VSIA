@@ -139,7 +139,11 @@
           <h1 class="admin-topbar-title" id="adminTopbarTitle"><%= pageTitle %></h1>
         </div>
         <div class="admin-topbar-right">
-          <div class="admin-search-box"><svg class="admin-search-ic"><use href="#i-search"/></svg><input placeholder="Tìm kiếm..." aria-label="Tìm kiếm"></div>
+          <div class="admin-search-box" id="adminSearchBox">
+            <svg class="admin-search-ic"><use href="#i-search"/></svg>
+            <input type="text" id="adminSearchInput" placeholder="Tìm kiếm..." aria-label="Tìm kiếm" autocomplete="off">
+            <div class="admin-search-results" id="adminSearchResults"></div>
+          </div>
           <div class="admin-icon-btn" title="Thông báo" aria-label="Thông báo"><svg><use href="#i-bell"/></svg></div>
           <div class="admin-divider-v"></div>
           <%- include('../../partials/user-menu', { menuContext: 'admin' }) %>

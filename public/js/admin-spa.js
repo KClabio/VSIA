@@ -102,3 +102,79 @@
     navigate(window.location.pathname + window.location.search, { push: false });
   });
 })();
+
+(function () {
+  var input = document.getElementById('adminSearchInput');
+  var box = document.getElementById('adminSearchBox');
+  var resultsEl = document.getElementById('adminSearchResults');
+  if (!input || !box || !resultsEl) return;
+
+  var debounceTimer = null;
+  var currentRequestId = 0;
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function renderResults(results) {
+    if (results.length === 0) {
+      resultsEl.innerHTML = '<div class="admin-search-empty">Không tìm thấy kết quả</div>';
+      return;
+    }
+    var groups = {};
+    var order = [];
+    results.forEach(function (r) {
+      if (!groups[r.type]) { groups[r.type] = []; order.push(r.type); }
+      groups[r.type].push(r);
+    });
+    var html = '';
+    order.forEach(function (type) {
+      html += '<div class="admin-search-group-title">' + escapeHtml(type) + '</div>';
+      groups[type].forEach(function (r) {
+        html += '<a class="admin-search-result" href="' + r.url + '">' + escapeHtml(r.title) + '</a>';
+      });
+    });
+    resultsEl.innerHTML = html;
+  }
+
+  function runSearch(q) {
+    var requestId = ++currentRequestId;
+    fetch('/admin/search?q=' + encodeURIComponent(q))
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (requestId !== currentRequestId) return;
+        renderResults(data.results || []);
+        box.classList.add('open');
+      })
+      .catch(function () {
+        if (requestId !== currentRequestId) return;
+        resultsEl.innerHTML = '<div class="admin-search-empty">Có lỗi khi tìm kiếm</div>';
+        box.classList.add('open');
+      });
+  }
+
+  input.addEventListener('input', function () {
+    var q = input.value.trim();
+    clearTimeout(debounceTimer);
+    if (q.length < 2) {
+      box.classList.remove('open');
+      resultsEl.innerHTML = '';
+      return;
+    }
+    debounceTimer = setTimeout(function () { runSearch(q); }, 300);
+  });
+
+  input.addEventListener('focus', function () {
+    if (resultsEl.innerHTML) box.classList.add('open');
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!box.contains(e.target)) box.classList.remove('open');
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') box.classList.remove('open');
+  });
+})();

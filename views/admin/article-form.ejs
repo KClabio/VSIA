@@ -16,6 +16,10 @@
     <textarea name="summary" rows="2" required><%= article ? article.summary : '' %></textarea>
   </label>
 
+  <label>Nhãn phân loại (tuỳ chọn, vd: HỢP TÁC QUỐC TẾ, PETROVIETNAM, SỰ KIỆN...)
+    <input type="text" name="category" value="<%= article ? article.category : '' %>">
+  </label>
+
   <label>Nội dung chi tiết
     <textarea name="content" rows="10" required><%= article ? article.content : '' %></textarea>
   </label>
