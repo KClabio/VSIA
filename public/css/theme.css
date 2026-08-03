@@ -1011,11 +1011,6 @@
 
 /* ============ Responsive ============ */
 @media (max-width: 1000px) {
-  .main-nav { position: fixed; inset: 96px 0 auto; flex-direction: column; background: #fff; padding: 24px; gap: 18px; border-bottom: 1px solid var(--line); transform: translateY(-160%); transition: transform .35s; box-shadow: var(--shadow); align-items: flex-start; display: flex; }
-  .main-nav.open { transform: none; }
-  .site-header.nav-transparent .main-nav a { color: #40506a; }
-  .nav-toggle { display: block; }
-  .main-nav a.nav-cta { width: 100%; text-align: center; }
   .course-grid, .article-grid, .experts3 { grid-template-columns: 1fr 1fr; }
   .about-grid, .hl-inner { grid-template-columns: 1fr; gap: 40px; }
   .about-media .badge { position: static; margin-top: 16px; max-width: none; }
@@ -1027,9 +1022,24 @@
   .leader-info .quote, .leader-info .quote-list { margin-inline: auto; text-align: left; }
   .footer-inner { grid-template-columns: 1fr; }
 }
-@media (max-width: 620px) {
-  .section { padding: 64px 0; }
-  .course-grid, .article-grid, .expertise, .experts3 { grid-template-columns: 1fr; }
-  .hero-home { padding: 150px 0 120px; }
+
+/* Menu mobile: bật bởi class .nav-compact (JS đo overflow thực tế), không phụ thuộc breakpoint cố định */
+.nav-compact .main-nav {
+  position: fixed;
+  inset: 96px 0 auto;
+  flex-direction: column;
+  background: #fff;
+  padding: 24px;
+  gap: 18px;
+  border-bottom: 1px solid var(--line);
+  transform: translateY(-160%);
+  transition: transform .35s;
+  box-shadow: var(--shadow);
+  align-items: flex-start;
+  display: flex;
 }
-:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+.nav-compact .main-nav.open { transform: none; }
+.site-header.nav-transparent.nav-compact .main-nav a { color: #40506a; }
+.nav-compact .nav-toggle { display: block; }
+.nav-compact .main-nav a.nav-cta { width: 100%; text-align: center; }
+.nav-compact .user-menu-names { display: none; }
