@@ -2434,20 +2434,6 @@ a { text-decoration: none; color: inherit; }
 
 /* Responsive */
 @media (max-width: 860px) {
-  .nav-toggle { display: block; }
-  .main-nav {
-    position: absolute;
-    top: 72px;
-    left: 0;
-    right: 0;
-    background: #fff;
-    flex-direction: column;
-    padding: 16px 20px;
-    display: none;
-    border-bottom: 1px solid var(--border);
-  }
-  .main-nav.open { display: flex; }
-  .user-menu-names { display: none; }
   .course-detail { grid-template-columns: 1fr; }
   .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 140px); }
   .gallery-large { grid-row: span 1; }
@@ -2475,3 +2461,19 @@ a { text-decoration: none; color: inherit; }
   .player-layout { grid-template-columns: 1fr; }
   .player-sidebar { position: static; max-height: none; }
 }
+
+/* Header: chuyển sang menu hamburger khi JS phát hiện nav không đủ chỗ (thay vì đoán breakpoint cố định) */
+.nav-compact .nav-toggle { display: block; }
+.nav-compact .main-nav {
+  position: absolute;
+  top: 72px;
+  left: 0;
+  right: 0;
+  background: #fff;
+  flex-direction: column;
+  padding: 16px 20px;
+  display: none;
+  border-bottom: 1px solid var(--border);
+}
+.nav-compact .main-nav.open { display: flex; }
+.nav-compact .user-menu-names { display: none; }
