@@ -10,7 +10,7 @@ const Partner = require('../models/Partner');
 const User = require('../models/User');
 const { requireAuth, requireStaff, requireModule } = require('../middleware/auth');
 const { ROLES } = require('../lib/roles');
-const { uploadImage, uploadVideo, uploadCourseFiles, uploadLessonFiles, friendlyUploadError, wrapUpload, fileUrl, signRawUrl } = require('../middleware/upload');
+const { uploadImage, uploadVideo, uploadCourseFiles, uploadLessonFiles, friendlyUploadError, wrapUpload, fileUrl, signRawUrl, fixFilenameEncoding } = require('../middleware/upload');
 const { computeStats, computeDashboardCards, addClient, removeClient, broadcastStats } = require('../lib/stats');
 const { unlinkUploaded } = require('../lib/files');
 const { escapeRegExp } = require('../lib/search');
@@ -96,7 +96,7 @@ router.post('/khoa-hoc/moi', wrapUpload(uploadCourseFiles, async (err, req, res)
 
   const image = req.files?.image?.[0] ? fileUrl(req.files.image[0], 'images') : null;
   const materials = (req.files?.materials || []).map((f) => ({
-    name: f.originalname,
+    name: fixFilenameEncoding(f.originalname),
     filePath: fileUrl(f, 'documents'),
   }));
 
@@ -131,7 +131,7 @@ router.post('/khoa-hoc/:id/sua', wrapUpload(uploadCourseFiles, async (err, req, 
 
   if (req.files?.materials?.length) {
     course.materials.push(...req.files.materials.map((f) => ({
-      name: f.originalname,
+      name: fixFilenameEncoding(f.originalname),
       filePath: fileUrl(f, 'documents'),
     })));
   }
@@ -258,7 +258,7 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai', wrapUpload(uploadLess
     videoUrl: req.body.videoUrl ? req.body.videoUrl.trim() : null,
     videoFile: videoFile ? fileUrl(videoFile, 'videos') : null,
     documentFile: documentFile ? fileUrl(documentFile, 'documents') : null,
-    documentName: documentFile ? documentFile.originalname : '',
+    documentName: documentFile ? fixFilenameEncoding(documentFile.originalname) : '',
     documentSize: documentFile ? documentFile.size : null,
     content: req.body.content || '',
   });
@@ -291,7 +291,7 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/sua', wrapUpl
   if (documentFile) {
     unlinkUploaded(lesson.documentFile);
     lesson.documentFile = fileUrl(documentFile, 'documents');
-    lesson.documentName = documentFile.originalname;
+    lesson.documentName = fixFilenameEncoding(documentFile.originalname);
     lesson.documentSize = documentFile.size;
   }
   await course.save();
@@ -434,7 +434,7 @@ router.post('/thu-vien/anh', wrapUpload(uploadImage.single('image'), async (err,
     return res.render('admin/gallery', { mediaItems, error: 'Vui lòng chọn ảnh.' });
   }
   await Media.create({
-    title: req.body.title || req.file.originalname,
+    title: req.body.title || fixFilenameEncoding(req.file.originalname),
     type: 'image',
     filePath: fileUrl(req.file, 'images'),
   });
@@ -451,7 +451,7 @@ router.post('/thu-vien/video', wrapUpload(uploadVideo.single('video'), async (er
     return res.render('admin/gallery', { mediaItems, error: 'Vui lòng chọn video.' });
   }
   await Media.create({
-    title: req.body.title || req.file.originalname,
+    title: req.body.title || fixFilenameEncoding(req.file.originalname),
     type: 'video',
     filePath: fileUrl(req.file, 'videos'),
   });

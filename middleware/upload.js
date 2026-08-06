@@ -223,6 +223,15 @@ function wrapUpload(uploader, handler) {
   };
 }
 
+// Busboy (dùng bên trong multer) mặc định đọc tên file trong header multipart theo latin1,
+// nên tên file tiếng Việt (UTF-8) bị lỗi phông chữ kiểu "há»​c" thay vì "học". Thử giải mã lại
+// theo UTF-8; nếu ra ký tự hợp lệ (không có ký tự thay thế U+FFFD) thì dùng bản đã sửa.
+function fixFilenameEncoding(name) {
+  if (!name) return name;
+  const converted = Buffer.from(name, 'latin1').toString('utf8');
+  return converted.includes('�') ? name : converted;
+}
+
 module.exports = {
   uploadImage,
   uploadVideo,
@@ -233,6 +242,7 @@ module.exports = {
   wrapUpload,
   fileUrl,
   signRawUrl,
+  fixFilenameEncoding,
   useCloudinary,
   cloudinary,
 };
