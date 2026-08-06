@@ -67,7 +67,7 @@ const DOCUMENT_EXTENSIONS = ['.pdf', '.doc', '.docx', '.ppt', '.pptx', '.xls', '
 // Gói Cloudinary free chỉ nhận ảnh tối đa 10MB/file — khớp giới hạn multer với giới hạn thật của
 // Cloudinary khi đang dùng cloud storage, để người dùng thấy thông báo "quá dung lượng" thân
 // thiện (friendlyUploadError) thay vì lỗi thô từ Cloudinary API.
-const IMAGE_SIZE_LIMIT = useCloudinary ? 10 * 1024 * 1024 : 20 * 1024 * 1024;
+const IMAGE_SIZE_LIMIT = useCloudinary ? 10 * 1024 * 1024 : 50 * 1024 * 1024;
 
 const uploadImage = multer({
   storage: makeStorage('images', 'image'),
@@ -77,20 +77,20 @@ const uploadImage = multer({
 
 const uploadVideo = multer({
   storage: makeStorage('videos', 'video'),
-  limits: { fileSize: 100 * 1024 * 1024 },
+  limits: { fileSize: 300 * 1024 * 1024 },
   fileFilter: fileFilterFor(VIDEO_EXTENSIONS),
 });
 
 const uploadDocuments = multer({
   storage: makeStorage('documents', 'raw'),
-  limits: { fileSize: 20 * 1024 * 1024 },
+  limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: fileFilterFor(DOCUMENT_EXTENSIONS),
 });
 
 function friendlyUploadError(err) {
   if (err && err.code === 'LIMIT_FILE_SIZE') {
-    const imageMax = useCloudinary ? '10MB' : '20MB';
-    return `File quá dung lượng cho phép. Ảnh tối đa ${imageMax}, video tối đa 100MB, tài liệu tối đa 20MB.`;
+    const imageMax = useCloudinary ? '10MB' : '50MB';
+    return `File quá dung lượng cho phép. Ảnh tối đa ${imageMax}, video tối đa 300MB, tài liệu tối đa 100MB.`;
   }
   return err ? err.message : 'Đã có lỗi xảy ra khi tải file lên.';
 }
