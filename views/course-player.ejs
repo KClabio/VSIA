@@ -94,6 +94,12 @@
           <p class="empty-state" style="text-align:left;">Bài học này chưa có video, quay lại sau nhé.</p>
         <% } %>
 
+        <% if (currentLesson.type === 'document' && currentLesson.documentFile) { %>
+          <p class="player-lesson-actions" style="text-align:left;">
+            <a href="<%= currentLesson.documentFile %>" target="_blank" rel="noopener" class="btn btn-primary">📄 <%= currentLesson.documentName || 'Tải tài liệu' %></a>
+          </p>
+        <% } %>
+
         <% if (currentLesson.content) { %>
           <div class="player-lesson-content"><%= currentLesson.content %></div>
         <% } %>

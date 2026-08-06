@@ -30,6 +30,8 @@ const courseSchema = new mongoose.Schema({
       category: { type: String, enum: ['lecture', 'interaction', 'practice', 'exam'], default: 'lecture' },
       videoUrl: { type: String, default: null },
       videoFile: { type: String, default: null },
+      documentFile: { type: String, default: null },
+      documentName: { type: String, default: '' },
       content: { type: String, default: '' },
     }],
   }],

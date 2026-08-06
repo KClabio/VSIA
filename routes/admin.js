@@ -10,7 +10,7 @@ const Partner = require('../models/Partner');
 const User = require('../models/User');
 const { requireAuth, requireStaff, requireModule } = require('../middleware/auth');
 const { ROLES } = require('../lib/roles');
-const { uploadImage, uploadVideo, uploadCourseFiles, friendlyUploadError, wrapUpload, fileUrl } = require('../middleware/upload');
+const { uploadImage, uploadVideo, uploadCourseFiles, uploadLessonFiles, friendlyUploadError, wrapUpload, fileUrl } = require('../middleware/upload');
 const { computeStats, computeDashboardCards, addClient, removeClient, broadcastStats } = require('../lib/stats');
 const { unlinkUploaded } = require('../lib/files');
 const { escapeRegExp } = require('../lib/search');
@@ -231,7 +231,7 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/xoa', async (req, res) => {
   res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
 });
 
-router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai', wrapUpload(uploadVideo.single('videoFile'), async (err, req, res) => {
+router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai', wrapUpload(uploadLessonFiles, async (err, req, res) => {
   if (err) return renderCourseContent(res, req.params.id, friendlyUploadError(err));
 
   const course = await Course.findById(req.params.id);
@@ -240,8 +240,12 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai', wrapUpload(uploadVide
   const mod = course.modules.id(req.params.moduleId);
   if (!mod) return renderCourseContent(res, req.params.id, 'Không tìm thấy chương.');
 
+  const videoFile = req.files?.videoFile?.[0];
+  const documentFile = req.files?.documentFile?.[0];
+
   if (!req.body.title || !req.body.title.trim()) {
-    if (req.file) unlinkUploaded(fileUrl(req.file, 'videos'));
+    if (videoFile) unlinkUploaded(fileUrl(videoFile, 'videos'));
+    if (documentFile) unlinkUploaded(fileUrl(documentFile, 'documents'));
     return renderCourseContent(res, req.params.id, 'Vui lòng nhập tên bài học.');
   }
 
@@ -250,14 +254,16 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai', wrapUpload(uploadVide
     type: req.body.type || 'video',
     category: req.body.category || 'lecture',
     videoUrl: req.body.videoUrl ? req.body.videoUrl.trim() : null,
-    videoFile: req.file ? fileUrl(req.file, 'videos') : null,
+    videoFile: videoFile ? fileUrl(videoFile, 'videos') : null,
+    documentFile: documentFile ? fileUrl(documentFile, 'documents') : null,
+    documentName: documentFile ? documentFile.originalname : '',
     content: req.body.content || '',
   });
   await course.save();
   res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
 }));
 
-router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/sua', wrapUpload(uploadVideo.single('videoFile'), async (err, req, res) => {
+router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/sua', wrapUpload(uploadLessonFiles, async (err, req, res) => {
   if (err) return renderCourseContent(res, req.params.id, friendlyUploadError(err));
 
   const course = await Course.findById(req.params.id);
@@ -267,14 +273,22 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/sua', wrapUpl
   const lesson = mod && mod.lessons.id(req.params.lessonId);
   if (!lesson) return renderCourseContent(res, req.params.id, 'Không tìm thấy bài học.');
 
+  const videoFile = req.files?.videoFile?.[0];
+  const documentFile = req.files?.documentFile?.[0];
+
   lesson.title = req.body.title ? req.body.title.trim() : lesson.title;
   lesson.type = req.body.type || lesson.type;
   lesson.category = req.body.category || lesson.category;
   lesson.videoUrl = req.body.videoUrl ? req.body.videoUrl.trim() : null;
   lesson.content = req.body.content || '';
-  if (req.file) {
+  if (videoFile) {
     unlinkUploaded(lesson.videoFile);
-    lesson.videoFile = fileUrl(req.file, 'videos');
+    lesson.videoFile = fileUrl(videoFile, 'videos');
+  }
+  if (documentFile) {
+    unlinkUploaded(lesson.documentFile);
+    lesson.documentFile = fileUrl(documentFile, 'documents');
+    lesson.documentName = documentFile.originalname;
   }
   await course.save();
   res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
@@ -287,6 +301,7 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/xoa', async (
     const lesson = mod && mod.lessons.id(req.params.lessonId);
     if (lesson) {
       unlinkUploaded(lesson.videoFile);
+      unlinkUploaded(lesson.documentFile);
       lesson.deleteOne();
       await course.save();
     }

@@ -134,6 +134,45 @@ const uploadCourseFiles = multer({
   { name: 'materials', maxCount: 10 },
 ]);
 
+const LESSON_FIELD_CONFIG = {
+  videoFile: { subfolder: 'videos', resourceType: 'video', extensions: VIDEO_EXTENSIONS },
+  documentFile: { subfolder: 'documents', resourceType: 'raw', extensions: DOCUMENT_EXTENSIONS },
+};
+
+const lessonFilesStorage = useCloudinary
+  ? new CloudinaryStorage({
+      cloudinary,
+      params: (req, file) => {
+        const config = LESSON_FIELD_CONFIG[file.fieldname];
+        return { folder: `vsia/${config.subfolder}`, resource_type: config.resourceType, public_id: crypto.randomUUID() };
+      },
+    })
+  : multer.diskStorage({
+      destination: (req, file, cb) => {
+        const config = LESSON_FIELD_CONFIG[file.fieldname];
+        cb(null, path.join(__dirname, '..', 'public', 'uploads', config.subfolder));
+      },
+      filename: (req, file, cb) => {
+        cb(null, crypto.randomUUID() + path.extname(file.originalname).toLowerCase());
+      },
+    });
+
+const uploadLessonFiles = multer({
+  storage: lessonFilesStorage,
+  limits: { fileSize: 100 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const config = LESSON_FIELD_CONFIG[file.fieldname];
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (!config || !config.extensions.includes(ext)) {
+      return cb(new Error(`Định dạng file không được hỗ trợ: ${ext}`));
+    }
+    cb(null, true);
+  },
+}).fields([
+  { name: 'videoFile', maxCount: 1 },
+  { name: 'documentFile', maxCount: 1 },
+]);
+
 // Bọc middleware upload (multer) + handler async: multer gọi callback nội bộ, không qua cơ
 // chế route-dispatch của Express, nên Express 5 không tự bắt được promise reject bên trong
 // callback đó. Bọc thủ công ở đây để mọi lỗi (validation Mongoose, lỗi DB...) đều được forward
@@ -151,6 +190,7 @@ module.exports = {
   uploadVideo,
   uploadDocuments,
   uploadCourseFiles,
+  uploadLessonFiles,
   friendlyUploadError,
   wrapUpload,
   fileUrl,
