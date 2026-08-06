@@ -1,139 +1,218 @@
 <%- include('partials/header', { title: course.title + ' - Học - VSIA' }) %>
 
-<section class="section player-section">
-  <div class="container player-layout">
-    <aside class="player-sidebar">
-      <a href="/khoa-hoc/<%= course._id %>" class="player-back">← <%= course.title %></a>
+<section class="section lp-shell">
+  <div class="container">
+    <a href="/khoa-hoc-cua-toi" class="lp-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Tất cả khoá học của tôi
+    </a>
 
-      <div class="player-progress">
-        <div class="player-progress-track"><div class="player-progress-fill" style="width:<%= stats.percent %>%;"></div></div>
-        <span><%= stats.done %>/<%= stats.total %> bài · <%= stats.percent %>%</span>
+    <section class="lp-hero">
+      <div class="lp-hero-main">
+        <div class="lp-hero-eyebrow">Khoá học STEM<% if (course.category) { %> · <%= course.category %><% } %></div>
+        <h1><%= course.title %></h1>
+        <div class="lp-hero-meta">
+          <% if (course.instructor) { %>
+            <span class="item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              GV. <%= course.instructor %>
+            </span>
+          <% } %>
+          <% if (course.studyPeriod) { %>
+            <span class="item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <%= course.studyPeriod %>
+            </span>
+          <% } %>
+          <% if (course.modules && course.modules.length > 0) { %>
+            <span class="item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <%= course.modules.length %> tuần học
+            </span>
+          <% } %>
+        </div>
+        <% if (course.courseCode) { %><span class="lp-hero-code">Mã khoá học: <%= course.courseCode %></span><% } %>
       </div>
 
-      <% if (!course.modules || course.modules.length === 0) { %>
-        <p class="empty-state" style="text-align:left;">Khoá học chưa có nội dung.</p>
-      <% } %>
+      <div class="lp-hero-progress">
+        <div class="lp-ring-wrap">
+          <svg width="88" height="88" viewBox="0 0 88 88" class="lp-ring-svg">
+            <circle cx="44" cy="44" r="38" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="8"/>
+            <circle cx="44" cy="44" r="38" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round"
+              stroke-dasharray="<%= ringCircumference %>" stroke-dashoffset="<%= ringOffset %>"/>
+          </svg>
+          <div class="lp-ring-label"><%= stats.percent %>%<span>hoàn thành</span></div>
+        </div>
+        <div class="lp-hero-progress-text">
+          <b><%= stats.done %>/<%= stats.total %> bài đã học</b>
+          <% if (nextUpLesson) { %>
+            Tiếp tục với <%= nextUpLesson.title %>
+          <% } else if (stats.total > 0) { %>
+            Bạn đã hoàn thành mọi bài học!
+          <% } %>
+        </div>
+      </div>
+    </section>
 
-      <%
-        const lessonIcon = { video: '▶', document: '📄', quiz: '📝', forum: '🌐', qa: '❓' };
-        const catList = [
-          { key: 'lecture', badge: 'L', label: 'Lecture/ Lý thuyết', empty: 'Không có bài lý thuyết trong tuần này.' },
-          { key: 'interaction', badge: 'I', label: 'Interation/ Tương tác', empty: 'Không có nội dung tương tác trong tuần này.' },
-          { key: 'practice', badge: 'P', label: 'Practice/ Luyện tập', empty: 'Không có bài luyện tập trong tuần này.' },
-          { key: 'exam', badge: 'E', label: 'Exams/ Bài kiểm tra', empty: 'Không có bài kiểm tra trong tuần này.' },
-        ];
-      %>
-      <% (course.modules || []).forEach((mod, mi) => { %>
-        <details class="player-week" <%= mi === 0 ? 'open' : '' %>>
-          <summary class="player-week-summary">
-            <%= mod.title %><% if (mod.weekStart || mod.weekEnd) { %> (<%= mod.weekStart %> - <%= mod.weekEnd %>)<% } %>
-          </summary>
-          <div class="player-week-body">
-            <% if (mod.chapterTitle) { %><h5 class="player-chapter-title"><%= mod.chapterTitle %></h5><% } %>
-            <% if (mod.topics && mod.topics.length > 0) { %>
-              <ul class="player-topics">
-                <% mod.topics.forEach(t => { %><li><%= t %></li><% }) %>
-              </ul>
-            <% } %>
+    <div class="lp-layout">
+      <aside class="lp-sidebar">
+        <div class="lp-sidebar-head">
+          <div class="lp-sidebar-title">Nội dung khoá học</div>
+          <div class="lp-sidebar-progress-bar"><div class="lp-sidebar-progress-fill" style="width:<%= stats.percent %>%;"></div></div>
+          <div class="lp-sidebar-progress-label"><%= stats.done %>/<%= stats.total %> bài · <%= stats.percent %>%</div>
+        </div>
 
-            <% catList.forEach(cat => {
-              const catLessons = mod.lessons.filter(l => (l.category || 'lecture') === cat.key);
-            %>
-              <div class="player-cat">
-                <div class="player-cat-head">
-                  <span class="player-cat-badge cat-<%= cat.key %>"><%= cat.badge %></span>
-                  <span><%= cat.label %></span>
-                </div>
-                <% if (catLessons.length === 0) { %>
-                  <p class="player-cat-empty"><%= cat.empty %></p>
+        <% if (!course.modules || course.modules.length === 0) { %>
+          <p class="empty-state" style="text-align:left; padding:16px;">Khoá học chưa có nội dung.</p>
+        <% } %>
+
+        <% weeksData.forEach(week => { %>
+          <details class="lp-week" <%= (week.hasCurrent || week.index === 0) ? 'open' : '' %>>
+            <summary class="lp-week-toggle">
+              <div class="lp-week-left">
+                <span class="lp-week-name"><%= week.module.title %></span>
+                <span class="lp-week-sub"><%= week.done %>/<%= week.total %> bài<% if (week.total > 0 && week.done === week.total) { %> · Hoàn thành<% } %></span>
+              </div>
+              <svg class="lp-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </summary>
+            <div class="lp-week-body">
+              <% week.groups.forEach(group => { %>
+                <div class="lp-group-label"><span class="lp-group-badge cat-<%= group.key %>"><%= group.letter %></span> <%= group.label %></div>
+                <% if (group.lessons.length === 0) { %>
+                  <p class="lp-empty-note"><%= group.empty %></p>
                 <% } else { %>
-                  <% catLessons.forEach(lesson => {
-                    const isDone = enrollment.completedLessons.includes(String(lesson._id));
+                  <% group.lessons.forEach(lesson => {
+                    const isLessonDone = enrollment.completedLessons.includes(String(lesson._id));
                     const isActive = currentLesson && String(currentLesson._id) === String(lesson._id);
                   %>
-                    <a href="/hoc/<%= course._id %>?bai=<%= lesson._id %>" class="player-lesson <%= isActive ? 'active' : '' %> <%= isDone ? 'done' : '' %>">
-                      <span class="player-lesson-icon"><%= lessonIcon[lesson.type] || '▶' %></span>
-                      <span class="player-lesson-title"><%= lesson.title %></span>
-                      <% if (isDone) { %><span class="player-lesson-check">✓</span><% } %>
+                    <a href="/hoc/<%= course._id %>?bai=<%= lesson._id %>" class="lp-lesson <%= isActive ? 'active' : '' %>">
+                      <span class="lname"><%= lesson.title %></span>
+                      <% if (isLessonDone) { %>
+                        <svg class="check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      <% } else { %>
+                        <span class="dash">—</span>
+                      <% } %>
                     </a>
                   <% }) %>
                 <% } %>
-              </div>
+              <% }) %>
+            </div>
+          </details>
+        <% }) %>
+
+        <% if (course.materials && course.materials.length > 0) { %>
+          <div class="lp-materials">
+            <div class="lp-materials-title">Tài liệu khoá học</div>
+            <% course.materials.forEach(m => { %>
+              <a href="<%= m.filePath %>" target="_blank" rel="noopener" class="lp-material-link">📄 <%= m.name %></a>
             <% }) %>
           </div>
-        </details>
-      <% }) %>
+        <% } %>
+      </aside>
 
-      <% if (course.materials && course.materials.length > 0) { %>
-        <div class="player-materials">
-          <h4>Tài liệu khoá học</h4>
-          <% course.materials.forEach(m => { %>
-            <a href="<%= m.filePath %>" target="_blank" rel="noopener">📄 <%= m.name %></a>
-          <% }) %>
-        </div>
-      <% } %>
-    </aside>
-
-    <div class="player-main">
-      <% if (!currentLesson) { %>
-        <p class="empty-state">Khoá học chưa có bài học nào. Vui lòng quay lại sau.</p>
-      <% } else {
-        const isDone = enrollment.completedLessons.includes(String(currentLesson._id));
-      %>
-        <h1 class="player-lesson-heading"><%= currentLesson.title %></h1>
-
-        <% if (currentLesson.type === 'video' && currentEmbedUrl) { %>
-          <div class="player-video-wrap">
-            <iframe src="<%= currentEmbedUrl %>" title="<%= currentLesson.title %>" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <main class="lp-main">
+        <% if (!currentLesson) { %>
+          <div class="lp-content-card">
+            <p class="empty-state">Khoá học chưa có bài học nào. Vui lòng quay lại sau.</p>
           </div>
-        <% } else if (currentLesson.type === 'video' && currentLesson.videoFile) { %>
-          <div class="player-video-wrap">
-            <video src="<%= currentLesson.videoFile %>" controls></video>
-          </div>
-        <% } else if (currentLesson.type === 'video') { %>
-          <p class="empty-state" style="text-align:left;">Bài học này chưa có video, quay lại sau nhé.</p>
-        <% } %>
-
-        <% if (currentLesson.type === 'document' && currentLesson.documentFile) { %>
-          <% if (currentDocumentPreview && (currentDocumentPreview.kind === 'pdf' || currentDocumentPreview.kind === 'office')) { %>
-            <div class="player-document-wrap">
-              <iframe src="<%= currentDocumentPreview.url %>" title="<%= currentLesson.title %>"></iframe>
-            </div>
-          <% } %>
-          <p class="player-lesson-actions" style="text-align:left;">
-            <a href="<%= currentLesson.documentFile %>" target="_blank" rel="noopener" class="btn btn-ghost">📄 <%= currentLesson.documentName || 'Mở tài liệu' %></a>
-          </p>
-        <% } %>
-
-        <% if (currentLesson.content) { %>
-          <div class="player-lesson-content"><%= currentLesson.content %></div>
-        <% } %>
-
-        <%
-          const autoTrackTypes = ['video', 'document'];
-          const isAutoTracked = autoTrackTypes.includes(currentLesson.type);
-          const autoMode = currentLesson.type === 'video' ? 'video' : 'dwell';
+        <% } else {
+          const isDone = enrollment.completedLessons.includes(String(currentLesson._id));
+          const currentWeek = weeksData.find(w => w.hasCurrent);
+          const catMeta = CATEGORY_META[currentLesson.category] || CATEGORY_META.lecture;
         %>
-        <% if (isAutoTracked) { %>
-          <div class="player-lesson-actions" id="lessonAutoComplete" data-course-id="<%= course._id %>" data-lesson-id="<%= currentLesson._id %>" data-mode="<%= isDone ? '' : autoMode %>" data-dwell-seconds="120">
-            <% if (isDone) { %>
-              <span class="player-complete-badge">✓ Đã hoàn thành</span>
-              <form method="POST" action="/hoc/<%= course._id %>/bai/<%= currentLesson._id %>/toggle" class="inline-form">
-                <button type="submit" class="btn btn-ghost">↺ Bỏ đánh dấu hoàn thành</button>
-              </form>
+          <div class="lp-content-card">
+            <div class="lp-crumb-mini">
+              <% if (currentWeek) { %>
+                <span class="tag">Tuần <%= currentWeek.index + 1 %></span>
+                <span><%= currentWeek.module.title %></span>
+                <span>›</span>
+              <% } %>
+              <span><%= catMeta.label %></span>
+            </div>
+            <h2><%= currentLesson.title %></h2>
+
+            <% if (currentLesson.type === 'video' && currentEmbedUrl) { %>
+              <div class="lp-video-wrap">
+                <iframe src="<%= currentEmbedUrl %>" title="<%= currentLesson.title %>" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+            <% } else if (currentLesson.type === 'video' && currentLesson.videoFile) { %>
+              <div class="lp-video-wrap">
+                <video src="<%= currentLesson.videoFile %>" controls></video>
+              </div>
+            <% } else if (currentLesson.type === 'video') { %>
+              <p class="empty-state" style="text-align:left;">Bài học này chưa có video, quay lại sau nhé.</p>
+            <% } %>
+
+            <% if (currentLesson.type === 'document' && currentLesson.documentFile) { %>
+              <% if (currentDocumentPreview && (currentDocumentPreview.kind === 'pdf' || currentDocumentPreview.kind === 'office')) { %>
+                <div class="lp-document-wrap">
+                  <iframe src="<%= currentDocumentPreview.url %>" title="<%= currentLesson.title %>"></iframe>
+                </div>
+              <% } %>
+              <a href="<%= currentLesson.documentFile %>" target="_blank" rel="noopener" class="lp-resource">
+                <div class="r-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div>
+                  <div class="r-name"><%= currentLesson.documentName || 'Mở tài liệu' %></div>
+                  <div class="r-sub">Tài liệu<% if (currentLesson.documentSize) { %> · <%= (currentLesson.documentSize / (1024 * 1024)).toFixed(1) %> MB<% } %></div>
+                </div>
+                <svg class="r-go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </a>
+            <% } %>
+
+            <% if (currentLesson.content) { %>
+              <div class="lp-lesson-content"><%= currentLesson.content %></div>
+            <% } %>
+
+            <div class="lp-actions-row">
+              <button type="button" class="btn btn-ghost" data-open-contact>Đặt câu hỏi cho giảng viên</button>
+            </div>
+
+            <%
+              const autoTrackTypes = ['video', 'document'];
+              const isAutoTracked = autoTrackTypes.includes(currentLesson.type);
+              const autoMode = currentLesson.type === 'video' ? 'video' : 'dwell';
+            %>
+            <% if (isAutoTracked) { %>
+              <div class="lp-actions-row" id="lessonAutoComplete" data-course-id="<%= course._id %>" data-lesson-id="<%= currentLesson._id %>" data-mode="<%= isDone ? '' : autoMode %>" data-dwell-seconds="120">
+                <% if (isDone) { %>
+                  <span class="lp-complete-badge">✓ Đã hoàn thành</span>
+                  <form method="POST" action="/hoc/<%= course._id %>/bai/<%= currentLesson._id %>/toggle" class="inline-form">
+                    <button type="submit" class="btn btn-ghost">↺ Bỏ đánh dấu hoàn thành</button>
+                  </form>
+                <% } else { %>
+                  <span class="lp-complete-pending">⏳ Hệ thống sẽ tự đánh dấu hoàn thành khi bạn <%= currentLesson.type === 'video' ? 'xem xong video' : 'đọc xong tài liệu' %>.</span>
+                <% } %>
+              </div>
             <% } else { %>
-              <span class="player-complete-pending">⏳ Hệ thống sẽ tự đánh dấu hoàn thành khi bạn <%= currentLesson.type === 'video' ? 'xem xong video' : 'đọc xong tài liệu' %>.</span>
+              <form method="POST" action="/hoc/<%= course._id %>/bai/<%= currentLesson._id %>/toggle" class="lp-actions-row">
+                <input type="hidden" name="bai" value="<%= currentLesson._id %>">
+                <button type="submit" class="btn <%= isDone ? 'btn-ghost' : 'btn-primary' %>">
+                  <%= isDone ? '↺ Bỏ đánh dấu hoàn thành' : '✓ Đánh dấu hoàn thành' %>
+                </button>
+              </form>
+            <% } %>
+
+            <% if (prevLesson || nextLesson) { %>
+              <div class="lp-prevnext">
+                <% if (prevLesson) { %>
+                  <a class="lp-pn-btn prev" href="/hoc/<%= course._id %>?bai=<%= prevLesson._id %>">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    <div><div class="pn-label">Bài trước</div><div class="pn-title"><%= prevLesson.title %></div></div>
+                  </a>
+                <% } else { %><span></span><% } %>
+                <% if (nextLesson) { %>
+                  <a class="lp-pn-btn next" href="/hoc/<%= course._id %>?bai=<%= nextLesson._id %>">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    <div><div class="pn-label">Bài tiếp theo</div><div class="pn-title"><%= nextLesson.title %></div></div>
+                  </a>
+                <% } %>
+              </div>
             <% } %>
           </div>
-        <% } else { %>
-          <form method="POST" action="/hoc/<%= course._id %>/bai/<%= currentLesson._id %>/toggle" class="player-lesson-actions">
-            <input type="hidden" name="bai" value="<%= currentLesson._id %>">
-            <button type="submit" class="btn <%= isDone ? 'btn-ghost' : 'btn-primary' %>">
-              <%= isDone ? '↺ Bỏ đánh dấu hoàn thành' : '✓ Đánh dấu hoàn thành' %>
-            </button>
-          </form>
         <% } %>
-      <% } %>
+      </main>
     </div>
   </div>
 </section>
@@ -152,12 +231,12 @@
   }
 
   if (mode === 'video') {
-    var videoEl = document.querySelector('.player-video-wrap video');
+    var videoEl = document.querySelector('.lp-video-wrap video');
     if (videoEl) {
       videoEl.addEventListener('ended', markComplete);
       return;
     }
-    var iframeEl = document.querySelector('.player-video-wrap iframe');
+    var iframeEl = document.querySelector('.lp-video-wrap iframe');
     if (iframeEl && iframeEl.src.indexOf('youtube.com/embed') !== -1) {
       var tag = document.createElement('script');
       tag.src = 'https://www.youtube.com/iframe_api';

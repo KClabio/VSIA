@@ -62,6 +62,14 @@ router.post('/khoa-hoc/:id/dang-ky', requireAuth, async (req, res) => {
   res.redirect(`/hoc/${course._id}`);
 });
 
+const CATEGORY_META = {
+  lecture: { letter: 'L', label: 'Lecture / Lý thuyết', empty: 'Không có nội dung lý thuyết trong tuần này' },
+  interaction: { letter: 'I', label: 'Interaction / Tương tác', empty: 'Không có nội dung tương tác trong tuần này' },
+  practice: { letter: 'P', label: 'Practice / Luyện tập', empty: 'Không có bài luyện tập trong tuần này' },
+  exam: { letter: 'E', label: 'Exam / Bài kiểm tra', empty: 'Không có bài kiểm tra trong tuần này' },
+};
+const CATEGORY_ORDER = ['lecture', 'interaction', 'practice', 'exam'];
+
 router.get('/hoc/:courseId', requireAuth, async (req, res) => {
   const course = await Course.findById(req.params.courseId).lean().catch(() => null);
   if (!course) return res.status(404).render('404');
@@ -92,6 +100,31 @@ router.get('/hoc/:courseId', requireAuth, async (req, res) => {
   const currentEmbedUrl = currentLesson && currentLesson.type === 'video' ? toYoutubeEmbedUrl(currentLesson.videoUrl) : null;
   const stats = courseStats(course, enrollment.completedLessons);
 
+  const weeksData = (course.modules || []).map((mod, wi) => {
+    const lessons = mod.lessons || [];
+    const doneCount = lessons.filter((l) => enrollment.completedLessons.includes(String(l._id))).length;
+    const groups = CATEGORY_ORDER.map((key) => ({
+      key,
+      ...CATEGORY_META[key],
+      lessons: lessons.filter((l) => l.category === key),
+    }));
+    return {
+      module: mod,
+      index: wi,
+      total: lessons.length,
+      done: doneCount,
+      groups,
+      hasCurrent: !!(currentLesson && lessons.some((l) => String(l._id) === String(currentLesson._id))),
+    };
+  });
+
+  const currentIndex = currentLesson ? allLessons.findIndex((l) => String(l._id) === String(currentLesson._id)) : -1;
+  const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
+  const nextLesson = currentIndex >= 0 && currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
+  const nextUpLesson = allLessons.find((l) => !enrollment.completedLessons.includes(String(l._id))) || null;
+
+  const ringCircumference = 238.76;
+
   res.render('course-player', {
     course,
     enrollment,
@@ -99,6 +132,13 @@ router.get('/hoc/:courseId', requireAuth, async (req, res) => {
     currentEmbedUrl,
     currentDocumentPreview: documentPreview(currentLesson, req),
     stats,
+    weeksData,
+    prevLesson,
+    nextLesson,
+    nextUpLesson,
+    ringCircumference,
+    ringOffset: ringCircumference * (1 - stats.percent / 100),
+    CATEGORY_META,
   });
 });
 

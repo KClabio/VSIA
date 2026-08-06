@@ -46,6 +46,7 @@ function courseFieldsFromBody(body) {
     rating: Number(body.rating) || 0,
     instructor: body.instructor || '',
     instructorUser: body.instructorUser || null,
+    courseCode: body.courseCode || '',
     studyPeriod: body.studyPeriod || '',
     examDate: body.examDate || '',
   };
@@ -84,13 +85,13 @@ router.get('/khoa-hoc', async (req, res) => {
 
 router.get('/khoa-hoc/moi', async (req, res) => {
   const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
-  res.render('admin/course-form', { course: null, error: null, active: 'khoa-hoc', teachers });
+  res.render('admin/course-form', { course: null, error: null, active: 'khoa-hoc', teachers, success: false });
 });
 
 router.post('/khoa-hoc/moi', wrapUpload(uploadCourseFiles, async (err, req, res) => {
   if (err) {
     const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
-    return res.render('admin/course-form', { course: null, error: friendlyUploadError(err), active: 'khoa-hoc', teachers });
+    return res.render('admin/course-form', { course: null, error: friendlyUploadError(err), active: 'khoa-hoc', teachers, success: false });
   }
 
   const image = req.files?.image?.[0] ? fileUrl(req.files.image[0], 'images') : null;
@@ -109,7 +110,7 @@ router.get('/khoa-hoc/:id/sua', async (req, res) => {
   if (!course) return res.status(404).render('404');
   (course.materials || []).forEach((m) => { m.filePath = signRawUrl(m.filePath); });
   const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
-  res.render('admin/course-form', { course, error: null, active: 'khoa-hoc', teachers });
+  res.render('admin/course-form', { course, error: null, active: 'khoa-hoc', teachers, success: req.query.updated === '1' });
 });
 
 router.post('/khoa-hoc/:id/sua', wrapUpload(uploadCourseFiles, async (err, req, res) => {
@@ -118,7 +119,7 @@ router.post('/khoa-hoc/:id/sua', wrapUpload(uploadCourseFiles, async (err, req, 
 
   if (err) {
     const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
-    return res.render('admin/course-form', { course: course.toObject(), error: friendlyUploadError(err), active: 'khoa-hoc', teachers });
+    return res.render('admin/course-form', { course: course.toObject(), error: friendlyUploadError(err), active: 'khoa-hoc', teachers, success: false });
   }
 
   Object.assign(course, courseFieldsFromBody(req.body));
@@ -137,7 +138,7 @@ router.post('/khoa-hoc/:id/sua', wrapUpload(uploadCourseFiles, async (err, req, 
 
   await course.save();
   await broadcastStats();
-  res.redirect('/admin/khoa-hoc');
+  res.redirect(`/admin/khoa-hoc/${req.params.id}/sua?updated=1`);
 }));
 
 router.post('/khoa-hoc/:id/xoa', async (req, res) => {
@@ -258,6 +259,7 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai', wrapUpload(uploadLess
     videoFile: videoFile ? fileUrl(videoFile, 'videos') : null,
     documentFile: documentFile ? fileUrl(documentFile, 'documents') : null,
     documentName: documentFile ? documentFile.originalname : '',
+    documentSize: documentFile ? documentFile.size : null,
     content: req.body.content || '',
   });
   await course.save();
@@ -290,6 +292,7 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/bai/:lessonId/sua', wrapUpl
     unlinkUploaded(lesson.documentFile);
     lesson.documentFile = fileUrl(documentFile, 'documents');
     lesson.documentName = documentFile.originalname;
+    lesson.documentSize = documentFile.size;
   }
   await course.save();
   res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);

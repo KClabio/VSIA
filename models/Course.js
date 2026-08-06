@@ -11,6 +11,7 @@ const courseSchema = new mongoose.Schema({
   image: { type: String, default: null },
   instructor: { type: String, default: '' },
   instructorUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+  courseCode: { type: String, default: '' },
   studyPeriod: { type: String, default: '' },
   examDate: { type: String, default: '' },
   materials: [{
@@ -32,6 +33,7 @@ const courseSchema = new mongoose.Schema({
       videoFile: { type: String, default: null },
       documentFile: { type: String, default: null },
       documentName: { type: String, default: '' },
+      documentSize: { type: Number, default: null },
       content: { type: String, default: '' },
     }],
   }],
