@@ -13,13 +13,15 @@ const { ROLES } = require('../lib/roles');
 const { uploadImage, uploadVideo, uploadCourseFiles, uploadLessonFiles, friendlyUploadError, wrapUpload, fileUrl, signRawUrl, fixFilenameEncoding } = require('../middleware/upload');
 const { computeStats, computeDashboardCards, addClient, removeClient, broadcastStats } = require('../lib/stats');
 const { unlinkUploaded } = require('../lib/files');
-const { escapeRegExp } = require('../lib/search');
+const { matchesSearchQuery } = require('../lib/search');
 const { getSiteSettings } = require('../lib/settings');
 const { getAllPageContents, PAGE_DEFAULTS } = require('../lib/pageContent');
 const PageContent = require('../models/PageContent');
 const ContactRequest = require('../models/ContactRequest');
 const Enrollment = require('../models/Enrollment');
 const { courseStats } = require('../lib/courseStats');
+const { toYoutubeEmbedUrl } = require('../lib/video');
+const { validateOptionalVNDate, validateOptionalVNDateRange, parseVNDate } = require('../lib/validators');
 
 router.use(requireAuth, requireStaff);
 
@@ -52,6 +54,40 @@ function courseFieldsFromBody(body) {
   };
 }
 
+function validateCourseBody(body) {
+  const errors = [];
+  if (!body.title || !body.title.trim()) errors.push('Vui lòng nhập tiêu đề khoá học.');
+  if (!body.description || !body.description.trim()) errors.push('Vui lòng nhập mô tả khoá học.');
+
+  if (body.isFree !== 'on') {
+    const priceRaw = (body.price || '').toString().trim();
+    const price = Number(priceRaw);
+    if (!priceRaw || !Number.isFinite(price) || price < 0) {
+      errors.push('Giá khoá học phải là một số không âm.');
+    }
+  }
+
+  const ratingRaw = (body.rating || '').toString().trim();
+  if (ratingRaw) {
+    const rating = Number(ratingRaw);
+    if (!Number.isFinite(rating) || rating < 0 || rating > 5) {
+      errors.push('Đánh giá phải là số từ 0 đến 5.');
+    }
+  }
+
+  const studyPeriodError = validateOptionalVNDateRange(body.studyPeriod, 'Thời gian học');
+  if (studyPeriodError) errors.push(studyPeriodError);
+  const examDateError = validateOptionalVNDateRange(body.examDate, 'Ngày thi dự kiến');
+  if (examDateError) errors.push(examDateError);
+
+  return errors;
+}
+
+function unlinkNewCourseUploads(req) {
+  if (req.files?.image?.[0]) unlinkUploaded(fileUrl(req.files.image[0], 'images'));
+  (req.files?.materials || []).forEach((f) => unlinkUploaded(fileUrl(f, 'documents')));
+}
+
 router.get('/', async (req, res) => {
   const { cards, showContentChart, stats } = await computeDashboardCards(req.user);
   res.render('admin/dashboard', { active: 'dashboard', cards, showContentChart, stats });
@@ -78,8 +114,8 @@ router.get('/stats-stream', (req, res, next) => {
 
 router.get('/khoa-hoc', async (req, res) => {
   const q = (req.query.q || '').trim();
-  const filter = q ? { title: new RegExp(escapeRegExp(q), 'i') } : {};
-  const courses = await Course.find(filter).sort({ createdAt: -1 }).lean();
+  const allCourses = await Course.find().sort({ createdAt: -1 }).lean();
+  const courses = q ? allCourses.filter((c) => matchesSearchQuery(c.title, q)) : allCourses;
   res.render('admin/courses', { courses, active: 'khoa-hoc', q });
 });
 
@@ -94,6 +130,13 @@ router.post('/khoa-hoc/moi', wrapUpload(uploadCourseFiles, async (err, req, res)
     return res.render('admin/course-form', { course: null, error: friendlyUploadError(err), active: 'khoa-hoc', teachers, success: false });
   }
 
+  const errors = validateCourseBody(req.body);
+  if (errors.length) {
+    unlinkNewCourseUploads(req);
+    const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
+    return res.render('admin/course-form', { course: null, error: errors.join(' '), active: 'khoa-hoc', teachers, success: false });
+  }
+
   const image = req.files?.image?.[0] ? fileUrl(req.files.image[0], 'images') : null;
   const materials = (req.files?.materials || []).map((f) => ({
     name: fixFilenameEncoding(f.originalname),
@@ -104,6 +147,19 @@ router.post('/khoa-hoc/moi', wrapUpload(uploadCourseFiles, async (err, req, res)
   await broadcastStats();
   res.redirect('/admin/khoa-hoc');
 }));
+
+router.get('/khoa-hoc/:id/xem', async (req, res) => {
+  const course = await Course.findById(req.params.id).lean().catch(() => null);
+  if (!course) return res.status(404).render('404');
+  (course.materials || []).forEach((m) => { m.filePath = signRawUrl(m.filePath); });
+  (course.modules || []).forEach((mod) => {
+    (mod.lessons || []).forEach((l) => {
+      if (l.documentFile) l.documentFile = signRawUrl(l.documentFile);
+      if (l.type === 'video' && l.videoUrl) l.videoEmbedUrl = toYoutubeEmbedUrl(l.videoUrl);
+    });
+  });
+  res.render('admin/course-view', { course, active: 'khoa-hoc' });
+});
 
 router.get('/khoa-hoc/:id/sua', async (req, res) => {
   const course = await Course.findById(req.params.id).lean().catch(() => null);
@@ -120,6 +176,13 @@ router.post('/khoa-hoc/:id/sua', wrapUpload(uploadCourseFiles, async (err, req, 
   if (err) {
     const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
     return res.render('admin/course-form', { course: course.toObject(), error: friendlyUploadError(err), active: 'khoa-hoc', teachers, success: false });
+  }
+
+  const errors = validateCourseBody(req.body);
+  if (errors.length) {
+    unlinkNewCourseUploads(req);
+    const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
+    return res.render('admin/course-form', { course: course.toObject(), error: errors.join(' '), active: 'khoa-hoc', teachers, success: false });
   }
 
   Object.assign(course, courseFieldsFromBody(req.body));
@@ -184,6 +247,17 @@ function parseTopics(raw) {
     .filter(Boolean);
 }
 
+function validateWeekDates(body) {
+  const startError = validateOptionalVNDate(body.weekStart, 'Ngày bắt đầu');
+  if (startError) return startError;
+  const endError = validateOptionalVNDate(body.weekEnd, 'Ngày kết thúc');
+  if (endError) return endError;
+  const start = parseVNDate(body.weekStart);
+  const end = parseVNDate(body.weekEnd);
+  if (start && end && end < start) return 'Ngày kết thúc phải sau ngày bắt đầu.';
+  return null;
+}
+
 router.post('/khoa-hoc/:id/noi-dung/chuong', async (req, res) => {
   const course = await Course.findById(req.params.id);
   if (!course) return res.status(404).render('404');
@@ -191,6 +265,8 @@ router.post('/khoa-hoc/:id/noi-dung/chuong', async (req, res) => {
   if (!req.body.title || !req.body.title.trim()) {
     return renderCourseContent(res, req.params.id, 'Vui lòng nhập tên tuần/chương.');
   }
+  const dateError = validateWeekDates(req.body);
+  if (dateError) return renderCourseContent(res, req.params.id, dateError);
 
   course.modules.push({
     title: req.body.title.trim(),
@@ -209,14 +285,19 @@ router.post('/khoa-hoc/:id/noi-dung/chuong/:moduleId/sua', async (req, res) => {
   if (!course) return res.status(404).render('404');
 
   const mod = course.modules.id(req.params.moduleId);
-  if (mod && req.body.title && req.body.title.trim()) {
-    mod.title = req.body.title.trim();
-    mod.weekStart = req.body.weekStart ? req.body.weekStart.trim() : '';
-    mod.weekEnd = req.body.weekEnd ? req.body.weekEnd.trim() : '';
-    mod.chapterTitle = req.body.chapterTitle ? req.body.chapterTitle.trim() : '';
-    mod.topics = parseTopics(req.body.topics);
-    await course.save();
+  if (!mod) return renderCourseContent(res, req.params.id, 'Không tìm thấy tuần/chương.');
+  if (!req.body.title || !req.body.title.trim()) {
+    return renderCourseContent(res, req.params.id, 'Vui lòng nhập tên tuần/chương.');
   }
+  const dateError = validateWeekDates(req.body);
+  if (dateError) return renderCourseContent(res, req.params.id, dateError);
+
+  mod.title = req.body.title.trim();
+  mod.weekStart = req.body.weekStart ? req.body.weekStart.trim() : '';
+  mod.weekEnd = req.body.weekEnd ? req.body.weekEnd.trim() : '';
+  mod.chapterTitle = req.body.chapterTitle ? req.body.chapterTitle.trim() : '';
+  mod.topics = parseTopics(req.body.topics);
+  await course.save();
   res.redirect(`/admin/khoa-hoc/${req.params.id}/noi-dung`);
 });
 
@@ -576,10 +657,10 @@ function sanitizeSourceUrl(raw) {
 
 router.get('/bai-viet', async (req, res) => {
   const q = (req.query.q || '').trim();
-  const filter = q
-    ? { $or: [{ title: new RegExp(escapeRegExp(q), 'i') }, { summary: new RegExp(escapeRegExp(q), 'i') }] }
-    : {};
-  const articles = await Article.find(filter).sort({ createdAt: -1 }).lean();
+  const allArticles = await Article.find().sort({ createdAt: -1 }).lean();
+  const articles = q
+    ? allArticles.filter((a) => matchesSearchQuery(a.title, q) || matchesSearchQuery(a.summary, q))
+    : allArticles;
   res.render('admin/articles', { articles, active: 'bai-viet', q });
 });
 
@@ -655,8 +736,8 @@ function parseAchievements(raw) {
 
 router.get('/doi-ngu', async (req, res) => {
   const q = (req.query.q || '').trim();
-  const filter = q ? { name: new RegExp(escapeRegExp(q), 'i') } : {};
-  const teamMembers = await TeamMember.find(filter).sort({ order: 1, createdAt: 1 }).lean();
+  const allMembers = await TeamMember.find().sort({ order: 1, createdAt: 1 }).lean();
+  const teamMembers = q ? allMembers.filter((m) => matchesSearchQuery(m.name, q)) : allMembers;
   res.render('admin/team', { teamMembers, active: 'doi-ngu', q });
 });
 
@@ -727,8 +808,8 @@ router.post('/doi-ngu/:id/xoa', async (req, res) => {
 
 router.get('/doi-tac', async (req, res) => {
   const q = (req.query.q || '').trim();
-  const filter = q ? { name: new RegExp(escapeRegExp(q), 'i') } : {};
-  const partners = await Partner.find(filter).sort({ order: 1, createdAt: 1 }).lean();
+  const allPartners = await Partner.find().sort({ order: 1, createdAt: 1 }).lean();
+  const partners = q ? allPartners.filter((p) => matchesSearchQuery(p.name, q)) : allPartners;
   res.render('admin/partners', { partners, active: 'doi-tac', q });
 });
 
@@ -816,16 +897,10 @@ router.post('/nguoi-dung/:id/vai-tro', async (req, res) => {
 
 router.get('/lien-he', async (req, res) => {
   const q = (req.query.q || '').trim();
-  const filter = q
-    ? {
-        $or: [
-          { name: new RegExp(escapeRegExp(q), 'i') },
-          { contact: new RegExp(escapeRegExp(q), 'i') },
-          { message: new RegExp(escapeRegExp(q), 'i') },
-        ],
-      }
-    : {};
-  const requests = await ContactRequest.find(filter).sort({ createdAt: -1 }).lean();
+  const allRequests = await ContactRequest.find().sort({ createdAt: -1 }).lean();
+  const requests = q
+    ? allRequests.filter((r) => matchesSearchQuery(r.name, q) || matchesSearchQuery(r.contact, q) || matchesSearchQuery(r.message, q))
+    : allRequests;
   res.render('admin/contacts', { requests, active: 'lien-he', q });
 });
 
@@ -1005,37 +1080,41 @@ router.get('/search', async (req, res) => {
   const q = (req.query.q || '').trim();
   if (q.length < 2) return res.json({ results: [] });
 
-  const regex = new RegExp(escapeRegExp(q), 'i');
   const tasks = [];
 
   if (res.locals.canAccessModule('khoa-hoc')) {
     tasks.push(
-      Course.find({ title: regex }).select('title').limit(5).lean()
-        .then((items) => items.map((c) => ({ type: 'Khoá học', title: c.title, url: `/admin/khoa-hoc/${c._id}/sua` }))),
+      Course.find().select('title').lean()
+        .then((items) => items.filter((c) => matchesSearchQuery(c.title, q)).slice(0, 5)
+          .map((c) => ({ type: 'Khoá học', title: c.title, url: `/admin/khoa-hoc/${c._id}/sua` }))),
     );
   }
   if (res.locals.canAccessModule('bai-viet')) {
     tasks.push(
-      Article.find({ title: regex }).select('title').limit(5).lean()
-        .then((items) => items.map((a) => ({ type: 'Bài viết', title: a.title, url: `/admin/bai-viet/${a._id}/sua` }))),
+      Article.find().select('title').lean()
+        .then((items) => items.filter((a) => matchesSearchQuery(a.title, q)).slice(0, 5)
+          .map((a) => ({ type: 'Bài viết', title: a.title, url: `/admin/bai-viet/${a._id}/sua` }))),
     );
   }
   if (res.locals.canAccessModule('video-khoa-hoc')) {
     tasks.push(
-      CourseVideo.find({ title: regex }).select('title').limit(5).lean()
-        .then((items) => items.map((v) => ({ type: 'Video bài giảng', title: v.title, url: '/admin/video-khoa-hoc' }))),
+      CourseVideo.find().select('title').lean()
+        .then((items) => items.filter((v) => matchesSearchQuery(v.title, q)).slice(0, 5)
+          .map((v) => ({ type: 'Video bài giảng', title: v.title, url: '/admin/video-khoa-hoc' }))),
     );
   }
   if (res.locals.canAccessModule('doi-ngu')) {
     tasks.push(
-      TeamMember.find({ name: regex }).select('name').limit(5).lean()
-        .then((items) => items.map((m) => ({ type: 'Đội ngũ', title: m.name, url: `/admin/doi-ngu/${m._id}/sua` }))),
+      TeamMember.find().select('name').lean()
+        .then((items) => items.filter((m) => matchesSearchQuery(m.name, q)).slice(0, 5)
+          .map((m) => ({ type: 'Đội ngũ', title: m.name, url: `/admin/doi-ngu/${m._id}/sua` }))),
     );
   }
   if (res.locals.canAccessModule('doi-tac')) {
     tasks.push(
-      Partner.find({ name: regex }).select('name').limit(5).lean()
-        .then((items) => items.map((p) => ({ type: 'Đối tác', title: p.name, url: `/admin/doi-tac/${p._id}/sua` }))),
+      Partner.find().select('name').lean()
+        .then((items) => items.filter((p) => matchesSearchQuery(p.name, q)).slice(0, 5)
+          .map((p) => ({ type: 'Đối tác', title: p.name, url: `/admin/doi-tac/${p._id}/sua` }))),
     );
   }
 

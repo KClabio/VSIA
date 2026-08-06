@@ -7,6 +7,7 @@ const Enrollment = require('../models/Enrollment');
 const { requireAuth } = require('../middleware/auth');
 const { courseStats } = require('../lib/courseStats');
 const { signRawUrl } = require('../middleware/upload');
+const { toYoutubeEmbedUrl: baseYoutubeEmbedUrl } = require('../lib/video');
 
 const OFFICE_PREVIEW_EXTENSIONS = ['.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx'];
 
@@ -28,25 +29,16 @@ function documentPreview(lesson, req) {
 }
 
 function toYoutubeEmbedUrl(url) {
-  if (!url) return null;
+  const embedUrl = baseYoutubeEmbedUrl(url);
+  if (!embedUrl) return embedUrl;
   try {
-    const parsed = new URL(url);
-    let embedUrl = null;
-    if (parsed.hostname.includes('youtu.be')) {
-      embedUrl = `https://www.youtube.com/embed/${parsed.pathname.slice(1)}`;
-    } else if (parsed.hostname.includes('youtube.com')) {
-      if (parsed.pathname === '/watch') embedUrl = `https://www.youtube.com/embed/${parsed.searchParams.get('v')}`;
-      else if (parsed.pathname.startsWith('/embed/')) embedUrl = url;
-      else if (parsed.pathname.startsWith('/shorts/')) embedUrl = `https://www.youtube.com/embed/${parsed.pathname.split('/')[2]}`;
-    }
-    if (!embedUrl) return url;
     // enablejsapi=1 để JS phía trình duyệt bắt được sự kiện video phát xong (qua YouTube IFrame API),
     // dùng cho tính năng tự động đánh dấu hoàn thành bài học.
     const embedParsed = new URL(embedUrl);
     embedParsed.searchParams.set('enablejsapi', '1');
     return embedParsed.toString();
   } catch {
-    return url;
+    return embedUrl;
   }
 }
 

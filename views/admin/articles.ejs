@@ -39,7 +39,7 @@
             <td class="admin-table-actions">
               <a href="/tin-tuc/<%= article._id %>" class="btn btn-icon" title="Xem trên trang công khai">👁 Xem</a>
               <a href="/admin/bai-viet/<%= article._id %>/sua" class="btn btn-icon" title="Sửa bài viết">✏️ Sửa</a>
-              <form action="/admin/bai-viet/<%= article._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá bài viết này?');">
+              <form action="/admin/bai-viet/<%= article._id %>/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá bài viết này?" data-confirm-name="<%= article.title %>">
                 <button type="submit" class="btn btn-icon btn-danger" title="Xoá bài viết">🗑 Xoá</button>
               </form>
             </td>

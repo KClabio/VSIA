@@ -58,13 +58,17 @@
       <input type="text" name="courseCode" placeholder="Vd: STEM-ROB-01" value="<%= course ? course.courseCode : '' %>">
     </label>
     <label>Thời gian học
-      <input type="text" name="studyPeriod" placeholder="Vd: 07/06/2026 - 30/08/2026" value="<%= course ? course.studyPeriod : '' %>">
+      <input type="text" name="studyPeriod" placeholder="Vd: 07/06/2026 - 30/08/2026"
+             pattern="\d{2}/\d{2}/\d{4}\s*-\s*\d{2}/\d{2}/\d{4}"
+             title="Định dạng: dd/mm/yyyy - dd/mm/yyyy" value="<%= course ? course.studyPeriod : '' %>">
     </label>
   </div>
 
   <div class="admin-form-row">
     <label>Ngày thi dự kiến
-      <input type="text" name="examDate" placeholder="Vd: 13/09/2026 - 20/09/2026" value="<%= course ? course.examDate : '' %>">
+      <input type="text" name="examDate" placeholder="Vd: 13/09/2026 - 20/09/2026"
+             pattern="\d{2}/\d{2}/\d{4}\s*-\s*\d{2}/\d{2}/\d{4}"
+             title="Định dạng: dd/mm/yyyy - dd/mm/yyyy" value="<%= course ? course.examDate : '' %>">
     </label>
   </div>
 
@@ -92,7 +96,7 @@
       <% course.materials.forEach(m => { %>
         <li>
           <a href="<%= m.filePath %>" target="_blank">📄 <%= m.name %></a>
-          <form action="/admin/khoa-hoc/<%= course._id %>/tai-lieu/<%= m._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá tài liệu này?');">
+          <form action="/admin/khoa-hoc/<%= course._id %>/tai-lieu/<%= m._id %>/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá tài liệu này?" data-confirm-name="<%= m.name %>">
             <button type="submit" class="btn-link-danger">Xoá</button>
           </form>
         </li>

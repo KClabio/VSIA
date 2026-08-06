@@ -30,7 +30,7 @@
             <% if (String(u._id) === String(user._id)) { %>
               <span class="empty-state">(Tài khoản của bạn)</span>
             <% } else { %>
-              <form action="/admin/nguoi-dung/<%= u._id %>/vai-tro" method="POST" class="inline-form" onsubmit="return confirm('Đổi vai trò của tài khoản này?');">
+              <form action="/admin/nguoi-dung/<%= u._id %>/vai-tro" method="POST" class="inline-form" data-confirm-title="Bạn có chắc đổi vai trò của tài khoản này?" data-confirm-name="<%= u.name %>" data-confirm-neutral="1" data-confirm-label="Đồng ý">
                 <select name="role">
                   <% ROLES.forEach(r => { %>
                     <option value="<%= r %>" <%= u.role === r ? 'selected' : '' %>><%= ROLE_LABELS[r] %></option>

@@ -74,7 +74,7 @@
               <button type="submit" class="btn btn-primary btn-block">Lưu thay đổi</button>
             </form>
           </details>
-          <form action="/admin/video-khoa-hoc/<%= item._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá video này?');">
+          <form action="/admin/video-khoa-hoc/<%= item._id %>/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá video này?" data-confirm-name="<%= item.title %>">
             <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá</button>
           </form>
         </div>

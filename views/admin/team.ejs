@@ -43,7 +43,7 @@
             <td><%= member.order %></td>
             <td class="admin-table-actions">
               <a href="/admin/doi-ngu/<%= member._id %>/sua" class="btn btn-icon" title="Sửa thành viên">✏️ Sửa</a>
-              <form action="/admin/doi-ngu/<%= member._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá thành viên này?');">
+              <form action="/admin/doi-ngu/<%= member._id %>/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá thành viên này?" data-confirm-name="<%= member.name %>">
                 <button type="submit" class="btn btn-icon btn-danger" title="Xoá thành viên">🗑 Xoá</button>
               </form>
             </td>

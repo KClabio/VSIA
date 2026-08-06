@@ -54,7 +54,7 @@
               </span>
             </td>
             <td class="admin-table-actions">
-              <form action="/admin/khoa-hoc/<%= course._id %>/hoc-vien/<%= row.enrollment._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá học viên này khỏi khoá học?');">
+              <form action="/admin/khoa-hoc/<%= course._id %>/hoc-vien/<%= row.enrollment._id %>/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá học viên này khỏi khoá học?" data-confirm-name="<%= row.user.name %>">
                 <button type="submit" class="btn btn-icon btn-danger" title="Xoá khỏi khoá học">🗑 Xoá</button>
               </form>
             </td>

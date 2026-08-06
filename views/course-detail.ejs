@@ -1,6 +1,9 @@
 <%- include('partials/header', { title: course.title + ' - VSIA' }) %>
 
 <section class="section">
+  <div class="container">
+    <a href="/khoa-hoc" class="course-back">← Tất cả khoá học</a>
+  </div>
   <div class="container course-detail">
     <% if (course.image) { %>
       <div class="course-detail-thumb course-thumb-image" style="background-image: url('<%= course.image %>');">

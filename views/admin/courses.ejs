@@ -33,11 +33,11 @@
             <td><%= course.isFree ? 'Miễn phí' : course.price.toLocaleString('vi-VN') + ' đ' %></td>
             <td><%= (course.materials || []).length %> file</td>
             <td class="admin-table-actions">
-              <a href="/khoa-hoc/<%= course._id %>" class="btn btn-icon" title="Xem trên trang công khai">👁 Xem</a>
+              <a href="/admin/khoa-hoc/<%= course._id %>/xem" class="btn btn-icon" title="Xem chi tiết trong trang quản trị">👁 Xem</a>
               <a href="/admin/khoa-hoc/<%= course._id %>/noi-dung" class="btn btn-icon" title="Quản lý nội dung bài học">📚 Nội dung</a>
               <a href="/admin/khoa-hoc/<%= course._id %>/hoc-vien" class="btn btn-icon" title="Quản lý học viên">👥 Học viên</a>
               <a href="/admin/khoa-hoc/<%= course._id %>/sua" class="btn btn-icon" title="Sửa khoá học">✏️ Sửa</a>
-              <form action="/admin/khoa-hoc/<%= course._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá khoá học này?');">
+              <form action="/admin/khoa-hoc/<%= course._id %>/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá khoá học này?" data-confirm-name="<%= course.title %>">
                 <button type="submit" class="btn btn-icon btn-danger" title="Xoá khoá học">🗑 Xoá</button>
               </form>
             </td>

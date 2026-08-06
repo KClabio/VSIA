@@ -113,9 +113,6 @@
   const axisTicks = [0, 1, 2, 3, 4, 5].map((i) => Math.round(axisMax * i / 5));
 
   const totalItems = chartItems.reduce((sum, i) => sum + i.value, 0) || 1;
-  const rating = parseFloat(stats.avgRating) || 0;
-  const gaugeCircumference = 251.3;
-  const gaugeOffset = (gaugeCircumference * (1 - rating / 5)).toFixed(1);
 %>
 <h2 class="adm-section-title">Thống kê nội dung</h2>
 <div class="adm-content-row">
@@ -140,29 +137,28 @@
   </div>
 
   <div class="adm-panel">
-    <div class="adm-chart-head"><div><div class="adm-eyebrow">Chất lượng</div><div class="adm-chart-title">Đánh giá trung bình</div></div></div>
-    <div class="adm-gauge-wrap">
-      <svg class="adm-gauge-svg" viewBox="0 0 200 116">
-        <path d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="var(--adm-border)" stroke-width="16" stroke-linecap="round"/>
-        <path d="M20,100 A80,80 0 0,1 180,100" fill="none" stroke="var(--adm-amber)" stroke-width="16" stroke-linecap="round"
-              stroke-dasharray="<%= gaugeCircumference %>" stroke-dashoffset="<%= gaugeOffset %>"/>
-      </svg>
-      <div class="adm-gauge-num"><%= stats.avgRating %><sub>/5</sub></div>
-      <div class="adm-gauge-caption">Trung bình trên 5 điểm</div>
-    </div>
-
-    <div class="adm-panel-divider"></div>
-
     <div class="adm-chart-head" style="margin-bottom:12px;"><div><div class="adm-eyebrow">Cơ cấu</div><div class="adm-chart-title">Tỉ trọng nội dung</div></div></div>
-    <div class="adm-stack-bar">
-      <% chartItems.forEach(item => { %>
-        <div class="adm-stack-seg" style="width: <%= (item.value / totalItems * 100).toFixed(1) %>%; background: <%= item.color %>;"></div>
-      <% }) %>
-    </div>
-    <div class="adm-legend">
-      <% chartItems.forEach(item => { %>
-        <div class="adm-legend-row"><span class="adm-legend-dot" style="background: <%= item.color %>;"></span><%= item.label %><span><%= item.value %></span></div>
-      <% }) %>
+    <%
+      let donutCursor = 0;
+      const donutStops = chartItems.map((item) => {
+        const pct = (item.value / totalItems) * 100;
+        const start = donutCursor;
+        donutCursor += pct;
+        return `${item.color} ${start.toFixed(2)}% ${donutCursor.toFixed(2)}%`;
+      }).join(', ');
+    %>
+    <div class="adm-donut-row">
+      <div class="adm-donut" style="background: conic-gradient(<%= donutStops %>);">
+        <div class="adm-donut-hole">
+          <div class="adm-donut-total"><%= totalItems %></div>
+          <div class="adm-donut-total-label">mục nội dung</div>
+        </div>
+      </div>
+      <div class="adm-legend">
+        <% chartItems.forEach(item => { %>
+          <div class="adm-legend-row"><span class="adm-legend-dot" style="background: <%= item.color %>;"></span><%= item.label %><span><%= Math.round(item.value / totalItems * 100) %>%</span></div>
+        <% }) %>
+      </div>
     </div>
   </div>
 </div>

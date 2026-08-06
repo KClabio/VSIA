@@ -1,0 +1,97 @@
+<%- include('partials/head', { pageTitle: 'Xem khoá học - ' + course.title, active: 'khoa-hoc' }) %>
+
+<div class="admin-page-head">
+  <h1 class="page-title">Xem khoá học: <%= course.title %></h1>
+  <div class="admin-view-actions">
+    <a href="/admin/khoa-hoc" class="btn btn-ghost">← Danh sách khoá học</a>
+    <a href="/admin/khoa-hoc/<%= course._id %>/noi-dung" class="btn btn-icon">📚 Nội dung</a>
+    <a href="/admin/khoa-hoc/<%= course._id %>/hoc-vien" class="btn btn-icon">👥 Học viên</a>
+    <a href="/admin/khoa-hoc/<%= course._id %>/sua" class="btn btn-primary">✏️ Sửa</a>
+  </div>
+</div>
+
+<div class="admin-view-card">
+  <% if (course.image) { %>
+    <img src="<%= course.image %>" alt="" class="admin-view-image">
+  <% } %>
+
+  <div class="admin-view-body">
+    <p class="admin-view-desc"><%= course.description %></p>
+
+    <div class="admin-view-meta-grid">
+      <div><span class="admin-view-meta-label">Đơn vị tổ chức</span><span><%= course.provider || '—' %></span></div>
+      <div><span class="admin-view-meta-label">Danh mục</span><span><%= course.category || '—' %></span></div>
+      <div><span class="admin-view-meta-label">Giá</span><span><%= course.isFree ? 'Miễn phí' : (course.price || 0).toLocaleString('vi-VN') + ' đ' %></span></div>
+      <div><span class="admin-view-meta-label">Đánh giá</span><span><%= course.rating || 0 %>/5</span></div>
+      <div><span class="admin-view-meta-label">Giảng viên</span><span><%= course.instructor || '—' %></span></div>
+      <div><span class="admin-view-meta-label">Mã khoá học</span><span><%= course.courseCode || '—' %></span></div>
+      <div><span class="admin-view-meta-label">Thời gian học</span><span><%= course.studyPeriod || '—' %></span></div>
+      <div><span class="admin-view-meta-label">Ngày thi dự kiến</span><span><%= course.examDate || '—' %></span></div>
+    </div>
+  </div>
+</div>
+
+<% if (course.materials && course.materials.length > 0) { %>
+  <div class="admin-materials-list" style="margin-top:24px;">
+    <p><strong>Tài liệu chung của khoá học:</strong></p>
+    <ul>
+      <% course.materials.forEach(m => { %>
+        <li><a href="<%= m.filePath %>" target="_blank">📄 <%= m.name %></a></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<h3 style="margin-top:32px;">Nội dung theo tuần</h3>
+<% if (!course.modules || course.modules.length === 0) { %>
+  <p class="empty-state">Chưa có tuần/nội dung nào. Vào "Nội dung" để thêm.</p>
+<% } else { %>
+  <% const catLabels = { lecture: 'Lecture/Lý thuyết', interaction: 'Interaction/Tương tác', practice: 'Practice/Luyện tập', exam: 'Exams/Bài kiểm tra' }; %>
+  <div style="max-width:900px;">
+    <% course.modules.forEach((mod, mi) => { %>
+      <details class="settings-page-block" <%= mi === 0 ? 'open' : '' %>>
+        <summary><%= mod.title %><% if (mod.weekStart || mod.weekEnd) { %> (<%= mod.weekStart %> - <%= mod.weekEnd %>)<% } %> <span class="admin-count-badge" style="margin-left:10px;"><%= mod.lessons.length %> bài</span></summary>
+        <div class="settings-page-form">
+          <% if (mod.chapterTitle) { %><p><strong><%= mod.chapterTitle %></strong></p><% } %>
+          <% if (mod.topics && mod.topics.length > 0) { %>
+            <ul class="admin-view-topics">
+              <% mod.topics.forEach(t => { %><li><%= t %></li><% }) %>
+            </ul>
+          <% } %>
+
+          <% if (mod.lessons.length === 0) { %>
+            <p class="empty-state">Tuần này chưa có bài học.</p>
+          <% } else { %>
+            <div class="admin-lesson-list">
+              <% mod.lessons.forEach(lesson => { %>
+                <details class="settings-sub-block">
+                  <summary>
+                    <span class="admin-lesson-type-icon"><%= lesson.type === 'video' ? '▶️' : lesson.type === 'document' ? '📄' : lesson.type === 'quiz' ? '📝' : lesson.type === 'forum' ? '🌐' : '❓' %></span>
+                    <%= lesson.title %>
+                    <span class="admin-count-badge" style="margin-left:8px;"><%= catLabels[lesson.category] || 'Lecture' %></span>
+                  </summary>
+                  <div class="settings-sub-form">
+                    <% if (lesson.type === 'video' && lesson.videoEmbedUrl) { %>
+                      <div class="admin-view-video-wrap"><iframe src="<%= lesson.videoEmbedUrl %>" allowfullscreen></iframe></div>
+                    <% } else if (lesson.type === 'video' && lesson.videoFile) { %>
+                      <video src="<%= lesson.videoFile %>" controls class="admin-view-video-tag"></video>
+                    <% } %>
+                    <% if (lesson.documentFile) { %>
+                      <p><a href="<%= lesson.documentFile %>" target="_blank">📄 <%= lesson.documentName || 'Xem tài liệu' %></a></p>
+                    <% } %>
+                    <% if (lesson.content) { %><div class="admin-view-lesson-content"><%- lesson.content %></div><% } %>
+                    <% if (!lesson.videoEmbedUrl && !lesson.videoFile && !lesson.documentFile && !lesson.content) { %>
+                      <p class="empty-state">Bài học này chưa có nội dung.</p>
+                    <% } %>
+                  </div>
+                </details>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+      </details>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('partials/foot') %>

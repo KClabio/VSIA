@@ -45,8 +45,18 @@ document.getElementById('navToggle')?.addEventListener('click', () => {
   });
 })();
 
-document.getElementById('sidebarToggle')?.addEventListener('click', () => {
-  document.getElementById('adminSidebar')?.classList.toggle('open');
+// Dùng event delegation (gắn trên document) thay vì gắn thẳng lên #sidebarClose vì admin-spa.js
+// thay innerHTML của #adminSidebar mỗi khi chuyển trang trong khu quản trị, làm mất listener gắn trực tiếp.
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#sidebarToggle')) {
+    document.getElementById('adminSidebar')?.classList.toggle('open');
+    document.getElementById('sidebarBackdrop')?.classList.toggle('open');
+    return;
+  }
+  if (e.target.closest('#sidebarClose') || e.target.closest('#sidebarBackdrop')) {
+    document.getElementById('adminSidebar')?.classList.remove('open');
+    document.getElementById('sidebarBackdrop')?.classList.remove('open');
+  }
 });
 
 document.querySelectorAll('.user-menu-trigger').forEach((trigger) => {

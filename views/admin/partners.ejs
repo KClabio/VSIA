@@ -41,7 +41,7 @@
             <td><%= partner.order %></td>
             <td class="admin-table-actions">
               <a href="/admin/doi-tac/<%= partner._id %>/sua" class="btn btn-icon" title="Sửa đối tác">✏️ Sửa</a>
-              <form action="/admin/doi-tac/<%= partner._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá đối tác này?');">
+              <form action="/admin/doi-tac/<%= partner._id %>/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá đối tác này?" data-confirm-name="<%= partner.name %>">
                 <button type="submit" class="btn btn-icon btn-danger" title="Xoá đối tác">🗑 Xoá</button>
               </form>
             </td>

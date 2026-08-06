@@ -13,8 +13,8 @@
   <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/noi-dung/chuong">
     <div class="admin-form-row">
       <label>Tên tuần <input type="text" name="title" placeholder="Vd: Tuần 1" required></label>
-      <label>Ngày bắt đầu <input type="text" name="weekStart" placeholder="07/06/2026"></label>
-      <label>Ngày kết thúc <input type="text" name="weekEnd" placeholder="14/06/2026"></label>
+      <label>Ngày bắt đầu <input type="text" name="weekStart" placeholder="07/06/2026" pattern="\d{2}/\d{2}/\d{4}" title="Định dạng: dd/mm/yyyy"></label>
+      <label>Ngày kết thúc <input type="text" name="weekEnd" placeholder="14/06/2026" pattern="\d{2}/\d{2}/\d{4}" title="Định dạng: dd/mm/yyyy"></label>
     </div>
     <label>Tên chương <input type="text" name="chapterTitle" placeholder="Vd: Chương 1: Tổng quan về..."></label>
     <label>Danh sách chủ đề (mỗi dòng 1 chủ đề, chỉ để hiển thị)
@@ -42,8 +42,8 @@
               <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/noi-dung/chuong/<%= mod._id %>/sua" style="margin-bottom:14px;">
                 <div class="admin-form-row">
                   <label>Tên tuần <input type="text" name="title" value="<%= mod.title %>" required></label>
-                  <label>Ngày bắt đầu <input type="text" name="weekStart" value="<%= mod.weekStart || '' %>" placeholder="07/06/2026"></label>
-                  <label>Ngày kết thúc <input type="text" name="weekEnd" value="<%= mod.weekEnd || '' %>" placeholder="14/06/2026"></label>
+                  <label>Ngày bắt đầu <input type="text" name="weekStart" value="<%= mod.weekStart || '' %>" placeholder="07/06/2026" pattern="\d{2}/\d{2}/\d{4}" title="Định dạng: dd/mm/yyyy"></label>
+                  <label>Ngày kết thúc <input type="text" name="weekEnd" value="<%= mod.weekEnd || '' %>" placeholder="14/06/2026" pattern="\d{2}/\d{2}/\d{4}" title="Định dạng: dd/mm/yyyy"></label>
                 </div>
                 <label>Tên chương <input type="text" name="chapterTitle" value="<%= mod.chapterTitle || '' %>"></label>
                 <label>Danh sách chủ đề (mỗi dòng 1 chủ đề)
@@ -51,7 +51,7 @@
                 </label>
                 <div class="admin-form-actions"><button type="submit" class="btn btn-primary">Lưu thông tin tuần</button></div>
               </form>
-              <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/noi-dung/chuong/<%= mod._id %>/xoa" class="inline-form" onsubmit="return confirm('Xoá cả tuần này và toàn bộ bài học bên trong?');">
+              <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/noi-dung/chuong/<%= mod._id %>/xoa" class="inline-form" data-confirm-title="Bạn có chắc xoá cả tuần này và toàn bộ bài học bên trong?" data-confirm-name="<%= mod.title %>">
                 <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá tuần này</button>
               </form>
             </div>
@@ -108,7 +108,7 @@
                         <button type="submit" class="btn btn-primary">Lưu bài học</button>
                       </div>
                     </form>
-                    <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/noi-dung/chuong/<%= mod._id %>/bai/<%= lesson._id %>/xoa" class="inline-form" onsubmit="return confirm('Xoá bài học này?');" style="margin-top:10px;">
+                    <form method="POST" action="/admin/khoa-hoc/<%= course._id %>/noi-dung/chuong/<%= mod._id %>/bai/<%= lesson._id %>/xoa" class="inline-form" data-confirm-title="Bạn có chắc xoá bài học này?" data-confirm-name="<%= lesson.title %>" style="margin-top:10px;">
                       <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá bài học này</button>
                     </form>
                   </div>

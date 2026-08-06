@@ -63,12 +63,17 @@
 
     var link = e.target.closest('a');
     if (!link || !link.href || link.target === '_blank') return;
-    if (!(link.closest('#adminSidebar') || link.closest('#adminContent'))) return;
+    var fromSidebar = link.closest('#adminSidebar');
+    if (!(fromSidebar || link.closest('#adminContent'))) return;
 
     var url = new URL(link.href, window.location.href);
     if (url.origin !== window.location.origin || url.pathname.indexOf('/admin') !== 0) return;
 
     e.preventDefault();
+    if (fromSidebar) {
+      document.getElementById('adminSidebar')?.classList.remove('open');
+      document.getElementById('sidebarBackdrop')?.classList.remove('open');
+    }
     navigate(url.pathname + url.search);
   });
 
@@ -84,6 +89,16 @@
     e.preventDefault();
 
     var method = (form.getAttribute('method') || 'GET').toUpperCase();
+
+    // GET không có body — dữ liệu form (vd ô tìm kiếm) phải nằm trong query string của URL,
+    // nhồi vào body như POST sẽ khiến fetch() báo lỗi (GET/HEAD không được có body) và mất luôn
+    // từ khoá vì rơi về fallback tải lại trang không kèm query.
+    if (method === 'GET') {
+      var params = new URLSearchParams(new FormData(form));
+      navigate(url.pathname + '?' + params.toString());
+      return;
+    }
+
     var isMultipart = form.enctype === 'multipart/form-data';
     var body;
     var headers = {};

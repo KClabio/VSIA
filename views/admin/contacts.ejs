@@ -44,7 +44,7 @@
                   <%= r.status === 'da_lien_he' ? '↺ Đánh dấu mới' : '✓ Đã liên hệ' %>
                 </button>
               </form>
-              <form action="/admin/lien-he/<%= r._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá yêu cầu tư vấn này?');">
+              <form action="/admin/lien-he/<%= r._id %>/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá yêu cầu tư vấn này?" data-confirm-name="<%= r.name %> - <%= r.contact %>">
                 <button type="submit" class="btn btn-icon btn-danger" title="Xoá">🗑 Xoá</button>
               </form>
             </td>

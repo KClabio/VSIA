@@ -20,7 +20,7 @@
         <div class="admin-logo-preview">
           <img src="<%= settings.logo %>" alt="Logo hiện tại">
         </div>
-        <form action="/admin/cai-dat/logo/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá logo và quay về logo chữ mặc định?');" style="margin-bottom:20px;">
+        <form action="/admin/cai-dat/logo/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá logo và quay về logo chữ mặc định?" style="margin-bottom:20px;">
           <button type="submit" class="btn btn-ghost">Xoá logo, dùng lại chữ "VSIA"</button>
         </form>
       <% } else { %>
@@ -48,7 +48,7 @@
           <% settings.heroImages.forEach((img, i) => { %>
             <div class="admin-hero-slide-item">
               <img src="<%= img.url %>" alt="Ảnh nền Hero <%= i + 1 %>">
-              <form action="/admin/cai-dat/anh-hero/<%= img._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá ảnh này khỏi slideshow?');">
+              <form action="/admin/cai-dat/anh-hero/<%= img._id %>/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá ảnh này khỏi slideshow?" data-confirm-name="Ảnh nền Hero <%= i + 1 %>">
                 <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá</button>
               </form>
             </div>
@@ -97,7 +97,7 @@
         <div class="admin-logo-preview">
           <img src="<%= settings.solutionImage %>" alt="Ảnh minh hoạ giải pháp" style="max-height:220px;">
         </div>
-        <form action="/admin/cai-dat/anh-giai-phap/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá ảnh minh hoạ này?');" style="margin-bottom:20px;">
+        <form action="/admin/cai-dat/anh-giai-phap/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá ảnh minh hoạ này?" style="margin-bottom:20px;">
           <button type="submit" class="btn btn-ghost">Xoá ảnh</button>
         </form>
       <% } else { %>
@@ -125,7 +125,7 @@
           <% settings.projectImages.forEach((img, i) => { %>
             <div class="admin-hero-slide-item">
               <img src="<%= img.url %>" alt="Ảnh dự án nổi bật <%= i + 1 %>">
-              <form action="/admin/cai-dat/anh-du-an/<%= img._id %>/xoa" method="POST" class="inline-form" onsubmit="return confirm('Xoá ảnh này khỏi lưới ảnh?');">
+              <form action="/admin/cai-dat/anh-du-an/<%= img._id %>/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá ảnh này khỏi lưới ảnh?" data-confirm-name="Ảnh dự án nổi bật <%= i + 1 %>">
                 <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá</button>
               </form>
             </div>
