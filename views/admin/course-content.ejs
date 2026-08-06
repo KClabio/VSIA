@@ -98,7 +98,7 @@
                       </label>
                       <% if (lesson.videoFile) { %><p class="admin-form-hint">Đang có file: <%= lesson.videoFile %></p><% } %>
                       <label>Tải file tài liệu lên (PDF, Word, PowerPoint, Excel, zip — bỏ trống nếu giữ nguyên<%= lesson.documentFile ? ' file hiện tại' : '' %>)
-                        <input type="file" name="documentFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip">
+                        <input type="file" name="documentFile">
                       </label>
                       <% if (lesson.documentFile) { %><p class="admin-form-hint">Đang có file: <%= lesson.documentName || lesson.documentFile %></p><% } %>
                       <label>Nội dung / ghi chú (dùng cho tài liệu, bài tập, diễn đàn, hỏi đáp, hoặc mô tả thêm)
@@ -150,7 +150,7 @@
                   <input type="file" name="videoFile" accept="video/mp4,video/webm,video/ogg">
                 </label>
                 <label>Tải file tài liệu lên (PDF, Word, PowerPoint, Excel, zip — dùng cho bài học loại Tài liệu)
-                  <input type="file" name="documentFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip">
+                  <input type="file" name="documentFile">
                 </label>
                 <label>Nội dung / ghi chú (dùng cho tài liệu, bài tập, diễn đàn, hỏi đáp, hoặc mô tả thêm)
                   <textarea name="content" rows="3" placeholder="Nội dung hiển thị cho học viên..."></textarea>

@@ -97,7 +97,7 @@ function friendlyUploadError(err) {
 
 const FIELD_CONFIG = {
   image: { subfolder: 'images', resourceType: 'image', extensions: IMAGE_EXTENSIONS },
-  materials: { subfolder: 'documents', resourceType: 'raw', extensions: DOCUMENT_EXTENSIONS },
+  materials: { subfolder: 'documents', resourceType: 'raw', extensions: null },
 };
 
 const courseFilesStorage = useCloudinary
@@ -124,7 +124,10 @@ const uploadCourseFiles = multer({
   fileFilter: (req, file, cb) => {
     const config = FIELD_CONFIG[file.fieldname];
     const ext = path.extname(file.originalname).toLowerCase();
-    if (!config || !config.extensions.includes(ext)) {
+    if (!config) {
+      return cb(new Error(`Trường file không hợp lệ: ${file.fieldname}`));
+    }
+    if (config.extensions && !config.extensions.includes(ext)) {
       return cb(new Error(`Định dạng file không được hỗ trợ: ${ext}`));
     }
     cb(null, true);
@@ -136,7 +139,7 @@ const uploadCourseFiles = multer({
 
 const LESSON_FIELD_CONFIG = {
   videoFile: { subfolder: 'videos', resourceType: 'video', extensions: VIDEO_EXTENSIONS },
-  documentFile: { subfolder: 'documents', resourceType: 'raw', extensions: DOCUMENT_EXTENSIONS },
+  documentFile: { subfolder: 'documents', resourceType: 'raw', extensions: null },
 };
 
 const lessonFilesStorage = useCloudinary
@@ -163,7 +166,10 @@ const uploadLessonFiles = multer({
   fileFilter: (req, file, cb) => {
     const config = LESSON_FIELD_CONFIG[file.fieldname];
     const ext = path.extname(file.originalname).toLowerCase();
-    if (!config || !config.extensions.includes(ext)) {
+    if (!config) {
+      return cb(new Error(`Trường file không hợp lệ: ${file.fieldname}`));
+    }
+    if (config.extensions && !config.extensions.includes(ext)) {
       return cb(new Error(`Định dạng file không được hỗ trợ: ${ext}`));
     }
     cb(null, true);
