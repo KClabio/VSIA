@@ -12,6 +12,29 @@ document.getElementById('navToggle')?.addEventListener('click', () => {
   document.getElementById('mainNav')?.classList.toggle('open');
 });
 
+(function () {
+  const header = document.getElementById('siteHeader');
+  const inner = header?.querySelector('.header-inner');
+  if (!header || !inner) return;
+
+  function checkNavFit() {
+    const wasCompact = header.classList.contains('nav-compact');
+    header.classList.remove('nav-compact'); // đo ở trạng thái đầy đủ
+
+    const overflowing = inner.scrollWidth > inner.clientWidth + 1;
+    header.classList.toggle('nav-compact', overflowing);
+
+    if (wasCompact && !overflowing) {
+      document.getElementById('mainNav')?.classList.remove('open');
+    }
+  }
+
+  checkNavFit();
+  window.addEventListener('resize', checkNavFit);
+  window.addEventListener('load', checkNavFit);
+  if (document.fonts?.ready) document.fonts.ready.then(checkNavFit);
+})();
+
 (() => {
   const currentPath = window.location.pathname;
   document.querySelectorAll('.main-nav a:not(.nav-cta)').forEach((link) => {
