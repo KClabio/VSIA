@@ -10,7 +10,7 @@ const Partner = require('../models/Partner');
 const User = require('../models/User');
 const { requireAuth, requireStaff, requireModule } = require('../middleware/auth');
 const { ROLES } = require('../lib/roles');
-const { uploadImage, uploadVideo, uploadCourseFiles, uploadLessonFiles, friendlyUploadError, wrapUpload, fileUrl } = require('../middleware/upload');
+const { uploadImage, uploadVideo, uploadCourseFiles, uploadLessonFiles, friendlyUploadError, wrapUpload, fileUrl, signRawUrl } = require('../middleware/upload');
 const { computeStats, computeDashboardCards, addClient, removeClient, broadcastStats } = require('../lib/stats');
 const { unlinkUploaded } = require('../lib/files');
 const { escapeRegExp } = require('../lib/search');
@@ -107,6 +107,7 @@ router.post('/khoa-hoc/moi', wrapUpload(uploadCourseFiles, async (err, req, res)
 router.get('/khoa-hoc/:id/sua', async (req, res) => {
   const course = await Course.findById(req.params.id).lean().catch(() => null);
   if (!course) return res.status(404).render('404');
+  (course.materials || []).forEach((m) => { m.filePath = signRawUrl(m.filePath); });
   const teachers = await User.find({ role: 'giaovien' }).select('name').sort({ name: 1 }).lean();
   res.render('admin/course-form', { course, error: null, active: 'khoa-hoc', teachers });
 });

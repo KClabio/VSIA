@@ -27,10 +27,15 @@ function makeStorage(subfolder, resourceType) {
   if (useCloudinary) {
     return new CloudinaryStorage({
       cloudinary,
-      params: () => ({
+      params: (req, file) => ({
         folder: `vsia/${subfolder}`,
         resource_type: resourceType,
-        public_id: crypto.randomUUID(),
+        // File "raw" (tài liệu) trên Cloudinary không tự thêm đuôi mở rộng vào URL như ảnh/video —
+        // phải tự gắn đuôi vào public_id, nếu không trình duyệt không nhận diện được định dạng
+        // file (PDF...) và sẽ tải về thay vì xem trực tiếp.
+        public_id: resourceType === 'raw'
+          ? crypto.randomUUID() + path.extname(file.originalname).toLowerCase()
+          : crypto.randomUUID(),
       }),
     });
   }
@@ -48,6 +53,27 @@ function makeStorage(subfolder, resourceType) {
 function fileUrl(file, subfolder) {
   if (!file) return null;
   return useCloudinary ? file.path : `/uploads/${subfolder}/${file.filename}`;
+}
+
+// Cloudinary mặc định chặn truy cập công khai (URL "res.cloudinary.com" bình thường) cho file
+// "raw" (PDF/Word/PPT/Excel/ZIP) theo cài đặt bảo mật tài khoản (Settings > Security > Restricted
+// media types) — đã thử ký URL kiểu sign_url thông thường nhưng KHÔNG bỏ qua được giới hạn này
+// (đã kiểm chứng thực tế, vẫn trả 401). Cách duy nhất hoạt động là dùng endpoint API tải file có
+// xác thực đầy đủ (api_key + timestamp + signature) của Cloudinary thay vì URL phân phối công
+// khai — endpoint này không bị áp giới hạn "Restricted media types" vì đi qua API xác thực, không
+// qua CDN phân phối công khai. Nhờ vậy tài liệu luôn mở được mà không cần admin vào đổi cài đặt
+// Cloudinary thủ công.
+function signRawUrl(url) {
+  if (!useCloudinary || !url) return url;
+  const match = url.match(/\/raw\/upload\/(?:v\d+\/)?(.+)$/);
+  if (!match) return url;
+  const publicId = match[1];
+  const ext = path.extname(publicId).slice(1);
+  try {
+    return cloudinary.utils.private_download_url(publicId, ext, { resource_type: 'raw', type: 'upload' });
+  } catch {
+    return url;
+  }
 }
 
 function fileFilterFor(allowedExtensions) {
@@ -105,7 +131,10 @@ const courseFilesStorage = useCloudinary
       cloudinary,
       params: (req, file) => {
         const config = FIELD_CONFIG[file.fieldname];
-        return { folder: `vsia/${config.subfolder}`, resource_type: config.resourceType, public_id: crypto.randomUUID() };
+        const publicId = config.resourceType === 'raw'
+          ? crypto.randomUUID() + path.extname(file.originalname).toLowerCase()
+          : crypto.randomUUID();
+        return { folder: `vsia/${config.subfolder}`, resource_type: config.resourceType, public_id: publicId };
       },
     })
   : multer.diskStorage({
@@ -147,7 +176,10 @@ const lessonFilesStorage = useCloudinary
       cloudinary,
       params: (req, file) => {
         const config = LESSON_FIELD_CONFIG[file.fieldname];
-        return { folder: `vsia/${config.subfolder}`, resource_type: config.resourceType, public_id: crypto.randomUUID() };
+        const publicId = config.resourceType === 'raw'
+          ? crypto.randomUUID() + path.extname(file.originalname).toLowerCase()
+          : crypto.randomUUID();
+        return { folder: `vsia/${config.subfolder}`, resource_type: config.resourceType, public_id: publicId };
       },
     })
   : multer.diskStorage({
@@ -200,6 +232,7 @@ module.exports = {
   friendlyUploadError,
   wrapUpload,
   fileUrl,
+  signRawUrl,
   useCloudinary,
   cloudinary,
 };

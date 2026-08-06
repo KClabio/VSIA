@@ -95,8 +95,13 @@
         <% } %>
 
         <% if (currentLesson.type === 'document' && currentLesson.documentFile) { %>
+          <% if (currentDocumentPreview && (currentDocumentPreview.kind === 'pdf' || currentDocumentPreview.kind === 'office')) { %>
+            <div class="player-document-wrap">
+              <iframe src="<%= currentDocumentPreview.url %>" title="<%= currentLesson.title %>"></iframe>
+            </div>
+          <% } %>
           <p class="player-lesson-actions" style="text-align:left;">
-            <a href="<%= currentLesson.documentFile %>" target="_blank" rel="noopener" class="btn btn-primary">📄 <%= currentLesson.documentName || 'Tải tài liệu' %></a>
+            <a href="<%= currentLesson.documentFile %>" target="_blank" rel="noopener" class="btn btn-ghost">📄 <%= currentLesson.documentName || 'Mở tài liệu' %></a>
           </p>
         <% } %>
 
@@ -104,15 +109,83 @@
           <div class="player-lesson-content"><%= currentLesson.content %></div>
         <% } %>
 
-        <form method="POST" action="/hoc/<%= course._id %>/bai/<%= currentLesson._id %>/toggle" class="player-lesson-actions">
-          <input type="hidden" name="bai" value="<%= currentLesson._id %>">
-          <button type="submit" class="btn <%= isDone ? 'btn-ghost' : 'btn-primary' %>">
-            <%= isDone ? '↺ Bỏ đánh dấu hoàn thành' : '✓ Đánh dấu hoàn thành' %>
-          </button>
-        </form>
+        <%
+          const autoTrackTypes = ['video', 'document'];
+          const isAutoTracked = autoTrackTypes.includes(currentLesson.type);
+          const autoMode = currentLesson.type === 'video' ? 'video' : 'dwell';
+        %>
+        <% if (isAutoTracked) { %>
+          <div class="player-lesson-actions" id="lessonAutoComplete" data-course-id="<%= course._id %>" data-lesson-id="<%= currentLesson._id %>" data-mode="<%= isDone ? '' : autoMode %>" data-dwell-seconds="120">
+            <% if (isDone) { %>
+              <span class="player-complete-badge">✓ Đã hoàn thành</span>
+              <form method="POST" action="/hoc/<%= course._id %>/bai/<%= currentLesson._id %>/toggle" class="inline-form">
+                <button type="submit" class="btn btn-ghost">↺ Bỏ đánh dấu hoàn thành</button>
+              </form>
+            <% } else { %>
+              <span class="player-complete-pending">⏳ Hệ thống sẽ tự đánh dấu hoàn thành khi bạn <%= currentLesson.type === 'video' ? 'xem xong video' : 'đọc xong tài liệu' %>.</span>
+            <% } %>
+          </div>
+        <% } else { %>
+          <form method="POST" action="/hoc/<%= course._id %>/bai/<%= currentLesson._id %>/toggle" class="player-lesson-actions">
+            <input type="hidden" name="bai" value="<%= currentLesson._id %>">
+            <button type="submit" class="btn <%= isDone ? 'btn-ghost' : 'btn-primary' %>">
+              <%= isDone ? '↺ Bỏ đánh dấu hoàn thành' : '✓ Đánh dấu hoàn thành' %>
+            </button>
+          </form>
+        <% } %>
       <% } %>
     </div>
   </div>
 </section>
+
+<script>
+(function () {
+  var box = document.getElementById('lessonAutoComplete');
+  if (!box) return;
+  var mode = box.dataset.mode;
+  if (!mode) return; // đã hoàn thành rồi, không cần theo dõi nữa
+
+  function markComplete() {
+    fetch('/hoc/' + box.dataset.courseId + '/bai/' + box.dataset.lessonId + '/hoan-thanh', { method: 'POST' })
+      .then(function () { window.location.reload(); })
+      .catch(function () {});
+  }
+
+  if (mode === 'video') {
+    var videoEl = document.querySelector('.player-video-wrap video');
+    if (videoEl) {
+      videoEl.addEventListener('ended', markComplete);
+      return;
+    }
+    var iframeEl = document.querySelector('.player-video-wrap iframe');
+    if (iframeEl && iframeEl.src.indexOf('youtube.com/embed') !== -1) {
+      var tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+      window.onYouTubeIframeAPIReady = function () {
+        new YT.Player(iframeEl, {
+          events: {
+            onStateChange: function (e) {
+              if (e.data === YT.PlayerState.ENDED) markComplete();
+            },
+          },
+        });
+      };
+    }
+  } else if (mode === 'dwell') {
+    var totalSeconds = parseInt(box.dataset.dwellSeconds, 10) || 120;
+    var elapsed = 0;
+    var lastTick = Date.now();
+    var timer = setInterval(function () {
+      if (document.visibilityState === 'visible') elapsed += (Date.now() - lastTick) / 1000;
+      lastTick = Date.now();
+      if (elapsed >= totalSeconds) {
+        clearInterval(timer);
+        markComplete();
+      }
+    }, 1000);
+  }
+})();
+</script>
 
 <%- include('partials/footer') %>

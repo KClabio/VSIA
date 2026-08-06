@@ -1,24 +1,50 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
 const Course = require('../models/Course');
 const Enrollment = require('../models/Enrollment');
 const { requireAuth } = require('../middleware/auth');
 const { courseStats } = require('../lib/courseStats');
+const { signRawUrl } = require('../middleware/upload');
+
+const OFFICE_PREVIEW_EXTENSIONS = ['.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx'];
+
+// Trả về cách hiển thị tài liệu ngay trên trang thay vì bắt học viên tải file về:
+// PDF trình duyệt tự render qua iframe; các định dạng Office (Word/PPT/Excel) nhúng qua
+// Microsoft Office Online Viewer (chỉ hoạt động khi file truy cập được từ Internet, tức là
+// khi web đã deploy công khai — không xem trước được lúc chạy trên localhost).
+function documentPreview(lesson, req) {
+  if (!lesson || lesson.type !== 'document' || !lesson.documentFile) return null;
+  const ext = path.extname(lesson.documentFile.split('?')[0]).toLowerCase();
+  if (ext === '.pdf') return { kind: 'pdf', url: lesson.documentFile };
+  if (OFFICE_PREVIEW_EXTENSIONS.includes(ext)) {
+    const absoluteUrl = lesson.documentFile.startsWith('http')
+      ? lesson.documentFile
+      : `${req.protocol}://${req.get('host')}${lesson.documentFile}`;
+    return { kind: 'office', url: `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(absoluteUrl)}` };
+  }
+  return { kind: 'other', url: lesson.documentFile };
+}
 
 function toYoutubeEmbedUrl(url) {
   if (!url) return null;
   try {
     const parsed = new URL(url);
-    let videoId = null;
+    let embedUrl = null;
     if (parsed.hostname.includes('youtu.be')) {
-      videoId = parsed.pathname.slice(1);
+      embedUrl = `https://www.youtube.com/embed/${parsed.pathname.slice(1)}`;
     } else if (parsed.hostname.includes('youtube.com')) {
-      if (parsed.pathname === '/watch') videoId = parsed.searchParams.get('v');
-      else if (parsed.pathname.startsWith('/embed/')) return url;
-      else if (parsed.pathname.startsWith('/shorts/')) videoId = parsed.pathname.split('/')[2];
+      if (parsed.pathname === '/watch') embedUrl = `https://www.youtube.com/embed/${parsed.searchParams.get('v')}`;
+      else if (parsed.pathname.startsWith('/embed/')) embedUrl = url;
+      else if (parsed.pathname.startsWith('/shorts/')) embedUrl = `https://www.youtube.com/embed/${parsed.pathname.split('/')[2]}`;
     }
-    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+    if (!embedUrl) return url;
+    // enablejsapi=1 để JS phía trình duyệt bắt được sự kiện video phát xong (qua YouTube IFrame API),
+    // dùng cho tính năng tự động đánh dấu hoàn thành bài học.
+    const embedParsed = new URL(embedUrl);
+    embedParsed.searchParams.set('enablejsapi', '1');
+    return embedParsed.toString();
   } catch {
     return url;
   }
@@ -58,6 +84,10 @@ router.get('/hoc/:courseId', requireAuth, async (req, res) => {
   if (!currentLesson) {
     currentLesson = allLessons.find((l) => !enrollment.completedLessons.includes(String(l._id))) || allLessons[0] || null;
   }
+  if (currentLesson && currentLesson.documentFile) {
+    currentLesson.documentFile = signRawUrl(currentLesson.documentFile);
+  }
+  (course.materials || []).forEach((m) => { m.filePath = signRawUrl(m.filePath); });
 
   const currentEmbedUrl = currentLesson && currentLesson.type === 'video' ? toYoutubeEmbedUrl(currentLesson.videoUrl) : null;
   const stats = courseStats(course, enrollment.completedLessons);
@@ -67,8 +97,30 @@ router.get('/hoc/:courseId', requireAuth, async (req, res) => {
     enrollment,
     currentLesson,
     currentEmbedUrl,
+    currentDocumentPreview: documentPreview(currentLesson, req),
     stats,
   });
+});
+
+// Đánh dấu hoàn thành tự động (gọi bằng fetch từ JS khi video phát xong / hết thời gian đọc tài
+// liệu tối thiểu) — chỉ thêm vào danh sách đã hoàn thành, không toggle, để tránh việc phát lại
+// video hoặc mở lại tài liệu vô tình bỏ đánh dấu đã hoàn thành.
+router.post('/hoc/:courseId/bai/:lessonId/hoan-thanh', requireAuth, async (req, res) => {
+  const course = await Course.findById(req.params.courseId).lean().catch(() => null);
+  if (!course) return res.status(404).json({ ok: false });
+
+  const validLessonIds = new Set();
+  (course.modules || []).forEach((m) => (m.lessons || []).forEach((l) => validLessonIds.add(String(l._id))));
+  if (!validLessonIds.has(req.params.lessonId)) return res.status(404).json({ ok: false });
+
+  const enrollment = await Enrollment.findOne({ user: req.user._id, course: req.params.courseId });
+  if (!enrollment) return res.status(404).json({ ok: false });
+
+  if (!enrollment.completedLessons.includes(req.params.lessonId)) {
+    enrollment.completedLessons.push(req.params.lessonId);
+    await enrollment.save();
+  }
+  res.json({ ok: true });
 });
 
 router.post('/hoc/:courseId/bai/:lessonId/toggle', requireAuth, async (req, res) => {
