@@ -1,0 +1,54 @@
+<%- include('partials/header', { title: 'Hội thảo STEM trực tuyến - VSIA' }) %>
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-inner">
+    <span class="hero-pill">Đào tạo và bồi dưỡng</span>
+    <h1>Hội thảo STEM trực tuyến</h1>
+    <p class="lead">Chuỗi hội thảo, webinar chia sẻ kinh nghiệm và phương pháp giáo dục STEM từ VSIA cùng các chuyên gia — xem lại miễn phí qua video.</p>
+    <div class="page-hero-ctas">
+      <a class="btn btn-primary" href="#danh-sach">Xem danh sách hội thảo</a>
+      <a class="btn btn-ghost" href="#" data-open-contact>Đăng ký nhận thông báo</a>
+    </div>
+    <div class="page-hero-badges">
+      <span class="badge-pill">Miễn phí xem lại</span>
+      <span class="badge-pill">Chuyên gia VSIA &amp; đối tác</span>
+      <span class="badge-pill">Cập nhật thường xuyên</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="danh-sach">
+  <div class="container">
+    <h2 class="section-title">CHƯƠNG TRÌNH TẬP HUẤN STEM INNOVATION PETROVIETNAM<br>HỘI THẢO STEM TRỰC TUYẾN 2026</h2>
+    <p class="section-subtitle">Xem lại các buổi hội thảo, webinar STEM đã phát sóng của VSIA.</p>
+
+    <% if (webinars.length === 0) { %>
+      <div class="webinar-empty">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z"/></svg>
+        <p>Chưa có hội thảo nào được đăng. Các buổi hội thảo STEM trực tuyến mới sẽ sớm được cập nhật tại đây.</p>
+      </div>
+    <% } else {
+      const initialCount = 5;
+      const visibleWebinars = webinars.slice(0, initialCount);
+      const moreWebinars = webinars.slice(initialCount);
+    %>
+      <div class="webinar-grid" id="webinarGrid">
+        <% visibleWebinars.forEach((item, i) => { %>
+          <%- include('partials/webinar-card', { item, featured: i === 0, hidden: false }) %>
+        <% }) %>
+        <% moreWebinars.forEach((item) => { %>
+          <%- include('partials/webinar-card', { item, featured: false, hidden: true }) %>
+        <% }) %>
+      </div>
+      <% if (moreWebinars.length > 0) { %>
+        <div class="webinar-more-cta">
+          <button type="button" class="btn btn-ghost" id="webinarShowMoreBtn">Xem thêm hội thảo (<%= moreWebinars.length %>) ↓</button>
+        </div>
+      <% } %>
+    <% } %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

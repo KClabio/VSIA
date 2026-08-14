@@ -31,9 +31,21 @@
 
       <nav class="main-nav" id="mainNav">
         <a href="/">Trang chủ</a>
-        <a href="/khoa-hoc">Đào tạo và bồi dưỡng</a>
-        <a href="/tu-van-phong-lab">Thiết kế chương trình giáo dục</a>
-        <a href="/ngay-hoi-cuoc-thi">Tổ chức &amp; Thẩm định sự kiện</a>
+        <a href="/khoa-hoc">Khóa học</a>
+        <div class="nav-dropdown">
+          <button type="button" class="nav-dropdown-trigger" aria-expanded="false">Lĩnh vực hoạt động <span class="nav-caret">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <div class="nav-subdropdown">
+              <a href="/khoa-hoc" class="nav-subdropdown-link">Đào tạo và bồi dưỡng</a>
+              <button type="button" class="nav-subdropdown-toggle" aria-label="Mở danh mục con" aria-expanded="false"><span class="nav-caret nav-caret-right">▸</span></button>
+              <div class="nav-subdropdown-menu">
+                <a href="/hoi-thao-truc-tuyen">Hội thảo STEM trực tuyến</a>
+              </div>
+            </div>
+            <a href="/tu-van-phong-lab">Thiết kế chương trình giáo dục</a>
+            <a href="/ngay-hoi-cuoc-thi">Tổ chức &amp; Thẩm định sự kiện</a>
+          </div>
+        </div>
         <a href="/tin-tuc">Tin tức</a>
         <a href="/giai-phap">Giải pháp</a>
         <a href="/lien-he" class="nav-cta">Liên hệ</a>

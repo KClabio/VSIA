@@ -5,20 +5,20 @@ const Media = require('../models/Media');
 const CourseVideo = require('../models/CourseVideo');
 const Article = require('../models/Article');
 const TeamMember = require('../models/TeamMember');
+const Webinar = require('../models/Webinar');
 const Partner = require('../models/Partner');
 const Enrollment = require('../models/Enrollment');
 const { getPageContent } = require('../lib/pageContent');
+const { getYoutubeThumbnail } = require('../lib/video');
 
 router.get('/', async (req, res) => {
   const hero = await getPageContent('home');
   const featuredCourses = await Course.find().sort({ createdAt: -1 }).limit(3).lean();
   const galleryItems = await Media.find().sort({ createdAt: -1 }).limit(4).lean();
   const latestArticles = await Article.find({ published: true }).sort({ createdAt: -1 }).limit(8).lean();
-  const teamMembers = await TeamMember.find().sort({ order: 1, createdAt: 1 }).lean();
-  const leadershipMembers = teamMembers.filter((m) => m.group === 'leadership');
-  const expertMembers = teamMembers.filter((m) => m.group !== 'leadership');
+  const expertMembers = await TeamMember.find().sort({ order: 1, createdAt: 1 }).lean();
   const partners = await Partner.find().sort({ order: 1, createdAt: 1 }).lean();
-  res.render('index', { hero, featuredCourses, galleryItems, latestArticles, leadershipMembers, expertMembers, partners });
+  res.render('index', { hero, featuredCourses, galleryItems, latestArticles, expertMembers, partners });
 });
 
 router.get('/giai-phap', async (req, res) => {
@@ -56,6 +56,12 @@ router.get('/khoa-hoc/:id', async (req, res) => {
     ? await Enrollment.findOne({ user: req.user._id, course: course._id }).lean()
     : null;
   res.render('course-detail', { course, enrollment });
+});
+
+router.get('/hoi-thao-truc-tuyen', async (req, res) => {
+  const webinarsRaw = await Webinar.find().sort({ order: 1, createdAt: -1 }).lean();
+  const webinars = webinarsRaw.map((w) => ({ ...w, thumbnail: getYoutubeThumbnail(w.youtubeUrl) }));
+  res.render('webinars', { webinars });
 });
 
 router.get('/tin-tuc', async (req, res) => {

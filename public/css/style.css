@@ -90,7 +90,7 @@ a { text-decoration: none; color: inherit; }
 .main-nav a {
   font-weight: 500;
   color: var(--text);
-  padding: 7px 13px;
+  padding: 6px 10px;
   border-radius: 999px;
   transition: color .2s ease, background-color .3s ease;
 }
@@ -107,6 +107,128 @@ a { text-decoration: none; color: inherit; }
   background-color: rgba(26, 143, 209, .12);
   animation: navActiveFade .5s ease;
 }
+
+/* Nav dropdown (Lĩnh vực hoạt động) */
+.nav-dropdown { position: relative; }
+.nav-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: inherit;
+  color: var(--text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: color .2s ease, background-color .3s ease;
+}
+.nav-dropdown-trigger:hover { color: var(--navy); }
+.nav-caret { font-size: 10px; transition: transform .2s ease; }
+.nav-dropdown.open > .nav-dropdown-trigger .nav-caret { transform: rotate(180deg); }
+
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  min-width: 260px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(15, 42, 92, 0.16);
+  padding: 8px;
+  z-index: 30;
+}
+.nav-dropdown-menu::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 8px;
+}
+.nav-dropdown.open .nav-dropdown-menu { display: block; }
+@media (hover: hover) and (pointer: fine) {
+  .nav-dropdown:hover > .nav-dropdown-trigger .nav-caret { transform: rotate(180deg); }
+  .nav-dropdown:hover > .nav-dropdown-menu { display: block; }
+}
+.nav-dropdown-menu a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  white-space: normal;
+}
+.nav-dropdown-menu a:hover { background: var(--bg-alt); color: var(--navy); }
+
+/* Submenu lồng bên trong dropdown (vd: Đào tạo và bồi dưỡng > Hội thảo STEM trực tuyến) */
+.nav-subdropdown { position: relative; display: flex; align-items: stretch; }
+.nav-subdropdown-link {
+  flex: 1;
+  display: block;
+  padding: 10px 4px 10px 12px;
+  border-radius: 8px 0 0 8px;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text);
+}
+.nav-subdropdown-link:hover { background: var(--bg-alt); color: var(--navy); }
+.nav-subdropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  border: none;
+  background: none;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  color: var(--muted);
+}
+.nav-subdropdown-toggle:hover { background: var(--bg-alt); color: var(--navy); }
+.nav-caret-right { font-size: 10px; transition: transform .2s ease; }
+.nav-subdropdown.open .nav-caret-right { transform: rotate(90deg); }
+@media (hover: hover) and (pointer: fine) {
+  .nav-subdropdown:hover .nav-caret-right { transform: rotate(90deg); }
+}
+
+.nav-subdropdown-menu {
+  display: none;
+  position: absolute;
+  top: -8px;
+  left: 100%;
+  margin-left: 8px;
+  min-width: 220px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(15, 42, 92, 0.16);
+  padding: 8px;
+  z-index: 31;
+}
+.nav-subdropdown-menu::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+}
+.nav-subdropdown.open .nav-subdropdown-menu { display: block; }
+@media (hover: hover) and (pointer: fine) {
+  .nav-subdropdown:hover .nav-subdropdown-menu { display: block; }
+}
+.nav-subdropdown-menu a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.nav-subdropdown-menu a:hover { background: var(--bg-alt); color: var(--navy); }
 
 .nav-toggle {
   display: none;
@@ -846,163 +968,6 @@ a { text-decoration: none; color: inherit; }
 }
 .partner-logo-ring .profile-avatar { border-radius: 16px; font-size: 18px; }
 
-/* Team tabs (Ban lãnh đạo / Hội đồng chuyên gia) */
-.team-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
-}
-
-.team-tab {
-  padding: 10px 24px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: #fff;
-  color: var(--navy);
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-}
-.team-tab:hover { transform: translateY(-2px); border-color: var(--navy); }
-.team-tab.active {
-  background: var(--navy);
-  border-color: var(--navy);
-  color: #fff;
-}
-
-.team-panel { display: none; }
-.team-panel.active { display: block; animation: teamPanelFade 0.35s ease; }
-
-@keyframes teamPanelFade {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Leadership spotlight card */
-.leadership-spotlight {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  align-items: center;
-  gap: 32px;
-  background: linear-gradient(120deg, var(--navy) 0%, var(--green) 100%);
-  border-radius: 20px;
-  padding: 44px 48px;
-  color: #fff;
-  overflow: hidden;
-  max-width: 900px;
-  margin: 0 auto 20px;
-}
-.leadership-spotlight:last-child { margin-bottom: 0; }
-
-.leadership-spotlight::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 26px),
-    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 26px);
-  pointer-events: none;
-}
-
-.leadership-spotlight-text { position: relative; z-index: 1; }
-.leadership-spotlight-photo { position: relative; z-index: 1; display: flex; justify-content: center; }
-
-.leadership-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--yellow);
-  font-weight: 700;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 12px;
-}
-.leadership-eyebrow::before {
-  content: '';
-  width: 20px;
-  height: 2px;
-  background: var(--yellow);
-}
-
-.leadership-spotlight-text h3 {
-  margin: 0 0 6px;
-  font-size: 26px;
-  font-weight: 800;
-}
-
-.leadership-role {
-  margin: 0 0 16px;
-  font-size: 15px;
-  opacity: 0.9;
-}
-
-.leadership-bio {
-  margin: 0;
-  padding-left: 16px;
-  border-left: 3px solid var(--yellow);
-  font-size: 14px;
-  line-height: 1.7;
-  opacity: 0.92;
-  max-width: 480px;
-}
-
-.leadership-photo-ring {
-  width: 200px;
-  height: 200px;
-  border-width: 5px;
-  border-color: rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.08);
-  animation: leadershipGlow 3s ease-in-out infinite;
-}
-.leadership-photo-ring .profile-avatar { font-size: 46px; }
-
-@keyframes leadershipGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.35); }
-  50% { box-shadow: 0 0 0 14px rgba(250, 204, 21, 0); }
-}
-
-@media (max-width: 640px) {
-  .leadership-spotlight {
-    grid-template-columns: 1fr;
-    padding: 32px 24px;
-    text-align: center;
-  }
-  .leadership-spotlight-photo { order: -1; }
-  .leadership-eyebrow { justify-content: center; }
-  .leadership-bio { margin: 0 auto; text-align: left; }
-}
-
-/* Horizontal sliding carousel (IG-style) */
-.carousel {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.carousel-track {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  padding: 4px 2px 16px;
-  flex: 1;
-  scrollbar-width: thin;
-}
-
-.carousel-track > * {
-  scroll-snap-align: start;
-  flex: 0 0 auto;
-}
-
-.carousel-track::-webkit-scrollbar { height: 6px; }
-.carousel-track::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
 .carousel-btn {
   flex: 0 0 auto;

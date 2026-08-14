@@ -231,14 +231,14 @@
     <% if (latestArticles.length === 0) { %>
       <p class="empty-state" style="margin-top:44px;">Chưa có bài viết nào.</p>
     <% } else { %>
-      <div class="carousel article-carousel reveal" style="margin-top:44px;">
-        <button type="button" class="carousel-btn" data-carousel-prev aria-label="Bài trước">‹</button>
-        <div class="carousel-track">
-          <% latestArticles.forEach(article => { %>
-            <div class="article-carousel-item"><%- include('partials/article-card', { article }) %></div>
+      <div class="gallery-marquee article-marquee reveal" style="margin-top:44px;">
+        <button type="button" class="carousel-btn gallery-marquee-btn" data-marquee-prev aria-label="Bài trước">‹</button>
+        <div class="gallery-marquee-track article-marquee-track">
+          <% [...latestArticles, ...latestArticles].forEach((article) => { %>
+            <div class="article-marquee-item"><%- include('partials/article-card', { article }) %></div>
           <% }) %>
         </div>
-        <button type="button" class="carousel-btn" data-carousel-next aria-label="Bài tiếp theo">›</button>
+        <button type="button" class="carousel-btn gallery-marquee-btn" data-marquee-next aria-label="Bài tiếp theo">›</button>
       </div>
     <% } %>
 
@@ -252,36 +252,25 @@
   <div class="wrap">
     <div class="center reveal">
       <span class="eyebrow">Đội ngũ</span>
-      <h2 class="h-sec">Ban lãnh đạo &amp; Hội đồng chuyên gia</h2>
-      <p class="lead-new">Đội ngũ điều hành và cố vấn chuyên môn đồng hành cùng VSIA trong các chương trình giáo dục STEM.</p>
+      <h2 class="h-sec">Hội đồng chuyên gia</h2>
+      <p class="lead-new">Đội ngũ cố vấn chuyên môn đồng hành cùng VSIA trong các chương trình giáo dục STEM.</p>
     </div>
 
-    <div class="team-tabs reveal" role="tablist">
-      <button type="button" class="team-tab active" data-team-tab="leadership">Ban lãnh đạo</button>
-      <button type="button" class="team-tab" data-team-tab="expert">Hội đồng chuyên gia</button>
-    </div>
-
-    <div class="team-panel active" data-team-panel="leadership">
-      <% if (leadershipMembers.length === 0) { %>
-        <p class="empty-state">Chưa có thông tin Ban lãnh đạo. Thêm ở trang quản trị (<code>/admin/doi-ngu</code>).</p>
-      <% } else { %>
-        <% leadershipMembers.forEach(member => { %>
-          <div class="reveal"><%- include('partials/leadership-spotlight', { member }) %></div>
-        <% }) %>
-      <% } %>
-    </div>
-
-    <div class="team-panel" data-team-panel="expert">
-      <% if (expertMembers.length === 0) { %>
-        <p class="empty-state">Chưa có thông tin Hội đồng chuyên gia. Thêm ở trang quản trị (<code>/admin/doi-ngu</code>).</p>
-      <% } else { %>
-        <div class="experts3">
-          <% expertMembers.forEach(member => { %>
-            <%- include('partials/person-card', { member }) %>
+    <% if (expertMembers.length === 0) { %>
+      <p class="empty-state" style="margin-top:44px;">Chưa có thông tin Hội đồng chuyên gia. Thêm ở trang quản trị (<code>/admin/doi-ngu</code>).</p>
+    <% } else { %>
+      <div class="gallery-marquee expert-marquee reveal" style="margin-top:44px;">
+        <button type="button" class="carousel-btn gallery-marquee-btn" data-marquee-prev aria-label="Chuyên gia trước">‹</button>
+        <div class="gallery-marquee-track expert-marquee-track">
+          <% [...expertMembers, ...expertMembers].forEach((member) => { %>
+            <div class="expert-marquee-item">
+              <%- include('partials/person-card', { member }) %>
+            </div>
           <% }) %>
         </div>
-      <% } %>
-    </div>
+        <button type="button" class="carousel-btn gallery-marquee-btn" data-marquee-next aria-label="Chuyên gia tiếp theo">›</button>
+      </div>
+    <% } %>
   </div>
 </section>
 

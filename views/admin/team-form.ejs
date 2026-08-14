@@ -16,17 +16,6 @@
     <input type="text" name="title" placeholder="Vd: Giảng viên Trường ĐH Khoa học Tự nhiên, ĐH Quốc gia HN" value="<%= member ? member.title : '' %>" required>
   </label>
 
-  <label>Nhóm hiển thị
-    <select name="group">
-      <option value="expert" <%= (!member || member.group !== 'leadership') ? 'selected' : '' %>>Hội đồng chuyên gia</option>
-      <option value="leadership" <%= (member && member.group === 'leadership') ? 'selected' : '' %>>Ban lãnh đạo</option>
-    </select>
-  </label>
-
-  <label>Mô tả ngắn (tuỳ chọn, dùng cho thẻ giới thiệu Ban lãnh đạo)
-    <textarea name="bio" rows="3" placeholder="Vd: Dẫn dắt hoạt động vận hành và triển khai các chương trình giáo dục STEM của VSIA tới địa phương và nhà trường."><%= member && member.bio ? member.bio : '' %></textarea>
-  </label>
-
   <label>Badge nổi bật (tuỳ chọn, vd: học hàm/học vị hoặc chứng chỉ tiêu biểu)
     <input type="text" name="highlight" placeholder="Vd: PGS.TS Hoá học" value="<%= member && member.highlight ? member.highlight : '' %>">
   </label>

@@ -1,0 +1,14 @@
+<a class="webinar-card <%= featured ? 'webinar-card-featured' : '' %> <%= hidden ? 'webinar-card-hidden' : '' %>" href="<%= item.youtubeUrl %>" target="_blank" rel="noopener noreferrer">
+  <div class="webinar-thumb" <% if (item.thumbnail) { %>style="background-image:url('<%= item.thumbnail %>');"<% } %>>
+    <div class="webinar-top-row">
+      <% if (item.tag) { %><span class="webinar-chip"><%= item.tag %></span><% } else { %><span></span><% } %>
+      <span class="webinar-play">
+        <svg width="<%= featured ? 22 : 16 %>" height="<%= featured ? 22 : 16 %>" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </span>
+    </div>
+    <div class="webinar-bottom">
+      <h3><%= item.title %></h3>
+      <% if (item.description) { %><p><%= item.description %></p><% } %>
+    </div>
+  </div>
+</a>
