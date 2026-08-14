@@ -64,32 +64,22 @@ const sampleArticles = [
 
 const sampleTeamMembers = [
   {
-    name: 'ThS. Nguyễn Thị Hoàng Anh',
-    title: 'Giám đốc Vận hành VSIA',
-    group: 'leadership',
-    bio: 'Dẫn dắt hoạt động vận hành và triển khai các chương trình giáo dục STEM của VSIA tới địa phương và nhà trường.',
-    order: 0,
-  },
-  {
     name: 'TS. Đặng Văn Sơn',
     title: 'Giảng viên Trường ĐH Khoa học Tự nhiên, ĐH Quốc gia HN',
-    group: 'expert',
     photo: '/images/team/dang-van-son.jpg',
-    order: 1,
+    order: 0,
   },
   {
     name: 'TS. Dương Tuấn Hưng',
     title: 'Phó Trưởng Phòng Hoá Phân tích, Viện Hoá học, Viện Hàn lâm KH&CN Việt Nam',
-    group: 'expert',
     photo: '/images/team/duong-tuan-hung.jpg',
-    order: 2,
+    order: 1,
   },
   {
     name: 'ThS. Hoàng Vân Đông',
     title: 'Giảng viên Khoa Điện tử viễn thông, Trường Đại học Điện lực HN',
-    group: 'expert',
     photo: '/images/team/hoang-van-dong.jpg',
-    order: 3,
+    order: 2,
   },
 ];
 

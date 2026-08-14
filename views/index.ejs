@@ -23,6 +23,27 @@
       </div>
     </div>
   </div>
+
+  <div class="hero-home-divider" aria-hidden="true">
+    <div class="hero-wave-text">
+      <div class="hero-wave-text-track">
+        <span>VSIA</span><span>VSIA</span><span>VSIA</span><span>VSIA</span><span>VSIA</span><span>VSIA</span><span>VSIA</span><span>VSIA</span>
+        <span>VSIA</span><span>VSIA</span><span>VSIA</span><span>VSIA</span><span>VSIA</span><span>VSIA</span><span>VSIA</span><span>VSIA</span>
+      </div>
+    </div>
+    <div class="hero-wave-layer hero-wave-back">
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0,60 C120,90 240,90 360,60 C480,30 600,30 720,60 C840,90 960,90 1080,60 C1200,30 1320,30 1440,60 L1440,120 L0,120 Z"></path></svg>
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0,60 C120,90 240,90 360,60 C480,30 600,30 720,60 C840,90 960,90 1080,60 C1200,30 1320,30 1440,60 L1440,120 L0,120 Z"></path></svg>
+    </div>
+    <div class="hero-wave-layer hero-wave-mid">
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0,70 C120,40 240,40 360,70 C480,100 600,100 720,70 C840,40 960,40 1080,70 C1200,100 1320,100 1440,70 L1440,120 L0,120 Z"></path></svg>
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0,70 C120,40 240,40 360,70 C480,100 600,100 720,70 C840,40 960,40 1080,70 C1200,100 1320,100 1440,70 L1440,120 L0,120 Z"></path></svg>
+    </div>
+    <div class="hero-wave-layer hero-wave-front">
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0,64 C120,84 240,84 360,64 C480,44 600,44 720,64 C840,84 960,84 1080,64 C1200,44 1320,44 1440,64 L1440,120 L0,120 Z"></path></svg>
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0,64 C120,84 240,84 360,64 C480,44 600,44 720,64 C840,84 960,84 1080,64 C1200,44 1320,44 1440,64 L1440,120 L0,120 Z"></path></svg>
+    </div>
+  </div>
 </section>
 
 <section class="section about-us-section" id="ve-vsia">
@@ -188,7 +209,8 @@
   </div>
 </section>
 
-<section class="section" style="background:var(--mist);">
+<section class="section" style="background:var(--mist); position:relative; overflow:hidden;">
+  <%- include('partials/section-glow-divider') %>
   <div class="wrap">
     <div class="center reveal">
       <span class="eyebrow">Hình ảnh</span>
@@ -231,14 +253,14 @@
     <% if (latestArticles.length === 0) { %>
       <p class="empty-state" style="margin-top:44px;">Chưa có bài viết nào.</p>
     <% } else { %>
-      <div class="carousel article-carousel reveal" style="margin-top:44px;">
-        <button type="button" class="carousel-btn" data-carousel-prev aria-label="Bài trước">‹</button>
-        <div class="carousel-track">
-          <% latestArticles.forEach(article => { %>
-            <div class="article-carousel-item"><%- include('partials/article-card', { article }) %></div>
+      <div class="gallery-marquee article-marquee reveal" style="margin-top:44px;">
+        <button type="button" class="carousel-btn gallery-marquee-btn" data-marquee-prev aria-label="Bài trước">‹</button>
+        <div class="gallery-marquee-track article-marquee-track">
+          <% [...latestArticles, ...latestArticles].forEach((article) => { %>
+            <div class="article-marquee-item"><%- include('partials/article-card', { article }) %></div>
           <% }) %>
         </div>
-        <button type="button" class="carousel-btn" data-carousel-next aria-label="Bài tiếp theo">›</button>
+        <button type="button" class="carousel-btn gallery-marquee-btn" data-marquee-next aria-label="Bài tiếp theo">›</button>
       </div>
     <% } %>
 
@@ -252,36 +274,25 @@
   <div class="wrap">
     <div class="center reveal">
       <span class="eyebrow">Đội ngũ</span>
-      <h2 class="h-sec">Ban lãnh đạo &amp; Hội đồng chuyên gia</h2>
-      <p class="lead-new">Đội ngũ điều hành và cố vấn chuyên môn đồng hành cùng VSIA trong các chương trình giáo dục STEM.</p>
+      <h2 class="h-sec">Hội đồng chuyên gia</h2>
+      <p class="lead-new">Đội ngũ cố vấn chuyên môn đồng hành cùng VSIA trong các chương trình giáo dục STEM.</p>
     </div>
 
-    <div class="team-tabs reveal" role="tablist">
-      <button type="button" class="team-tab active" data-team-tab="leadership">Ban lãnh đạo</button>
-      <button type="button" class="team-tab" data-team-tab="expert">Hội đồng chuyên gia</button>
-    </div>
-
-    <div class="team-panel active" data-team-panel="leadership">
-      <% if (leadershipMembers.length === 0) { %>
-        <p class="empty-state">Chưa có thông tin Ban lãnh đạo. Thêm ở trang quản trị (<code>/admin/doi-ngu</code>).</p>
-      <% } else { %>
-        <% leadershipMembers.forEach(member => { %>
-          <div class="reveal"><%- include('partials/leadership-spotlight', { member }) %></div>
-        <% }) %>
-      <% } %>
-    </div>
-
-    <div class="team-panel" data-team-panel="expert">
-      <% if (expertMembers.length === 0) { %>
-        <p class="empty-state">Chưa có thông tin Hội đồng chuyên gia. Thêm ở trang quản trị (<code>/admin/doi-ngu</code>).</p>
-      <% } else { %>
-        <div class="experts3">
-          <% expertMembers.forEach(member => { %>
-            <%- include('partials/person-card', { member }) %>
+    <% if (expertMembers.length === 0) { %>
+      <p class="empty-state" style="margin-top:44px;">Chưa có thông tin Hội đồng chuyên gia. Thêm ở trang quản trị (<code>/admin/doi-ngu</code>).</p>
+    <% } else { %>
+      <div class="gallery-marquee expert-marquee reveal" style="margin-top:44px;">
+        <button type="button" class="carousel-btn gallery-marquee-btn" data-marquee-prev aria-label="Chuyên gia trước">‹</button>
+        <div class="gallery-marquee-track expert-marquee-track">
+          <% [...expertMembers, ...expertMembers].forEach((member) => { %>
+            <div class="expert-marquee-item">
+              <%- include('partials/person-card', { member }) %>
+            </div>
           <% }) %>
         </div>
-      <% } %>
-    </div>
+        <button type="button" class="carousel-btn gallery-marquee-btn" data-marquee-next aria-label="Chuyên gia tiếp theo">›</button>
+      </div>
+    <% } %>
   </div>
 </section>
 

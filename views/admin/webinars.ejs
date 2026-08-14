@@ -1,0 +1,79 @@
+<%- include('partials/head', { pageTitle: 'Hội thảo STEM trực tuyến', active: 'hoi-thao' }) %>
+
+<div class="admin-page-head">
+  <h1 class="page-title">Hội thảo STEM trực tuyến</h1>
+  <span class="admin-count-badge"><%= webinars.length %> hội thảo</span>
+</div>
+<p class="section-subtitle" style="margin-bottom:30px; text-align:left;">Hiển thị ở trang "Hội thảo STEM trực tuyến" (thuộc Đào tạo và bồi dưỡng). Dán link YouTube của buổi hội thảo/webinar.</p>
+
+<% if (error) { %><p class="form-error"><%= error %></p><% } %>
+
+<form method="POST" action="/admin/hoi-thao" class="admin-form" style="max-width:520px; margin-bottom:36px;">
+  <h3>Thêm hội thảo mới</h3>
+  <label>Tiêu đề
+    <input type="text" name="title" placeholder="Vd: Hội thảo STEM: Tích hợp AI vào lớp học" required>
+  </label>
+  <label>Mô tả ngắn
+    <textarea name="description" rows="2" placeholder="Vd: Chia sẻ kinh nghiệm triển khai bài học STEM có ứng dụng AI cho học sinh phổ thông."></textarea>
+  </label>
+  <label>Nhãn phân loại (tuỳ chọn, hiện dạng thẻ nhỏ trên video)
+    <input type="text" name="tag" placeholder="Vd: STEM, ROBOTICS, AI, 2026...">
+  </label>
+  <label>Link video YouTube
+    <input type="text" name="youtubeUrl" placeholder="https://youtube.com/watch?v=..." required>
+  </label>
+  <label>Thứ tự hiển thị (số nhỏ hơn hiển thị trước, mục đầu tiên sẽ hiện to hơn)
+    <input type="number" name="order" value="0">
+  </label>
+  <div class="admin-form-actions">
+    <button type="submit" class="btn btn-primary">+ Thêm hội thảo</button>
+  </div>
+</form>
+
+<% if (webinars.length === 0) { %>
+  <p class="empty-state">Chưa có hội thảo nào. Dùng form phía trên để thêm.</p>
+<% } else { %>
+  <div class="admin-media-grid">
+    <% webinars.forEach(item => { %>
+      <div class="admin-media-card">
+        <% if (item.thumbnail) { %>
+          <img src="<%= item.thumbnail %>" alt="<%= item.title %>">
+        <% } else { %>
+          <div class="admin-media-card-external"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z"/></svg><span>YouTube</span></div>
+        <% } %>
+        <p>
+          <% if (item.tag) { %><span class="admin-badge-tag"><%= item.tag %></span><% } %>
+          <%= item.title %>
+        </p>
+        <div class="admin-media-card-actions">
+          <details class="admin-media-edit">
+            <summary class="btn btn-icon">✏️ Sửa</summary>
+            <form action="/admin/hoi-thao/<%= item._id %>/sua" method="POST" class="admin-media-edit-form">
+              <label>Tiêu đề
+                <input type="text" name="title" value="<%= item.title %>" required>
+              </label>
+              <label>Mô tả ngắn
+                <textarea name="description" rows="2"><%= item.description %></textarea>
+              </label>
+              <label>Nhãn phân loại
+                <input type="text" name="tag" value="<%= item.tag %>">
+              </label>
+              <label>Link video YouTube
+                <input type="text" name="youtubeUrl" value="<%= item.youtubeUrl %>" required>
+              </label>
+              <label>Thứ tự hiển thị
+                <input type="number" name="order" value="<%= item.order %>">
+              </label>
+              <button type="submit" class="btn btn-primary btn-block">Lưu thay đổi</button>
+            </form>
+          </details>
+          <form action="/admin/hoi-thao/<%= item._id %>/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc xoá hội thảo này?" data-confirm-name="<%= item.title %>">
+            <button type="submit" class="btn btn-icon btn-danger">🗑 Xoá</button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('partials/foot') %>

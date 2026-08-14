@@ -4,6 +4,7 @@ const router = express.Router();
 const Course = require('../models/Course');
 const Media = require('../models/Media');
 const CourseVideo = require('../models/CourseVideo');
+const Webinar = require('../models/Webinar');
 const Article = require('../models/Article');
 const TeamMember = require('../models/TeamMember');
 const Partner = require('../models/Partner');
@@ -20,7 +21,7 @@ const PageContent = require('../models/PageContent');
 const ContactRequest = require('../models/ContactRequest');
 const Enrollment = require('../models/Enrollment');
 const { courseStats } = require('../lib/courseStats');
-const { toYoutubeEmbedUrl } = require('../lib/video');
+const { toYoutubeEmbedUrl, getYoutubeThumbnail } = require('../lib/video');
 const { validateOptionalVNDate, validateOptionalVNDateRange, parseVNDate } = require('../lib/validators');
 
 router.use(requireAuth, requireStaff);
@@ -29,6 +30,7 @@ router.use('/khoa-hoc', requireModule('khoa-hoc'));
 router.use('/tien-do', requireModule('tien-do'));
 router.use('/thu-vien', requireModule('thu-vien'));
 router.use('/video-khoa-hoc', requireModule('video-khoa-hoc'));
+router.use('/hoi-thao', requireModule('hoi-thao'));
 router.use('/bai-viet', requireModule('bai-viet'));
 router.use('/doi-ngu', requireModule('doi-ngu'));
 router.use('/doi-tac', requireModule('doi-tac'));
@@ -641,6 +643,57 @@ router.post('/video-khoa-hoc/:id/xoa', async (req, res) => {
   res.redirect('/admin/video-khoa-hoc');
 });
 
+// --- Hội thảo STEM trực tuyến (thuộc Đào tạo và bồi dưỡng) ---
+
+async function renderWebinars(res, error) {
+  const webinarsRaw = await Webinar.find().sort({ order: 1, createdAt: -1 }).lean();
+  const webinars = webinarsRaw.map((w) => ({ ...w, thumbnail: getYoutubeThumbnail(w.youtubeUrl) }));
+  res.render('admin/webinars', { webinars, error, active: 'hoi-thao' });
+}
+
+router.get('/hoi-thao', async (req, res) => {
+  await renderWebinars(res, null);
+});
+
+router.post('/hoi-thao', async (req, res) => {
+  const title = (req.body.title || '').trim();
+  const youtubeUrl = (req.body.youtubeUrl || '').trim();
+  if (!title) return renderWebinars(res, 'Vui lòng nhập tiêu đề hội thảo.');
+  if (!youtubeUrl) return renderWebinars(res, 'Vui lòng dán link video YouTube.');
+
+  await Webinar.create({
+    title,
+    description: req.body.description || '',
+    tag: req.body.tag || '',
+    youtubeUrl,
+    order: Number(req.body.order) || 0,
+  });
+  res.redirect('/admin/hoi-thao');
+});
+
+router.post('/hoi-thao/:id/sua', async (req, res) => {
+  const webinar = await Webinar.findById(req.params.id).catch(() => null);
+  if (!webinar) return res.status(404).render('404');
+
+  const title = (req.body.title || '').trim();
+  const youtubeUrl = (req.body.youtubeUrl || '').trim();
+  if (!title) return renderWebinars(res, 'Vui lòng nhập tiêu đề hội thảo.');
+  if (!youtubeUrl) return renderWebinars(res, 'Vui lòng dán link video YouTube.');
+
+  webinar.title = title;
+  webinar.description = req.body.description || '';
+  webinar.tag = req.body.tag || '';
+  webinar.youtubeUrl = youtubeUrl;
+  webinar.order = Number(req.body.order) || 0;
+  await webinar.save();
+  res.redirect('/admin/hoi-thao');
+});
+
+router.post('/hoi-thao/:id/xoa', async (req, res) => {
+  await Webinar.findByIdAndDelete(req.params.id);
+  res.redirect('/admin/hoi-thao');
+});
+
 // --- Bài viết ---
 
 function sanitizeSourceUrl(raw) {
@@ -725,7 +778,7 @@ router.post('/bai-viet/:id/xoa', async (req, res) => {
   res.redirect('/admin/bai-viet');
 });
 
-// --- Đội ngũ (Ban lãnh đạo & Hội đồng chuyên gia) ---
+// --- Đội ngũ (Hội đồng chuyên gia) ---
 
 function parseAchievements(raw) {
   return (raw || '')
@@ -754,8 +807,6 @@ router.post('/doi-ngu/moi', wrapUpload(uploadImage.single('photo'), async (err, 
   await TeamMember.create({
     name: req.body.name,
     title: req.body.title,
-    group: req.body.group === 'leadership' ? 'leadership' : 'expert',
-    bio: req.body.bio || null,
     highlight: req.body.highlight || null,
     achievements: parseAchievements(req.body.achievements),
     order: Number(req.body.order) || 0,
@@ -781,8 +832,6 @@ router.post('/doi-ngu/:id/sua', wrapUpload(uploadImage.single('photo'), async (e
 
   member.name = req.body.name;
   member.title = req.body.title;
-  member.group = req.body.group === 'leadership' ? 'leadership' : 'expert';
-  member.bio = req.body.bio || null;
   member.highlight = req.body.highlight || null;
   member.achievements = parseAchievements(req.body.achievements);
   member.order = Number(req.body.order) || 0;
@@ -1101,6 +1150,13 @@ router.get('/search', async (req, res) => {
       CourseVideo.find().select('title').lean()
         .then((items) => items.filter((v) => matchesSearchQuery(v.title, q)).slice(0, 5)
           .map((v) => ({ type: 'Video bài giảng', title: v.title, url: '/admin/video-khoa-hoc' }))),
+    );
+  }
+  if (res.locals.canAccessModule('hoi-thao')) {
+    tasks.push(
+      Webinar.find().select('title').lean()
+        .then((items) => items.filter((w) => matchesSearchQuery(w.title, q)).slice(0, 5)
+          .map((w) => ({ type: 'Hội thảo trực tuyến', title: w.title, url: '/admin/hoi-thao' }))),
     );
   }
   if (res.locals.canAccessModule('doi-ngu')) {

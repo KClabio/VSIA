@@ -39,7 +39,7 @@
 <%
   const ADMIN_BREADCRUMB_GROUP = {
     dashboard: 'Tổng quan',
-    'khoa-hoc': 'Đào tạo và bồi dưỡng', 'tien-do': 'Đào tạo và bồi dưỡng', 'video-khoa-hoc': 'Đào tạo và bồi dưỡng',
+    'khoa-hoc': 'Đào tạo và bồi dưỡng', 'tien-do': 'Đào tạo và bồi dưỡng', 'video-khoa-hoc': 'Đào tạo và bồi dưỡng', 'hoi-thao': 'Đào tạo và bồi dưỡng',
     'bai-viet': 'Nội dung & Giới thiệu', 'thu-vien': 'Nội dung & Giới thiệu', 'doi-ngu': 'Nội dung & Giới thiệu', 'doi-tac': 'Nội dung & Giới thiệu',
     'lien-he': 'Khách hàng & Người dùng', 'nguoi-dung': 'Khách hàng & Người dùng',
     'cai-dat': 'Hệ thống',
@@ -63,7 +63,7 @@
         </a>
         <% } %>
 
-        <% if (canAccessModule('khoa-hoc') || canAccessModule('tien-do') || canAccessModule('video-khoa-hoc')) { %>
+        <% if (canAccessModule('khoa-hoc') || canAccessModule('tien-do') || canAccessModule('video-khoa-hoc') || canAccessModule('hoi-thao')) { %>
         <p class="admin-nav-section-title">Đào tạo và bồi dưỡng</p>
         <% if (canAccessModule('khoa-hoc')) { %>
         <a href="/admin/khoa-hoc" class="<%= active === 'khoa-hoc' ? 'active' : '' %>">
@@ -73,6 +73,11 @@
         <% if (canAccessModule('video-khoa-hoc')) { %>
         <a href="/admin/video-khoa-hoc" class="<%= active === 'video-khoa-hoc' ? 'active' : '' %>">
           <svg class="admin-nav-icon"><use href="#i-play"/></svg> Video bài giảng
+        </a>
+        <% } %>
+        <% if (canAccessModule('hoi-thao')) { %>
+        <a href="/admin/hoi-thao" class="<%= active === 'hoi-thao' ? 'active' : '' %>">
+          <svg class="admin-nav-icon"><use href="#i-chat"/></svg> Hội thảo trực tuyến
         </a>
         <% } %>
         <% if (canAccessModule('tien-do')) { %>

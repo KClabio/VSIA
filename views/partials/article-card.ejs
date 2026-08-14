@@ -6,6 +6,9 @@
     ['#135f96', '#062544'],
   ];
   const pal = palettes[article.title.length % palettes.length];
+  const createdAt = new Date(article.createdAt);
+  const dateDay = String(createdAt.getDate()).padStart(2, '0');
+  const dateMonth = 'Th' + (createdAt.getMonth() + 1);
 %>
 <div class="article-card">
   <a href="/tin-tuc/<%= article._id %>" class="article-thumb-link">
@@ -16,9 +19,9 @@
         <div class="hexlayer"><svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#hexpat)"/></svg></div>
       </div>
     <% } %>
+    <div class="article-date-badge"><span class="article-date-day"><%= dateDay %></span><span class="article-date-month"><%= dateMonth %></span></div>
   </a>
   <div class="article-body">
-    <span class="article-date"><%= new Date(article.createdAt).toLocaleDateString('vi-VN') %></span>
     <h3><a href="/tin-tuc/<%= article._id %>"><%= article.title %></a></h3>
     <p class="article-summary"><%= article.summary %></p>
     <a href="<%= article.sourceUrl || ('/tin-tuc/' + article._id) %>" class="article-more"<% if (article.sourceUrl) { %> rel="noopener noreferrer nofollow"<% } %>>Xem thêm →</a>
