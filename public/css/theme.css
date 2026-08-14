@@ -239,6 +239,7 @@
 .main-nav a.nav-cta {
   padding: 11px 22px; border-radius: 6px; background: var(--blue); color: #fff !important;
   font-weight: 700; box-shadow: 0 10px 22px -10px rgba(26, 143, 209, .7); text-shadow: none !important;
+  margin-left: 42px;
 }
 .main-nav a.nav-cta:hover { background: var(--blue-d); transform: translateY(-1px); }
 .auth-actions { gap: 8px; }
@@ -1159,7 +1160,7 @@
 .nav-compact .main-nav.open { transform: none; }
 .site-header.nav-transparent.nav-compact .main-nav a, .site-header.nav-transparent.nav-compact .nav-dropdown-trigger { color: #40506a; }
 .nav-compact .nav-toggle { display: block; }
-.nav-compact .main-nav a.nav-cta { width: 100%; text-align: center; }
+.nav-compact .main-nav a.nav-cta { width: 100%; text-align: center; margin-left: 0; }
 .nav-compact .user-menu-names { display: none; }
 .nav-compact .nav-dropdown { width: 100%; }
 .nav-compact .nav-dropdown-trigger { width: 100%; justify-content: space-between; }
