@@ -4,11 +4,11 @@
   <h1 class="page-title">Hội thảo STEM trực tuyến</h1>
   <span class="admin-count-badge"><%= webinars.length %> hội thảo</span>
 </div>
-<p class="section-subtitle" style="margin-bottom:30px; text-align:left;">Hiển thị ở trang "Hội thảo STEM trực tuyến" (thuộc Đào tạo và bồi dưỡng). Dán link YouTube của buổi hội thảo/webinar.</p>
+<p class="section-subtitle" style="margin-bottom:30px; text-align:left;">Hiển thị ở trang "Hội thảo STEM trực tuyến" (thuộc Đào tạo và bồi dưỡng). Dán link YouTube của buổi hội thảo/webinar — chỉ dán đúng đường link (vd: https://www.youtube.com/watch?v=...), không copy kèm chữ khác trên trang YouTube.</p>
 
 <% if (error) { %><p class="form-error"><%= error %></p><% } %>
 
-<form method="POST" action="/admin/hoi-thao" class="admin-form" style="max-width:520px; margin-bottom:36px;">
+<form method="POST" action="/admin/hoi-thao" enctype="multipart/form-data" class="admin-form" style="max-width:520px; margin-bottom:36px;">
   <h3>Thêm hội thảo mới</h3>
   <label>Tiêu đề
     <input type="text" name="title" placeholder="Vd: Hội thảo STEM: Tích hợp AI vào lớp học" required>
@@ -21,6 +21,9 @@
   </label>
   <label>Link video YouTube
     <input type="text" name="youtubeUrl" placeholder="https://youtube.com/watch?v=..." required>
+  </label>
+  <label>Ảnh bìa (tuỳ chọn — nếu không chọn, hệ thống tự lấy ảnh từ link YouTube)
+    <input type="file" name="thumbnailFile" accept="image/png,image/jpeg,image/webp,image/gif">
   </label>
   <label>Thứ tự hiển thị (số nhỏ hơn hiển thị trước, mục đầu tiên sẽ hiện to hơn)
     <input type="number" name="order" value="0">
@@ -48,7 +51,7 @@
         <div class="admin-media-card-actions">
           <details class="admin-media-edit">
             <summary class="btn btn-icon">✏️ Sửa</summary>
-            <form action="/admin/hoi-thao/<%= item._id %>/sua" method="POST" class="admin-media-edit-form">
+            <form action="/admin/hoi-thao/<%= item._id %>/sua" method="POST" enctype="multipart/form-data" class="admin-media-edit-form">
               <label>Tiêu đề
                 <input type="text" name="title" value="<%= item.title %>" required>
               </label>
@@ -60,6 +63,9 @@
               </label>
               <label>Link video YouTube
                 <input type="text" name="youtubeUrl" value="<%= item.youtubeUrl %>" required>
+              </label>
+              <label>Ảnh bìa <% if (item.hasCustomThumbnail) { %>(đã tải lên, chọn file mới để thay)<% } else { %>(chưa tải lên, đang tự lấy từ YouTube)<% } %>
+                <input type="file" name="thumbnailFile" accept="image/png,image/jpeg,image/webp,image/gif">
               </label>
               <label>Thứ tự hiển thị
                 <input type="number" name="order" value="<%= item.order %>">

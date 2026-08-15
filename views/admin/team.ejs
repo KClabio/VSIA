@@ -12,6 +12,8 @@
 </div>
 <p class="section-subtitle" style="margin-bottom:30px; text-align:left;">Danh sách hiển thị ở mục "Hội đồng chuyên gia" trên trang chủ, sắp xếp theo thứ tự tăng dần.</p>
 
+<% if (flash) { %><p class="form-success"><%= flash %></p><% } %>
+
 <% if (teamMembers.length === 0) { %>
   <p class="empty-state">Không tìm thấy thành viên nào.</p>
 <% } else { %>

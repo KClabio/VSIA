@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const teamMemberSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
-  title: { type: String, required: true, trim: true },
+  title: { type: String, default: '', trim: true },
   highlight: { type: String, default: null, trim: true },
   achievements: [{ type: String, trim: true }],
   photo: { type: String, default: null },

@@ -17,12 +17,12 @@
   <h4><%= member.name %></h4>
   <% if (member.achievements && member.achievements.length > 0) { %>
     <ul class="aff-list">
-      <li><span class="check-icon">✓</span><span><%= member.title %></span></li>
+      <% if (member.title) { %><li><span class="check-icon">✓</span><span><%= member.title %></span></li><% } %>
       <% member.achievements.forEach(item => { %>
         <li><span class="check-icon">✓</span><span><%= item %></span></li>
       <% }) %>
     </ul>
-  <% } else { %>
+  <% } else if (member.title) { %>
     <div class="aff"><%= member.title %></div>
   <% } %>
 </div>

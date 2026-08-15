@@ -60,7 +60,7 @@ router.get('/khoa-hoc/:id', async (req, res) => {
 
 router.get('/hoi-thao-truc-tuyen', async (req, res) => {
   const webinarsRaw = await Webinar.find().sort({ order: 1, createdAt: -1 }).lean();
-  const webinars = webinarsRaw.map((w) => ({ ...w, thumbnail: getYoutubeThumbnail(w.youtubeUrl) }));
+  const webinars = webinarsRaw.map((w) => ({ ...w, thumbnail: w.thumbnail || getYoutubeThumbnail(w.youtubeUrl) }));
   res.render('webinars', { webinars });
 });
 

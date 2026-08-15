@@ -26,6 +26,13 @@ const { validateOptionalVNDate, validateOptionalVNDateRange, parseVNDate } = req
 
 router.use(requireAuth, requireStaff);
 
+// Trang quản trị luôn phải hiện dữ liệu mới nhất — chặn trình duyệt/CDN cache lại bản cũ
+// (từng gây hiện tượng thêm/sửa xong nhưng danh sách vẫn hiện dữ liệu cũ cho tới khi bấm F5).
+router.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  next();
+});
+
 router.use('/khoa-hoc', requireModule('khoa-hoc'));
 router.use('/tien-do', requireModule('tien-do'));
 router.use('/thu-vien', requireModule('thu-vien'));
@@ -647,7 +654,7 @@ router.post('/video-khoa-hoc/:id/xoa', async (req, res) => {
 
 async function renderWebinars(res, error) {
   const webinarsRaw = await Webinar.find().sort({ order: 1, createdAt: -1 }).lean();
-  const webinars = webinarsRaw.map((w) => ({ ...w, thumbnail: getYoutubeThumbnail(w.youtubeUrl) }));
+  const webinars = webinarsRaw.map((w) => ({ ...w, hasCustomThumbnail: !!w.thumbnail, thumbnail: w.thumbnail || getYoutubeThumbnail(w.youtubeUrl) }));
   res.render('admin/webinars', { webinars, error, active: 'hoi-thao' });
 }
 
@@ -655,7 +662,9 @@ router.get('/hoi-thao', async (req, res) => {
   await renderWebinars(res, null);
 });
 
-router.post('/hoi-thao', async (req, res) => {
+router.post('/hoi-thao', wrapUpload(uploadImage.single('thumbnailFile'), async (err, req, res) => {
+  if (err) return renderWebinars(res, friendlyUploadError(err));
+
   const title = (req.body.title || '').trim();
   const youtubeUrl = (req.body.youtubeUrl || '').trim();
   if (!title) return renderWebinars(res, 'Vui lòng nhập tiêu đề hội thảo.');
@@ -666,14 +675,17 @@ router.post('/hoi-thao', async (req, res) => {
     description: req.body.description || '',
     tag: req.body.tag || '',
     youtubeUrl,
+    thumbnail: req.file ? fileUrl(req.file, 'images') : null,
     order: Number(req.body.order) || 0,
   });
   res.redirect('/admin/hoi-thao');
-});
+}));
 
-router.post('/hoi-thao/:id/sua', async (req, res) => {
+router.post('/hoi-thao/:id/sua', wrapUpload(uploadImage.single('thumbnailFile'), async (err, req, res) => {
   const webinar = await Webinar.findById(req.params.id).catch(() => null);
   if (!webinar) return res.status(404).render('404');
+
+  if (err) return renderWebinars(res, friendlyUploadError(err));
 
   const title = (req.body.title || '').trim();
   const youtubeUrl = (req.body.youtubeUrl || '').trim();
@@ -685,12 +697,17 @@ router.post('/hoi-thao/:id/sua', async (req, res) => {
   webinar.tag = req.body.tag || '';
   webinar.youtubeUrl = youtubeUrl;
   webinar.order = Number(req.body.order) || 0;
+  if (req.file) {
+    unlinkUploaded(webinar.thumbnail);
+    webinar.thumbnail = fileUrl(req.file, 'images');
+  }
   await webinar.save();
   res.redirect('/admin/hoi-thao');
-});
+}));
 
 router.post('/hoi-thao/:id/xoa', async (req, res) => {
-  await Webinar.findByIdAndDelete(req.params.id);
+  const webinar = await Webinar.findByIdAndDelete(req.params.id);
+  if (webinar) unlinkUploaded(webinar.thumbnail);
   res.redirect('/admin/hoi-thao');
 });
 
@@ -791,7 +808,8 @@ router.get('/doi-ngu', async (req, res) => {
   const q = (req.query.q || '').trim();
   const allMembers = await TeamMember.find().sort({ order: 1, createdAt: 1 }).lean();
   const teamMembers = q ? allMembers.filter((m) => matchesSearchQuery(m.name, q)) : allMembers;
-  res.render('admin/team', { teamMembers, active: 'doi-ngu', q });
+  const flash = req.query.added ? 'Đã thêm thành viên thành công.' : req.query.updated ? 'Đã lưu thay đổi thành công.' : null;
+  res.render('admin/team', { teamMembers, active: 'doi-ngu', q, flash });
 });
 
 router.get('/doi-ngu/moi', (req, res) => {
@@ -803,17 +821,22 @@ router.post('/doi-ngu/moi', wrapUpload(uploadImage.single('photo'), async (err, 
     return res.render('admin/team-form', { member: null, error: friendlyUploadError(err), active: 'doi-ngu' });
   }
 
+  const name = (req.body.name || '').trim();
+  if (!name) {
+    return res.render('admin/team-form', { member: null, error: 'Vui lòng nhập họ tên.', active: 'doi-ngu' });
+  }
+
   const photo = req.file ? fileUrl(req.file, 'images') : null;
   await TeamMember.create({
-    name: req.body.name,
-    title: req.body.title,
+    name,
+    title: (req.body.title || '').trim(),
     highlight: req.body.highlight || null,
     achievements: parseAchievements(req.body.achievements),
     order: Number(req.body.order) || 0,
     photo,
   });
   await broadcastStats();
-  res.redirect('/admin/doi-ngu');
+  res.redirect('/admin/doi-ngu?added=1');
 }));
 
 router.get('/doi-ngu/:id/sua', async (req, res) => {
@@ -830,8 +853,13 @@ router.post('/doi-ngu/:id/sua', wrapUpload(uploadImage.single('photo'), async (e
     return res.render('admin/team-form', { member: member.toObject(), error: friendlyUploadError(err), active: 'doi-ngu' });
   }
 
-  member.name = req.body.name;
-  member.title = req.body.title;
+  const name = (req.body.name || '').trim();
+  if (!name) {
+    return res.render('admin/team-form', { member: member.toObject(), error: 'Vui lòng nhập họ tên.', active: 'doi-ngu' });
+  }
+
+  member.name = name;
+  member.title = (req.body.title || '').trim();
   member.highlight = req.body.highlight || null;
   member.achievements = parseAchievements(req.body.achievements);
   member.order = Number(req.body.order) || 0;
@@ -843,7 +871,7 @@ router.post('/doi-ngu/:id/sua', wrapUpload(uploadImage.single('photo'), async (e
 
   await member.save();
   await broadcastStats();
-  res.redirect('/admin/doi-ngu');
+  res.redirect('/admin/doi-ngu?updated=1');
 }));
 
 router.post('/doi-ngu/:id/xoa', async (req, res) => {

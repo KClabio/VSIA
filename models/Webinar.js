@@ -5,6 +5,7 @@ const webinarSchema = new mongoose.Schema({
   description: { type: String, default: '' },
   tag: { type: String, default: '', trim: true },
   youtubeUrl: { type: String, required: true, trim: true },
+  thumbnail: { type: String, default: null },
   order: { type: Number, default: 0 },
 }, { timestamps: true });
 
