@@ -29,7 +29,14 @@ document.getElementById('webinarShowMoreBtn')?.addEventListener('click', functio
     header.classList.remove('nav-compact'); // đo ở trạng thái đầy đủ
 
     const overflowing = inner.scrollWidth > inner.clientWidth + 1;
+
+    // Apply the compact state without animating: only a user click on #navToggle
+    // should trigger the sliding transition, never the automatic fit check.
+    header.classList.add('nav-no-anim');
     header.classList.toggle('nav-compact', overflowing);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => header.classList.remove('nav-no-anim'));
+    });
 
     if (wasCompact && !overflowing) {
       document.getElementById('mainNav')?.classList.remove('open');

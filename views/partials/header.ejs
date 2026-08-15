@@ -61,4 +61,17 @@
       </div>
     </div>
   </header>
+  <script>
+  (function () {
+    var header = document.getElementById('siteHeader');
+    var inner = header && header.querySelector('.header-inner');
+    if (!header || !inner) return;
+    var overflowing = inner.scrollWidth > inner.clientWidth + 1;
+    header.classList.add('nav-no-anim');
+    header.classList.toggle('nav-compact', overflowing);
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { header.classList.remove('nav-no-anim'); });
+    });
+  })();
+  </script>
   <main>

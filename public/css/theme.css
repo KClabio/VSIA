@@ -1157,7 +1157,11 @@
   align-items: flex-start;
   display: flex;
 }
+/* Suppress the transform transition only for the very first (non-click) application
+   of .nav-compact, so it applies instantly instead of animating in on load/resize/fonts. */
+.nav-compact.nav-no-anim .main-nav { transition: none; }
 .nav-compact .main-nav.open { transform: none; }
+.nav-compact .header-inner { transform: none; }
 .site-header.nav-transparent.nav-compact .main-nav a, .site-header.nav-transparent.nav-compact .nav-dropdown-trigger { color: #40506a; }
 .nav-compact .nav-toggle { display: block; }
 .nav-compact .main-nav a.nav-cta { width: 100%; text-align: center; margin-left: 0; }
