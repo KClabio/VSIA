@@ -1101,6 +1101,7 @@ const BIZ_IMAGE_FIELDS = {
   'eco-equipment': 'ecoEquipmentImage',
   'eco-competition': 'ecoCompetitionImage',
   'eco-training': 'ecoTrainingImage',
+  'hoi-thao': 'hoiThaoHeroImage',
 };
 
 router.post('/cai-dat/anh-linh-vuc/:key', (req, res, next) => {

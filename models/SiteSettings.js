@@ -16,6 +16,7 @@ const siteSettingsSchema = new mongoose.Schema({
   ecoEquipmentImage: { type: String, default: null },
   ecoCompetitionImage: { type: String, default: null },
   ecoTrainingImage: { type: String, default: null },
+  hoiThaoHeroImage: { type: String, default: null },
 }, { timestamps: true });
 
 module.exports = mongoose.model('SiteSettings', siteSettingsSchema);

@@ -192,6 +192,17 @@
 
   <div id="hero-lien-he"><%- include('partials/settings-hero-form', { page: pageByKey['lien-he'] }) %></div>
 
+  <h2 class="admin-settings-group-title">Hội thảo STEM trực tuyến</h2>
+
+  <details class="settings-page-block" id="hoi-thao-image">
+    <summary>🌄 Ảnh banner đầu trang</summary>
+    <div class="settings-page-form">
+      <%- include('partials/settings-image-block', { id: 'img-hoi-thao', label: 'Ảnh banner', value: settings.hoiThaoHeroImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/hoi-thao', deleteUrl: '/admin/cai-dat/anh-linh-vuc/hoi-thao/xoa' }) %>
+    </div>
+  </details>
+
+  <div id="hero-hoi-thao"><%- include('partials/settings-hero-form', { page: pageByKey['hoi-thao'] }) %></div>
+
 </div>
 
 <script>

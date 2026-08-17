@@ -1,15 +1,17 @@
 <%- include('partials/header', { title: 'Hội thảo STEM trực tuyến - VSIA' }) %>
 
 <section class="page-hero">
-  <div class="page-hero-bg"></div>
+  <div class="page-hero-bg">
+    <% if (hoiThaoHeroImage) { %><img src="<%= hoiThaoHeroImage %>" alt=""><% } %>
+  </div>
   <div class="page-hero-overlay"></div>
   <div class="page-hero-inner">
-    <span class="hero-pill">Đào tạo và bồi dưỡng</span>
-    <h1>Hội thảo STEM trực tuyến</h1>
-    <p class="lead">Chuỗi hội thảo, webinar chia sẻ kinh nghiệm và phương pháp giáo dục STEM từ VSIA cùng các chuyên gia — xem lại miễn phí qua video.</p>
+    <span class="hero-pill"><%= hero.heroBadge %></span>
+    <h1><%= hero.heroTitleLine1 %><% if (hero.heroTitleLine2) { %> <%= hero.heroTitleLine2 %><% } %></h1>
+    <p class="lead"><%= hero.heroSubtitle %></p>
     <div class="page-hero-ctas">
-      <a class="btn btn-primary" href="#danh-sach">Xem danh sách hội thảo</a>
-      <a class="btn btn-ghost" href="#" data-open-contact>Đăng ký nhận thông báo</a>
+      <a class="btn btn-primary" href="#" data-open-contact><%= hero.heroCtaText %></a>
+      <a class="btn btn-ghost" href="#danh-sach">Xem danh sách hội thảo</a>
     </div>
     <div class="page-hero-badges">
       <span class="badge-pill">Miễn phí xem lại</span>
