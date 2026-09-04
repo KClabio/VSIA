@@ -1,12 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const User = require('../models/User');
+const PendingRegistration = require('../models/PendingRegistration');
 const { requireAuth } = require('../middleware/auth');
 const { uploadImage, wrapUpload, fileUrl } = require('../middleware/upload');
 const { unlinkUploaded } = require('../lib/files');
 const { computeStats, broadcastStats } = require('../lib/stats');
 const { checkAndConsume } = require('../lib/rateLimit');
+const { sendMail } = require('../lib/mailer');
+
+function generateCode() {
+  return String(crypto.randomInt(100000, 1000000));
+}
 
 router.get('/dang-ky', (req, res) => {
   if (req.user) return res.redirect('/');
@@ -15,12 +22,10 @@ router.get('/dang-ky', (req, res) => {
 
 router.post('/dang-ky', async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
-
   const registerLimit = checkAndConsume(`register:ip:${req.ip}`, { minuteLimit: 3, dayLimit: 10 });
   if (!registerLimit.allowed) {
     return res.render('register', { error: `Bạn đã đăng ký quá nhiều lần, vui lòng thử lại sau ${registerLimit.retryAfterSeconds} giây.`, form: { name, email } });
   }
-
   if (!name || !email || !password) {
     return res.render('register', { error: 'Vui lòng điền đầy đủ thông tin.', form: { name, email } });
   }
@@ -31,25 +36,99 @@ router.post('/dang-ky', async (req, res) => {
     return res.render('register', { error: 'Mật khẩu phải có ít nhất 6 ký tự.', form: { name, email } });
   }
 
-  const existing = await User.findOne({ email: email.toLowerCase().trim() });
+  const normalizedEmail = email.toLowerCase().trim();
+  const existing = await User.findOne({ email: normalizedEmail });
   if (existing) {
     return res.render('register', { error: 'Email này đã được đăng ký.', form: { name, email } });
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
+  const code = generateCode();
+
+  await PendingRegistration.findOneAndUpdate(
+    { email: normalizedEmail },
+    { name, email: normalizedEmail, passwordHash, code, attempts: 0, createdAt: new Date() },
+    { upsert: true, setDefaultsOnInsert: true },
+  );
+
+  await sendMail({
+    to: normalizedEmail,
+    subject: 'Mã xác nhận đăng ký VSIA',
+    html: `<p>Xin chào ${name},</p><p>Mã xác nhận đăng ký tài khoản VSIA của bạn là:</p><h2>${code}</h2><p>Mã có hiệu lực trong 15 phút.</p>`,
+  });
+
+  req.session.pendingEmail = normalizedEmail;
+  res.redirect('/dang-ky/xac-thuc');
+});
+
+router.get('/dang-ky/xac-thuc', (req, res) => {
+  if (!req.session.pendingEmail) return res.redirect('/dang-ky');
+  res.render('verify-email', { error: null, email: req.session.pendingEmail });
+});
+
+router.post('/dang-ky/xac-thuc', async (req, res) => {
+  const email = req.session.pendingEmail;
+  if (!email) return res.redirect('/dang-ky');
+
+  const pending = await PendingRegistration.findOne({ email });
+  if (!pending) {
+    return res.render('verify-email', { error: 'Mã đã hết hạn, vui lòng đăng ký lại.', email });
+  }
+  if (pending.attempts >= 5) {
+    await PendingRegistration.deleteOne({ _id: pending._id });
+    req.session.pendingEmail = null;
+    return res.redirect('/dang-ky');
+  }
+  if (pending.code !== (req.body.code || '').trim()) {
+    pending.attempts += 1;
+    await pending.save();
+    return res.render('verify-email', { error: 'Mã xác nhận không đúng.', email });
+  }
+
   let user;
   try {
-    user = await User.create({ name, email, passwordHash });
+    user = await User.create({ name: pending.name, email: pending.email, passwordHash: pending.passwordHash });
   } catch (err) {
     if (err.code === 11000) {
-      return res.render('register', { error: 'Email này đã được đăng ký.', form: { name, email } });
+      await PendingRegistration.deleteOne({ _id: pending._id });
+      req.session.pendingEmail = null;
+      return res.render('register', { error: 'Email này đã được đăng ký.', form: {} });
     }
     throw err;
   }
+
+  await PendingRegistration.deleteOne({ _id: pending._id });
   await broadcastStats();
 
+  req.session.pendingEmail = null;
   req.session.userId = user._id;
   res.redirect('/');
+});
+
+router.post('/dang-ky/gui-lai-ma', async (req, res) => {
+  const email = req.session.pendingEmail;
+  if (!email) return res.redirect('/dang-ky');
+
+  const resendLimit = checkAndConsume(`resend-code:${email}`, { minuteLimit: 1, dayLimit: 5 });
+  if (!resendLimit.allowed) {
+    return res.render('verify-email', { error: `Vui lòng đợi ${resendLimit.retryAfterSeconds} giây trước khi gửi lại mã.`, email });
+  }
+
+  const pending = await PendingRegistration.findOne({ email });
+  if (!pending) return res.redirect('/dang-ky');
+
+  pending.code = generateCode();
+  pending.attempts = 0;
+  pending.createdAt = new Date();
+  await pending.save();
+
+  await sendMail({
+    to: email,
+    subject: 'Mã xác nhận đăng ký VSIA',
+    html: `<p>Mã xác nhận mới của bạn là:</p><h2>${pending.code}</h2><p>Mã có hiệu lực trong 15 phút.</p>`,
+  });
+
+  res.render('verify-email', { error: null, email, resent: true });
 });
 
 router.get('/dang-nhap', (req, res) => {
