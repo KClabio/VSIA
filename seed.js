@@ -37,7 +37,7 @@ const sampleCourses = [
     title: 'Hướng dẫn kỹ thuật sử dụng thiết bị phòng STEM',
     description: 'Module hướng dẫn giáo viên và học sinh THCS sử dụng an toàn, hiệu quả các thiết bị trong phòng học STEM.',
     provider: 'VSIA',
-    category: 'Kỹ thuật',
+    category: 'Khoa học - Kỹ thuật',
     isFree: true,
     price: 0,
     rating: 0,
