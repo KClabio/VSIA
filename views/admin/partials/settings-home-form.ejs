@@ -1,0 +1,161 @@
+<details class="settings-page-block" open>
+  <summary>Nội dung các khối trang chủ</summary>
+  <div class="settings-page-form">
+    <form method="POST" action="/admin/cai-dat/trang/<%= page.key %>" class="settings-sub-form">
+      <h3 class="settings-form-heading">Hero</h3>
+      <div class="admin-form-row">
+        <label>Nút liên hệ
+          <input type="text" name="homeHeroContactText" value="<%= page.homeHeroContactText %>">
+        </label>
+        <label>Nút khoá học
+          <input type="text" name="homeHeroCoursesText" value="<%= page.homeHeroCoursesText %>">
+        </label>
+      </div>
+
+      <h3 class="settings-form-heading">Về VSIA</h3>
+      <div class="admin-form-row">
+        <label>Nhãn phần giới thiệu
+          <input type="text" name="homeAboutEyebrow" value="<%= page.homeAboutEyebrow %>">
+        </label>
+        <label>Tiêu đề phần giới thiệu
+          <input type="text" name="homeAboutTitle" value="<%= page.homeAboutTitle %>">
+        </label>
+      </div>
+      <div class="admin-form-row">
+        <label>Tiêu đề sứ mệnh
+          <input type="text" name="homeMissionTitle" value="<%= page.homeMissionTitle %>">
+        </label>
+        <label>Tiêu đề tầm nhìn
+          <input type="text" name="homeVisionTitle" value="<%= page.homeVisionTitle %>">
+        </label>
+      </div>
+      <label>Nội dung sứ mệnh
+        <textarea name="homeMissionText" rows="3"><%= page.homeMissionText %></textarea>
+      </label>
+      <label>Nội dung tầm nhìn
+        <textarea name="homeVisionText" rows="3"><%= page.homeVisionText %></textarea>
+      </label>
+      <label>Tiêu đề giá trị cốt lõi
+        <input type="text" name="homeCoreValuesTitle" value="<%= page.homeCoreValuesTitle %>">
+      </label>
+      <div class="admin-form-row">
+        <label>Giá trị 1
+          <input type="text" name="homeCoreValue1" value="<%= page.homeCoreValue1 %>">
+        </label>
+        <label>Giá trị 2
+          <input type="text" name="homeCoreValue2" value="<%= page.homeCoreValue2 %>">
+        </label>
+      </div>
+      <div class="admin-form-row">
+        <label>Giá trị 3
+          <input type="text" name="homeCoreValue3" value="<%= page.homeCoreValue3 %>">
+        </label>
+        <label>Giá trị 4
+          <input type="text" name="homeCoreValue4" value="<%= page.homeCoreValue4 %>">
+        </label>
+      </div>
+
+      <h3 class="settings-form-heading">Năng lực nổi bật</h3>
+      <label>Tiêu đề phần năng lực
+        <input type="text" name="homeWhyTitle" value="<%= page.homeWhyTitle %>">
+      </label>
+      <% for (let i = 1; i <= 3; i++) { %>
+        <div class="admin-form-row">
+          <label>Tiêu đề năng lực <%= i %>
+            <input type="text" name="homeWhyItem<%= i %>Title" value="<%= page['homeWhyItem' + i + 'Title'] %>">
+          </label>
+          <label>Mô tả năng lực <%= i %>
+            <textarea name="homeWhyItem<%= i %>Text" rows="2"><%= page['homeWhyItem' + i + 'Text'] %></textarea>
+          </label>
+        </div>
+      <% } %>
+
+      <h3 class="settings-form-heading">Các khối nội dung</h3>
+      <label>Nhãn lĩnh vực hoạt động
+        <input type="text" name="homeBusinessEyebrow" value="<%= page.homeBusinessEyebrow %>">
+      </label>
+      <div class="admin-form-row">
+        <label>Lĩnh vực 1
+          <input type="text" name="homeBusiness1Title" value="<%= page.homeBusiness1Title %>">
+        </label>
+        <label>Lĩnh vực 2
+          <input type="text" name="homeBusiness2Title" value="<%= page.homeBusiness2Title %>">
+        </label>
+      </div>
+      <div class="admin-form-row">
+        <label>Lĩnh vực 3
+          <input type="text" name="homeBusiness3Title" value="<%= page.homeBusiness3Title %>">
+        </label>
+        <label>Nút tìm hiểu thêm
+          <input type="text" name="homeLearnMoreText" value="<%= page.homeLearnMoreText %>">
+        </label>
+      </div>
+      <div class="admin-form-row">
+        <label>Nhãn chương trình đào tạo
+          <input type="text" name="homeTrainingEyebrow" value="<%= page.homeTrainingEyebrow %>">
+        </label>
+        <label>Tiêu đề chương trình đào tạo
+          <input type="text" name="homeTrainingTitle" value="<%= page.homeTrainingTitle %>">
+        </label>
+      </div>
+      <label>Mô tả chương trình đào tạo
+        <textarea name="homeTrainingLead" rows="2"><%= page.homeTrainingLead %></textarea>
+      </label>
+      <div class="admin-form-row">
+        <label>Nhãn Hình ảnh
+          <input type="text" name="homeGalleryEyebrow" value="<%= page.homeGalleryEyebrow %>">
+        </label>
+        <label>Tiêu đề Hình ảnh
+          <input type="text" name="homeGalleryTitle" value="<%= page.homeGalleryTitle %>">
+        </label>
+      </div>
+      <div class="admin-form-row">
+        <label>Nhãn Tin tức
+          <input type="text" name="homeNewsEyebrow" value="<%= page.homeNewsEyebrow %>">
+        </label>
+        <label>Tiêu đề Tin tức
+          <input type="text" name="homeNewsTitle" value="<%= page.homeNewsTitle %>">
+        </label>
+      </div>
+      <div class="admin-form-row">
+        <label>Nhãn Đội ngũ
+          <input type="text" name="homeTeamEyebrow" value="<%= page.homeTeamEyebrow %>">
+        </label>
+        <label>Tiêu đề Đội ngũ
+          <input type="text" name="homeTeamTitle" value="<%= page.homeTeamTitle %>">
+        </label>
+      </div>
+      <label>Mô tả Đội ngũ
+        <textarea name="homeTeamLead" rows="2"><%= page.homeTeamLead %></textarea>
+      </label>
+      <div class="admin-form-row">
+        <label>Nhãn Đối tác
+          <input type="text" name="homePartnersEyebrow" value="<%= page.homePartnersEyebrow %>">
+        </label>
+        <label>Tiêu đề Đối tác
+          <input type="text" name="homePartnersTitle" value="<%= page.homePartnersTitle %>">
+        </label>
+      </div>
+
+      <h3 class="settings-form-heading">CTA cuối trang</h3>
+      <label>Tiêu đề CTA
+        <input type="text" name="homeCtaTitle" value="<%= page.homeCtaTitle %>">
+      </label>
+      <label>Mô tả CTA
+        <textarea name="homeCtaText" rows="2"><%= page.homeCtaText %></textarea>
+      </label>
+      <div class="admin-form-row">
+        <label>Nút liên hệ
+          <input type="text" name="homeContactText" value="<%= page.homeContactText %>">
+        </label>
+        <label>Nút hoạt động
+          <input type="text" name="homeActivityText" value="<%= page.homeActivityText %>">
+        </label>
+      </div>
+
+      <div class="admin-form-actions">
+        <button type="submit" class="btn btn-primary">Lưu nội dung trang chủ</button>
+      </div>
+    </form>
+  </div>
+</details>

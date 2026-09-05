@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 
 const Course = require('../models/Course');
 const Media = require('../models/Media');
@@ -949,7 +950,30 @@ router.post('/doi-tac/:id/xoa', async (req, res) => {
 
 router.get('/nguoi-dung', async (req, res) => {
   const users = await User.find().select('-passwordHash').sort({ createdAt: -1 }).lean();
-  res.render('admin/users', { users, error: null });
+  res.render('admin/users', { users, error: null, success: req.query.created === '1', form: {} });
+});
+
+router.post('/nguoi-dung', async (req, res) => {
+  const name = (req.body.name || '').trim();
+  const email = (req.body.email || '').toLowerCase().trim();
+  const password = req.body.password || '';
+  const confirmPassword = req.body.confirmPassword || '';
+  const role = ROLES.includes(req.body.role) ? req.body.role : 'hocvien';
+  const form = { name, email, role };
+
+  const renderUserError = async (error) => {
+    const users = await User.find().select('-passwordHash').sort({ createdAt: -1 }).lean();
+    res.render('admin/users', { users, error, success: false, form });
+  };
+
+  if (!name || !email || !password) return renderUserError('Vui lòng điền đầy đủ họ tên, email và mật khẩu.');
+  if (password.length < 6) return renderUserError('Mật khẩu phải có ít nhất 6 ký tự.');
+  if (password !== confirmPassword) return renderUserError('Mật khẩu xác nhận không khớp.');
+  if (await User.exists({ email })) return renderUserError('Email này đã được sử dụng.');
+
+  await User.create({ name, email, role, passwordHash: await bcrypt.hash(password, 10) });
+  await broadcastStats();
+  res.redirect('/admin/nguoi-dung?created=1');
 });
 
 router.post('/nguoi-dung/:id/vai-tro', async (req, res) => {
@@ -1137,16 +1161,11 @@ router.post('/cai-dat/anh-linh-vuc/:key/xoa', async (req, res) => {
 router.post('/cai-dat/trang/:pageKey', async (req, res) => {
   if (!PAGE_DEFAULTS[req.params.pageKey]) return res.status(404).render('404');
 
+  const editableFields = Object.keys(PAGE_DEFAULTS[req.params.pageKey]).filter((field) => field !== 'label');
+  const updates = Object.fromEntries(editableFields.map((field) => [field, req.body[field] || '']));
   await PageContent.findOneAndUpdate(
     { pageKey: req.params.pageKey },
-    {
-      heroBadge: req.body.heroBadge || '',
-      heroTitleLine1: req.body.heroTitleLine1 || '',
-      heroTitleLine2: req.body.heroTitleLine2 || '',
-      heroSubtitle: req.body.heroSubtitle || '',
-      heroCtaText: req.body.heroCtaText || '',
-      heroCtaLink: req.body.heroCtaLink || '',
-    },
+    updates,
     { upsert: true },
   );
   res.redirect('/admin/cai-dat#hero-' + req.params.pageKey);

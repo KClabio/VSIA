@@ -3,6 +3,41 @@
 <h1 class="page-title">Quản lý người dùng</h1>
 
 <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+<% if (success) { %><p class="form-success">Đã tạo tài khoản người dùng.</p><% } %>
+
+<details class="settings-page-block" open style="margin-bottom:24px;">
+  <summary>Thêm tài khoản người dùng</summary>
+  <div class="settings-page-form">
+    <form method="POST" action="/admin/nguoi-dung" class="admin-form">
+      <div class="admin-form-row">
+        <label>Họ tên
+          <input type="text" name="name" value="<%= form.name || '' %>" required>
+        </label>
+        <label>Email
+          <input type="email" name="email" value="<%= form.email || '' %>" required>
+        </label>
+      </div>
+      <div class="admin-form-row">
+        <label>Mật khẩu
+          <input type="password" name="password" minlength="6" required>
+        </label>
+        <label>Xác nhận mật khẩu
+          <input type="password" name="confirmPassword" minlength="6" required>
+        </label>
+      </div>
+      <label>Vai trò
+        <select name="role">
+          <% ROLES.forEach(r => { %>
+            <option value="<%= r %>" <%= (form.role || 'hocvien') === r ? 'selected' : '' %>><%= ROLE_LABELS[r] %></option>
+          <% }) %>
+        </select>
+      </label>
+      <div class="admin-form-actions">
+        <button type="submit" class="btn btn-primary">Tạo tài khoản</button>
+      </div>
+    </form>
+  </div>
+</details>
 
 <div class="admin-table-wrap">
   <table class="admin-table">
