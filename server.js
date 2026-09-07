@@ -38,6 +38,14 @@ if (process.env.TRUST_PROXY) app.set('trust proxy', process.env.TRUST_PROXY);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use((req, res, next) => {
+  if (req.method === 'GET' && !req.path.startsWith('/css/') && !req.path.startsWith('/js/') && !req.path.startsWith('/images/')) {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+  }
+  next();
+});
 
 // Health-check nhẹ, không qua session/DB query nặng — để nền tảng hosting (Render/Railway...)
 // tự kiểm tra server còn sống và đã kết nối MongoDB hay chưa.

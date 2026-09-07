@@ -14,7 +14,7 @@ const { getYoutubeThumbnail } = require('../lib/video');
 router.get('/', async (req, res) => {
   const hero = await getPageContent('home');
   const featuredCourses = await Course.find().sort({ createdAt: -1 }).limit(3).lean();
-  const galleryItems = await Media.find().sort({ createdAt: -1 }).limit(4).lean();
+  const galleryItems = await Media.find().sort({ createdAt: -1 }).limit(6).lean();
   const latestArticles = await Article.find({ published: true }).sort({ createdAt: -1 }).limit(8).lean();
   const expertMembers = await TeamMember.find().sort({ order: 1, createdAt: 1 }).lean();
   const partners = await Partner.find().sort({ order: 1, createdAt: 1 }).lean();
@@ -66,8 +66,11 @@ router.get('/hoi-thao-truc-tuyen', async (req, res) => {
 });
 
 router.get('/tin-tuc', async (req, res) => {
-  const articles = await Article.find({ published: true }).sort({ createdAt: -1 }).lean();
-  res.render('news', { articles });
+  const allArticles = await Article.find({ published: true }).sort({ createdAt: -1 }).lean();
+  const isInternational = (article) => /quốc tế|international|global|world/i.test(article.category || '');
+  const internationalArticles = allArticles.filter(isInternational);
+  const articles = allArticles.filter((article) => !isInternational(article));
+  res.render('news', { articles, internationalArticles });
 });
 
 router.get('/tin-tuc/:id', async (req, res) => {

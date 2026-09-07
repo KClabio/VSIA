@@ -562,6 +562,7 @@
 
 .linhvuc-body { padding: 46px 26px 26px; flex: 1; display: flex; flex-direction: column; }
 .linhvuc-body h3 { font-size: 1.14rem; color: var(--navy); font-weight: 700; margin: 0 0 16px; line-height: 1.35; }
+.linhvuc-description { margin: 0 0 20px; color: var(--muted); font-size: .88rem; line-height: 1.6; }
 .linhvuc-more {
   display: inline-flex; align-items: center; gap: 6px; margin-top: auto;
   font-weight: 600; font-size: .88rem; color: var(--lv-a); transition: gap .2s ease;
@@ -806,6 +807,9 @@
 /* ============ Trang Tin tức (featured + grid + sidebar) ============ */
 .news-layout { display: grid; grid-template-columns: 1fr 400px; gap: 40px; align-items: start; margin-top: 36px; }
 .news-main { min-width: 0; }
+.news-section-title { margin: 42px 0 18px; color: var(--navy); font-size: 18px; letter-spacing: .08em; }
+.news-international-section { margin-top: 52px; }
+.news-international-section .news-section-title { margin-top: 0; }
 
 .news-featured {
   display: block; border-radius: 20px; overflow: hidden; background: #fff; border: 1px solid var(--line);
@@ -947,8 +951,8 @@
 /* ============ CTA BANNER ============ */
 .cta { background: var(--navy); color: #fff; text-align: center; position: relative; overflow: hidden; }
 .cta .hexlayer { color: rgba(255, 255, 255, .06); }
-.cta-inner { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
-.cta h2 { color: #fff; font-size: clamp(1.9rem, 4vw, 2.9rem); font-weight: 700; }
+.cta-inner { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; }
+.cta h2 { color: #fff; font-size: clamp(1.9rem, 3.6vw, 2.8rem); line-height: 1.1; font-weight: 700; text-wrap: balance; }
 .cta p { color: #cfe6f7; font-size: 1.1rem; margin: 18px auto 32px; max-width: 52ch; font-weight: 300; }
 .cta .btn-primary { background: #fff; color: var(--navy); box-shadow: none; }
 .cta .btn-primary:hover { background: #eef3fa; }
