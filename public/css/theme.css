@@ -728,6 +728,7 @@
 .path-card {
   background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 16px 20px;
   box-shadow: var(--shadow-sm); transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  color: inherit; text-decoration: none;
 }
 .path-node:hover .path-card { transform: translateY(-3px); box-shadow: 0 14px 28px -18px rgba(11, 31, 51, .35); border-color: #d3ddec; }
 .path-node.left .path-card { grid-column: 1; margin-right: 30px; text-align: left; }
