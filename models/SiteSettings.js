@@ -12,6 +12,7 @@ const siteSettingsSchema = new mongoose.Schema({
   bizEventsImage: { type: String, default: null },
   bizRoboticsImage: { type: String, default: null },
   contactImage: { type: String, default: null },
+  companyProfile: { type: String, default: null },
   ecoMovementImage: { type: String, default: null },
   ecoEquipmentImage: { type: String, default: null },
   ecoCompetitionImage: { type: String, default: null },

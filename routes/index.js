@@ -36,10 +36,13 @@ router.get('/ngay-hoi-cuoc-thi', async (req, res) => {
   res.render('stem-events', { hero });
 });
 
-router.get('/lien-he', async (req, res) => {
+async function renderContactPage(req, res) {
   const hero = await getPageContent('lien-he');
   res.render('contact', { hero });
-});
+}
+
+router.get('/lien-he', renderContactPage);
+router.get('/hop-tac', renderContactPage);
 
 router.get('/khoa-hoc', async (req, res) => {
   const courses = await Course.find().sort({ createdAt: -1 }).lean();

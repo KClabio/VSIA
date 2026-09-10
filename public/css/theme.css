@@ -766,6 +766,11 @@
 }
 .page-hero h1 { color: #fff; font-size: clamp(30px, 4.2vw, 46px); font-weight: 800; line-height: 1.16; margin: 20px 0 0; }
 .page-hero p.lead { color: rgba(255, 255, 255, .84); font-size: 16px; line-height: 1.7; margin-top: 18px; max-width: 560px; }
+.breadcrumb { display: flex; align-items: center; gap: 12px; color: rgba(255, 255, 255, .72); font-size: 14px; }
+.breadcrumb a:hover { color: #fff; }
+.hero-gradient-text { background: linear-gradient(100deg, var(--green), var(--yellow)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.partnership-hero .page-hero-bg { background: linear-gradient(140deg, var(--navy-dark), var(--navy2)); }
+.partnership-hero .page-hero-overlay { background: linear-gradient(100deg, rgba(6, 37, 68, .92) 20%, rgba(6, 37, 68, .72) 55%, rgba(6, 37, 68, .5)); }
 .page-hero-ctas { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 28px; }
 .page-hero-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
 .page-hero .badge-pill {

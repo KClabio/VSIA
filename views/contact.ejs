@@ -1,16 +1,14 @@
-<%- include('partials/header', { title: 'Liên hệ - VSIA' }) %>
+<%- include('partials/header', { title: 'Hợp tác - VSIA' }) %>
 
-<section class="page-hero">
-  <div class="page-hero-bg">
-    <% if (contactImage) { %><img src="<%= contactImage %>" alt=""><% } %>
-  </div>
+<section class="page-hero partnership-hero">
+  <div class="page-hero-bg"></div>
   <div class="page-hero-overlay"></div>
   <div class="page-hero-inner">
-    <span class="hero-pill"><%= hero.heroBadge %></span>
-    <h1><%= hero.heroTitleLine1 %><% if (hero.heroTitleLine2) { %> <%= hero.heroTitleLine2 %><% } %></h1>
-    <p class="lead"><%= hero.heroSubtitle %></p>
+    <span class="hero-pill">KẾT NỐI VỚI VSIA</span>
+    <h1>Liên hệ với chúng tôi</h1>
+    <p class="lead">VSIA luôn sẵn sàng lắng nghe và đồng hành cùng nhà trường, giáo viên<br>trên hành trình giáo dục STEM.</p>
     <div class="page-hero-ctas">
-      <a class="btn btn-primary" href="#" data-open-contact><%= hero.heroCtaText %></a>
+      <a class="btn btn-primary" href="#dang-ky-tu-van">Đăng ký tư vấn</a>
       <a class="btn btn-ghost" href="#thong-tin-lien-he">Xem thông tin liên hệ</a>
     </div>
     <div class="page-hero-badges">
@@ -21,98 +19,96 @@
   </div>
 </section>
 
-<section class="section" id="thong-tin-lien-he">
+<section class="contact-page-section" id="thong-tin-lien-he">
   <div class="container">
-    <div class="contact-vrec-grid">
-      <div class="contact-vrec-left reveal">
-        <h2 class="section-title" style="text-align:left; margin-bottom:14px;">ĐỒNG HÀNH CÙNG VSIA</h2>
-        <p style="color:var(--muted); line-height:1.7; margin-bottom:28px;">Nhà trường, giáo viên và đối tác có thể kết nối với VSIA theo nhiều hình thức khác nhau — từ đào tạo, tư vấn thiết kế đến tổ chức sự kiện.</p>
-
-        <div class="contact-highlight">
-          <span class="contact-highlight-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-          <div>
-            <h4>Đào tạo &amp; Bồi dưỡng giáo viên</h4>
-            <p>Tập huấn nâng cao năng lực sư phạm và phương pháp giảng dạy STEM. <a href="/khoa-hoc">Xem khoá đào tạo →</a></p>
-          </div>
+    <div class="contact-page-grid">
+      <div class="contact-page-intro reveal">
+        <span class="eyebrow">Thông tin liên hệ</span>
+        <h1>Công ty TNHH Học viện Đổi mới Sáng tạo STEM Việt Nam</h1>
+        <div class="contact-page-details">
+          <div class="contact-page-detail"><span class="contact-page-icon">⌖</span><div><small>TRỤ SỞ</small><strong><a href="https://www.google.com/maps/search/?api=1&query=S%E1%BB%91+23%2C+Ng%C3%B5+9%2C+X%C3%B3m+Trung+Thanh%2C+Th%C3%B4n+H%E1%BB%AFu+T%E1%BB%AB%2C+X%C3%A3+%C4%90%E1%BA%A1i+Thanh%2C+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener">Số 23, Ngõ 9, Xóm Trung Thanh, Thôn Hữu Từ,<br>Xã Đại Thanh, Thành phố Hà Nội</a></strong></div></div>
+          <div class="contact-page-detail"><span class="contact-page-icon">⌕</span><div><small>HOTLINE</small><strong><a href="https://zalo.me/0862260526" target="_blank" rel="noopener">0862.26.05.26</a></strong></div></div>
+          <div class="contact-page-detail"><span class="contact-page-icon">@</span><div><small>EMAIL</small><strong><a href="https://mail.google.com/mail/u/0/?fs=1&to=info%40vsia.edu.vn&tf=cm" target="_blank" rel="noopener">info@vsia.edu.vn</a></strong></div></div>
+          <div class="contact-page-detail"><span class="contact-page-icon">◎</span><div><small>WEBSITE</small><strong><a href="https://www.vsia.edu.vn" target="_blank" rel="noopener">www.vsia.edu.vn</a></strong></div></div>
         </div>
-        <div class="contact-highlight">
-          <span class="contact-highlight-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v5.5L4.8 19a1.4 1.4 0 0 0 1.2 2h12a1.4 1.4 0 0 0 1.2-2L14 8.5V3"/><path d="M7.2 15h9.6"/></svg></span>
-          <div>
-            <h4>Thiết kế chương trình giáo dục</h4>
-            <p>Quy hoạch không gian học tập, xây dựng khung chương trình và học liệu STEM. <a href="/tu-van-phong-lab">Xem tư vấn phòng Lab →</a></p>
-          </div>
-        </div>
-        <div class="contact-highlight">
-          <span class="contact-highlight-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 5h3a2 2 0 0 1-2 4M7 5H4a2 2 0 0 0 2 4"/></svg></span>
-          <div>
-            <h4>Tổ chức &amp; Thẩm định sự kiện</h4>
-            <p>Đồng hành tổ chức ngày hội, cuộc thi khoa học kỹ thuật, AI và Robotics. <a href="/ngay-hoi-cuoc-thi">Xem ngày hội &amp; cuộc thi →</a></p>
-          </div>
-        </div>
+        <% if (companyProfile) { %>
+          <a class="btn btn-primary contact-profile-btn" href="<%= companyProfile %>" download>↓ &nbsp; Tải Hồ sơ năng lực</a>
+        <% } %>
       </div>
 
-      <div class="contact-vrec-right reveal">
-        <div class="contact-info-card">
-          <div class="contact-info-head">Liên hệ</div>
-          <div class="contact-info-body">
-            <p class="contact-info-org">VIETNAM STEM INNOVATION ACADEMY</p>
-            <div class="contact-info-list">
-              <div class="contact-info-row">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                <span>Số 23, Ngõ 9, Xóm Trung Thanh, Thôn Hữu Từ,<br>Xã Đại Thanh, Thành phố Hà Nội</span>
-              </div>
-              <div class="contact-info-row">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
-                <a href="https://www.vsia.edu.vn" target="_blank" rel="noopener">www.vsia.edu.vn</a>
-              </div>
-              <div class="contact-info-row">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-                <a href="mailto:info@vsia.edu.vn">info@vsia.edu.vn</a>
-              </div>
-              <div class="contact-info-row">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
-                <a href="tel:0862260526">0862.26.05.26</a>
-              </div>
-            </div>
-            <a href="https://www.google.com/maps/search/?api=1&query=S%E1%BB%91+23%2C+Ng%C3%B5+9%2C+X%C3%B3m+Trung+Thanh%2C+Th%C3%B4n+H%E1%BB%AFu+T%E1%BB%AB%2C+X%C3%A3+%C4%90%E1%BA%A1i+Thanh%2C+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener" class="contact-map-link">Xem đường đi trên Google Maps →</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section section-alt" id="dang-ky-tu-van">
-  <div class="container">
-    <div class="center"><span class="eyebrow" style="justify-content:center;">Đăng ký tư vấn</span><h2 class="h-sec">Để lại thông tin, VSIA sẽ liên hệ ngay</h2></div>
-    <div class="contact-form-card reveal" style="max-width:640px; margin:36px auto 0;">
+      <div class="contact-form-card contact-page-form reveal" id="dang-ky-tu-van">
+        <h2>Gửi yêu cầu tư vấn</h2>
+        <p>Các trường có dấu * là bắt buộc.</p>
       <form id="pageContactForm">
-        <label>Họ tên
+        <div class="contact-form-grid">
+        <label>Họ và tên *
           <div class="auth-input-wrap">
             <svg class="auth-input-ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
             <input type="text" name="name" placeholder="Nguyễn Văn A" required maxlength="200">
           </div>
         </label>
-        <div class="auth-form-row">
-          <label>Số điện thoại
+        <label>Đơn vị *
+          <input type="text" name="organization" placeholder="Trường / Sở / Doanh nghiệp" required maxlength="200">
+        </label>
+        <label>Vai trò
+          <select name="role"><option value="">– Chọn vai trò –</option><option>Giáo viên</option><option>Cán bộ quản lý</option><option>Doanh nghiệp</option><option>Đối tác giáo dục</option></select>
+        </label>
+        <label>Tỉnh / Thành phố
+          <input type="text" name="city" placeholder="Hà Nội" maxlength="100">
+        </label>
+        <label>Số điện thoại *
             <div class="auth-input-wrap">
               <svg class="auth-input-ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
               <input type="tel" name="phone" placeholder="0912 345 678" required maxlength="30">
             </div>
-          </label>
-          <label>Email
+        </label>
+        <label>Email
             <div class="auth-input-wrap">
               <svg class="auth-input-ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-              <input type="email" name="email" placeholder="ten@email.com" required maxlength="200">
+              <input type="email" name="email" placeholder="ten@email.com" maxlength="200">
             </div>
-          </label>
+        </label>
         </div>
         <label>Nội dung cần tư vấn
-          <textarea name="message" rows="3" placeholder="Bạn cần hỗ trợ về vấn đề gì?" required maxlength="2000"></textarea>
+          <textarea name="message" rows="3" placeholder="Mô tả ngắn nhu cầu của đơn vị (phòng Lab, chương trình, ngày hội, hợp tác...)" required maxlength="2000"></textarea>
         </label>
         <p id="pageContactFormMsg" class="form-error" style="display:none;"></p>
-        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">Gửi yêu cầu</button>
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">Gửi yêu cầu &nbsp; →</button>
       </form>
+      <small class="contact-form-note">Thông tin của bạn sẽ được gửi tới <strong>info@vsia.edu.vn</strong>. VSIA sẽ liên hệ sớm nhất.</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="partnership-section" id="hinh-thuc-hop-tac">
+  <div class="container">
+    <div class="partnership-heading">
+      <span class="eyebrow">Đồng hành cùng VSIA</span>
+      <h2>Hình thức hợp tác</h2>
+      <p>Kết nối với VSIA qua những mô hình hợp tác phù hợp với nhu cầu của từng đơn vị.</p>
+    </div>
+    <div class="partnership-grid">
+      <article class="partnership-card">
+        <h3>Hợp tác với Sở Giáo dục các địa phương và nhà trường</h3>
+        <ul><li>Tư vấn và chuyển giao chương trình</li><li>Tư vấn xây dựng phòng thực hành STEM, khu trải nghiệm STEM</li><li>Đào tạo và tập huấn giáo viên</li></ul>
+        <a class="btn btn-primary" href="#thong-tin-lien-he">LIÊN HỆ</a>
+      </article>
+      <article class="partnership-card">
+        <h3>Hợp tác với các Trung tâm Giáo dục và Tổ chức Giáo dục Tư nhân</h3>
+        <ul><li>Mô hình nhượng quyền chương trình (Franchise)</li><li>Đồng thương hiệu (Co-branding)</li></ul>
+        <a class="btn btn-primary" href="#thong-tin-lien-he">LIÊN HỆ</a>
+      </article>
+      <article class="partnership-card">
+        <h3>Hợp tác với các Doanh nghiệp</h3>
+        <ul><li>Tích hợp giải pháp</li><li>Hợp tác truyền thông trong việc phân phối học liệu, thiết bị</li></ul>
+        <a class="btn btn-primary" href="#thong-tin-lien-he">LIÊN HỆ</a>
+      </article>
+      <article class="partnership-card">
+        <h3>Hợp tác tổ chức các Ngày hội, Giải đấu và Sự kiện STEM, AI, Robotics</h3>
+        <ul><li>Hội thảo và Diễn đàn</li><li>Các cuộc thi STEM, giải đấu Robotics</li></ul>
+        <a class="btn btn-primary" href="#thong-tin-lien-he">LIÊN HỆ</a>
+      </article>
     </div>
   </div>
 </section>
@@ -123,41 +119,33 @@
     var msg = document.getElementById('pageContactFormMsg');
     if (!form) return;
 
-    form.addEventListener('submit', async function (e) {
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
       msg.style.display = 'none';
       var submitBtn = form.querySelector('button[type="submit"]');
       submitBtn.disabled = true;
 
-      try {
-        var formData = new FormData(form);
-        var res = await fetch('/lien-he-tu-van', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: formData.get('name'),
-            contact: [formData.get('phone'), formData.get('email')].filter(Boolean).join(' - '),
-            message: formData.get('message'),
-          }),
-        });
-        var data = await res.json().catch(function () { return {}; });
+      var formData = new FormData(form);
+      var body = [
+        'Họ và tên: ' + formData.get('name'),
+        'Đơn vị: ' + formData.get('organization'),
+        'Vai trò: ' + (formData.get('role') || 'Chưa cung cấp'),
+        'Tỉnh / Thành phố: ' + (formData.get('city') || 'Chưa cung cấp'),
+        'Số điện thoại: ' + formData.get('phone'),
+        'Email: ' + (formData.get('email') || 'Chưa cung cấp'),
+        '',
+        'Nội dung cần tư vấn:',
+        formData.get('message'),
+      ].join('\n');
+      var mailto = 'mailto:info@vsia.edu.vn'
+        + '?subject=' + encodeURIComponent('Yêu cầu tư vấn từ ' + formData.get('name'))
+        + '&body=' + encodeURIComponent(body);
 
-        msg.style.display = 'block';
-        if (res.ok) {
-          form.reset();
-          msg.style.color = 'var(--green)';
-          msg.textContent = 'Đã gửi yêu cầu! VSIA sẽ liên hệ với bạn sớm nhất.';
-        } else {
-          msg.style.color = '';
-          msg.textContent = data.error || 'Có lỗi xảy ra, vui lòng thử lại.';
-        }
-      } catch (err) {
-        msg.style.display = 'block';
-        msg.style.color = '';
-        msg.textContent = 'Không thể kết nối, vui lòng thử lại.';
-      } finally {
-        submitBtn.disabled = false;
-      }
+      window.location.href = mailto;
+      msg.style.display = 'block';
+      msg.style.color = 'var(--green)';
+      msg.textContent = 'Đang mở ứng dụng email để gửi thông tin tới info@vsia.edu.vn.';
+      submitBtn.disabled = false;
     });
   })();
 </script>

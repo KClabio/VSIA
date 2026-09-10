@@ -193,6 +193,29 @@
 
   <div id="hero-lien-he"><%- include('partials/settings-hero-form', { page: pageByKey['lien-he'] }) %></div>
 
+  <details class="settings-page-block" id="company-profile">
+    <summary>📄 Hồ sơ năng lực</summary>
+    <div class="settings-page-form">
+      <% if (settings.companyProfile) { %>
+        <p class="empty-state" style="text-align:left; margin-bottom:16px;">Đã có hồ sơ năng lực được tải lên.</p>
+        <a href="<%= settings.companyProfile %>" target="_blank" rel="noopener" class="btn btn-ghost" style="margin-bottom:20px;">Xem file hiện tại</a>
+        <form action="/admin/cai-dat/ho-so-nang-luc/xoa" method="POST" class="inline-form" data-confirm-title="Bạn có chắc muốn xóa hồ sơ năng lực hiện tại?">
+          <button type="submit" class="btn btn-ghost">Xóa hồ sơ hiện tại</button>
+        </form>
+      <% } else { %>
+        <p class="empty-state" style="text-align:left; margin-bottom:16px;">Chưa có hồ sơ năng lực.</p>
+      <% } %>
+      <form method="POST" enctype="multipart/form-data" action="/admin/cai-dat/ho-so-nang-luc">
+        <label>Chọn hồ sơ năng lực (PDF, Word, PowerPoint, Excel hoặc ZIP)
+          <input type="file" name="companyProfile" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip" required>
+        </label>
+        <div class="admin-form-actions">
+          <button type="submit" class="btn btn-primary"><%= settings.companyProfile ? 'Thay hồ sơ năng lực' : 'Tải hồ sơ năng lực lên' %></button>
+        </div>
+      </form>
+    </div>
+  </details>
+
   <h2 class="admin-settings-group-title">Hội thảo STEM trực tuyến</h2>
 
   <details class="settings-page-block" id="hoi-thao-image">

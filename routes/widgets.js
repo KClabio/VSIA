@@ -3,6 +3,7 @@ const router = express.Router();
 const crypto = require('crypto');
 
 const ContactRequest = require('../models/ContactRequest');
+const { sendMail } = require('../lib/mailer');
 const { TOOL_DECLARATIONS, executeTool } = require('../lib/chatbotTools');
 const { checkAndConsume, checkGlobalChatbotLimit } = require('../lib/rateLimit');
 
@@ -111,6 +112,23 @@ router.post('/lien-he-tu-van', async (req, res) => {
     name: name.slice(0, 200),
     contact: contact.slice(0, 200),
     message: message.slice(0, 2000),
+  });
+
+  const escapeHtml = (value) => value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+  await sendMail({
+    to: 'info@vsia.edu.vn',
+    subject: `Yêu cầu tư vấn mới từ ${name.slice(0, 200)}`,
+    html: `<h2>Yêu cầu tư vấn mới</h2>
+      <p><strong>Họ và tên:</strong> ${escapeHtml(name.slice(0, 200))}</p>
+      <p><strong>Thông tin liên hệ:</strong> ${escapeHtml(contact.slice(0, 200))}</p>
+      <p><strong>Nội dung:</strong></p>
+      <p>${escapeHtml(message.slice(0, 2000)).replace(/\n/g, '<br>')}</p>`,
   });
 
   res.json({ success: true });

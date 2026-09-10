@@ -12,7 +12,7 @@ const Partner = require('../models/Partner');
 const User = require('../models/User');
 const { requireAuth, requireStaff, requireModule } = require('../middleware/auth');
 const { ROLES } = require('../lib/roles');
-const { uploadImage, uploadVideo, uploadCourseFiles, uploadLessonFiles, friendlyUploadError, wrapUpload, fileUrl, signRawUrl, fixFilenameEncoding } = require('../middleware/upload');
+const { uploadImage, uploadVideo, uploadDocuments, uploadCourseFiles, uploadLessonFiles, friendlyUploadError, wrapUpload, fileUrl, signRawUrl, fixFilenameEncoding } = require('../middleware/upload');
 const { computeStats, computeDashboardCards, addClient, removeClient, broadcastStats } = require('../lib/stats');
 const { unlinkUploaded } = require('../lib/files');
 const { matchesSearchQuery } = require('../lib/search');
@@ -1156,6 +1156,26 @@ router.post('/cai-dat/anh-linh-vuc/:key/xoa', async (req, res) => {
   settings[field] = null;
   await settings.save();
   res.redirect('/admin/cai-dat#img-' + req.params.key);
+});
+
+router.post('/cai-dat/ho-so-nang-luc', wrapUpload(uploadDocuments.single('companyProfile'), async (err, req, res) => {
+  if (err) return renderSettings(res, friendlyUploadError(err));
+
+  const settings = await getSiteSettings();
+  if (!req.file) return renderSettings(res, 'Vui lòng chọn file hồ sơ năng lực.');
+
+  unlinkUploaded(settings.companyProfile);
+  settings.companyProfile = fileUrl(req.file, 'documents');
+  await settings.save();
+  res.redirect('/admin/cai-dat#company-profile');
+}));
+
+router.post('/cai-dat/ho-so-nang-luc/xoa', async (req, res) => {
+  const settings = await getSiteSettings();
+  unlinkUploaded(settings.companyProfile);
+  settings.companyProfile = null;
+  await settings.save();
+  res.redirect('/admin/cai-dat#company-profile');
 });
 
 router.post('/cai-dat/trang/:pageKey', async (req, res) => {
