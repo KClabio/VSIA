@@ -6,10 +6,27 @@
 </p>
 
 <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+<% if (typeof success !== 'undefined' && success) { %><p class="form-success"><%= success %></p><% } %>
 
 <% const pageByKey = {}; pages.forEach((p) => { pageByKey[p.key] = p; }); %>
 
-<div style="max-width:1040px;">
+<div class="admin-settings-layout">
+  <aside class="admin-settings-nav" aria-label="Mục lục nội dung website">
+    <div class="admin-settings-nav-title">Đi nhanh đến</div>
+    <a href="#logo" data-settings-target>Logo &amp; nhận diện</a>
+    <a href="#hero-image" data-settings-target>Ảnh trang chủ</a>
+    <a href="#biz-images-home" data-settings-target>Lĩnh vực hoạt động</a>
+    <div class="admin-settings-nav-group">Trang nội dung</div>
+    <a href="#hero-giai-phap" data-settings-target>Giải pháp</a>
+    <a href="#hero-lab-consulting" data-settings-target>Tư vấn phòng Lab</a>
+    <a href="#hero-stem-events" data-settings-target>Sự kiện STEM</a>
+    <a href="#hero-lien-he" data-settings-target>Liên hệ / Hợp tác</a>
+    <div class="admin-settings-nav-group">Tài nguyên</div>
+    <a href="#company-profile" data-settings-target>Hồ sơ năng lực</a>
+    <a href="#hoi-thao-image" data-settings-target>Hội thảo trực tuyến</a>
+  </aside>
+
+  <div class="admin-settings-content">
 
   <h2 class="admin-settings-group-title">Trang chủ</h2>
 
@@ -227,6 +244,7 @@
 
   <div id="hero-hoi-thao"><%- include('partials/settings-hero-form', { page: pageByKey['hoi-thao'] }) %></div>
 
+  </div>
 </div>
 
 <script>
@@ -238,16 +256,27 @@
       if (!target) return;
 
       // Mở chính nó (nếu là <details>) và toàn bộ <details> cha bên trên (hỗ trợ accordion lồng nhau).
-      var self = target.tagName === 'DETAILS' ? target : target.querySelector('details');
-      if (self) self.open = true;
+      var details = target.tagName === 'DETAILS' ? [target] : target.querySelectorAll('details');
+      details.forEach(function (item) { item.open = true; });
       var ancestor = target.parentElement ? target.parentElement.closest('details') : null;
       while (ancestor) {
         ancestor.open = true;
         ancestor = ancestor.parentElement ? ancestor.parentElement.closest('details') : null;
       }
 
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.requestAnimationFrame(function () {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     }
+    document.querySelectorAll('[data-settings-target]').forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        event.preventDefault();
+        history.pushState(null, '', link.getAttribute('href'));
+        var target = document.getElementById(link.getAttribute('href').slice(1));
+        if (!target) return;
+        openFromHash();
+      });
+    });
     openFromHash();
     window.addEventListener('hashchange', openFromHash);
   })();

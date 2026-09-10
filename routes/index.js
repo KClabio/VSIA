@@ -45,9 +45,10 @@ router.get('/lien-he', renderContactPage);
 router.get('/hop-tac', renderContactPage);
 
 router.get('/khoa-hoc', async (req, res) => {
+  const hero = await getPageContent('home');
   const courses = await Course.find().sort({ createdAt: -1 }).lean();
   const courseVideos = await CourseVideo.find().sort({ featured: -1, order: 1, createdAt: -1 }).lean();
-  res.render('courses', { courses, courseVideos });
+  res.render('courses', { hero, courses, courseVideos });
 });
 
 router.get('/khoa-hoc/:id', async (req, res) => {

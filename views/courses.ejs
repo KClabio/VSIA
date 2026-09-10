@@ -23,7 +23,7 @@
 
 <section class="section section-alt" id="lo-trinh">
   <div class="container">
-    <%- include('partials/training-roadmap') %>
+    <%- include('partials/training-roadmap', { hero: typeof hero === 'undefined' ? null : hero }) %>
   </div>
 </section>
 

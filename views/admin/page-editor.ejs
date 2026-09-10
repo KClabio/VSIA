@@ -1,0 +1,123 @@
+<%- include('partials/head', { pageTitle, active }) %>
+
+<div class="admin-page-head">
+  <div>
+    <span class="admin-eyebrow">Website / Chỉnh sửa theo trang</span>
+    <h1 class="page-title"><%= pageTitle %></h1>
+  </div>
+  <a class="btn btn-ghost" href="/<%= pageKey === 'tin-tuc' ? 'tin-tuc' : pageKey === 'hop-tac' ? 'hop-tac' : pageKey === 'giai-phap' ? 'giai-phap' : pageKey === 'lab' ? 'tu-van-phong-lab' : pageKey === 'su-kien' ? 'ngay-hoi-cuoc-thi' : pageKey === 'khoa-hoc' || pageKey === 'dao-tao' ? 'khoa-hoc' : '' %>" target="_blank" rel="noopener">Xem trang</a>
+</div>
+<% if (saved) { %><p class="form-success">Đã lưu nội dung thành công.</p><% } %>
+<p class="admin-scope-note">Chỉ các nội dung thuộc trang này được hiển thị tại đây. Các danh sách như khóa học, video, bài viết và dự án có thể thêm, sửa, xóa ở các nút quản lý tương ứng.</p>
+
+<div class="admin-page-editor-grid">
+  <main>
+    <% if (pageKey === 'home' || pageKey === 'giai-phap' || pageKey === 'hop-tac' || pageKey === 'lab' || pageKey === 'su-kien') { %>
+      <div class="settings-page-form admin-editor-panel">
+        <h2>Giao diện đầu trang</h2>
+        <%- include('partials/settings-hero-form', { page, actionUrl: '/admin/trang/' + pageKey + '/save' }) %>
+      </div>
+    <% } %>
+
+    <% if (pageKey === 'home' || pageKey === 'dao-tao' || pageKey === 'khoa-hoc') { %>
+      <div class="settings-page-form admin-editor-panel">
+        <h2>Nội dung chương trình đào tạo</h2>
+        <form method="POST" action="/admin/trang/<%= pageKey %>/save" class="settings-sub-form">
+          <label>Nhãn chương trình đào tạo<input type="text" name="homeTrainingEyebrow" value="<%= page.homeTrainingEyebrow %>"></label>
+          <label>Tiêu đề chương trình đào tạo<input type="text" name="homeTrainingTitle" value="<%= page.homeTrainingTitle %>"></label>
+          <label>Mô tả chương trình đào tạo<textarea name="homeTrainingLead" rows="2"><%= page.homeTrainingLead %></textarea></label>
+          <% for (let i = 1; i <= 5; i += 1) { %>
+            <div class="admin-form-row">
+              <label>Mục <%= i %> - Tiêu đề<input type="text" name="trainingProgram<%= i %>Title" value="<%= page['trainingProgram' + i + 'Title'] %>" required></label>
+              <label>Mục <%= i %> - Mô tả<textarea name="trainingProgram<%= i %>Text" rows="2" required><%= page['trainingProgram' + i + 'Text'] %></textarea></label>
+            </div>
+          <% } %>
+          <div class="admin-form-actions"><button class="btn btn-primary" type="submit">Lưu nội dung đào tạo</button></div>
+        </form>
+      </div>
+    <% } %>
+
+    <% if (pageKey === 'home') { %>
+      <div class="settings-page-form admin-editor-panel">
+        <h2>Các khối nội dung trang chủ</h2>
+        <%- include('partials/settings-home-form', { page, actionUrl: '/admin/trang/home/save' }) %>
+      </div>
+    <% } %>
+
+    <div class="admin-editor-panel">
+      <h2>Ảnh và tài nguyên của trang</h2>
+      <% if (pageKey === 'home') { %>
+        <%- include('partials/settings-image-block', { id: 'editor-teacher-image', label: 'Ảnh Đào tạo giáo viên', value: settings.bizTeacherImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/teacher', deleteUrl: '/admin/cai-dat/anh-linh-vuc/teacher/xoa' }) %>
+        <%- include('partials/settings-image-block', { id: 'editor-robotics-image', label: 'Ảnh Robotics AI', value: settings.bizRoboticsImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/robotics', deleteUrl: '/admin/cai-dat/anh-linh-vuc/robotics/xoa' }) %>
+        <a class="admin-action-link" href="/admin/thu-vien"><strong>Dự án &amp; hoạt động nổi bật</strong><span>Thêm, sửa, xóa ảnh/video hiển thị trên trang chủ.</span></a>
+        <a class="admin-action-link" href="/admin/doi-ngu"><strong>Đội ngũ chuyên gia</strong><span>Thêm, sửa, xóa thành viên và ảnh đại diện.</span></a>
+        <a class="admin-action-link" href="/admin/doi-tac"><strong>Đối tác đồng hành</strong><span>Thêm, sửa, xóa logo và thứ tự hiển thị.</span></a>
+      <% } %>
+      <% if (pageKey === 'dao-tao') { %>
+        <%- include('partials/settings-image-block', { id: 'editor-teacher-image', label: 'Ảnh banner Đào tạo giáo viên', value: settings.bizTeacherImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/teacher', deleteUrl: '/admin/cai-dat/anh-linh-vuc/teacher/xoa' }) %>
+        <a class="admin-action-link" href="/admin/khoa-hoc"><strong>Khóa học</strong><span>Thêm, sửa, xóa khóa học, tài liệu và nội dung bài học.</span></a>
+        <a class="admin-action-link" href="/admin/video-khoa-hoc"><strong>Video tập huấn giáo viên</strong><span>Thêm, sửa, xóa video và bài giảng mẫu.</span></a>
+      <% } %>
+      <% if (pageKey === 'khoa-hoc') { %>
+        <%- include('partials/settings-image-block', { id: 'editor-robotics-image', label: 'Ảnh banner Khóa học', value: settings.bizRoboticsImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/robotics', deleteUrl: '/admin/cai-dat/anh-linh-vuc/robotics/xoa' }) %>
+        <a class="admin-action-link" href="/admin/khoa-hoc"><strong>Danh sách khóa học</strong><span>Thêm, sửa, xóa khóa học, học liệu và nội dung.</span></a>
+        <a class="admin-action-link" href="/admin/video-khoa-hoc"><strong>Video &amp; bài giảng mẫu</strong><span>Thêm, sửa, xóa và sắp xếp video.</span></a>
+      <% } %>
+      <% if (pageKey === 'lab') { %>
+        <%- include('partials/settings-image-block', { id: 'editor-lab-image', label: 'Ảnh banner Phòng Lab', value: settings.bizLabImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/lab', deleteUrl: '/admin/cai-dat/anh-linh-vuc/lab/xoa' }) %>
+      <% } %>
+      <% if (pageKey === 'su-kien') { %>
+        <%- include('partials/settings-image-block', { id: 'editor-events-image', label: 'Ảnh banner Sự kiện STEM', value: settings.bizEventsImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/events', deleteUrl: '/admin/cai-dat/anh-linh-vuc/events/xoa' }) %>
+        <a class="admin-action-link" href="/admin/hoi-thao"><strong>Hội thảo trực tuyến</strong><span>Thêm, sửa, xóa các buổi hội thảo.</span></a>
+      <% } %>
+      <% if (pageKey === 'giai-phap') { %>
+        <%- include('partials/settings-image-block', { id: 'editor-solution-hero', label: 'Ảnh banner Giải pháp', value: settings.solutionHeroImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/solution-hero', deleteUrl: '/admin/cai-dat/anh-linh-vuc/solution-hero/xoa' }) %>
+        <%- include('partials/settings-image-block', { id: 'editor-solution-image', label: 'Ảnh minh họa Giải pháp', value: settings.solutionImage, actionUrl: '/admin/cai-dat/anh-giai-phap', deleteUrl: '/admin/cai-dat/anh-giai-phap/xoa' }) %>
+        <a class="admin-action-link" href="/admin/cai-dat#project-images"><strong>Dự án nổi bật</strong><span>Thêm, sửa, xóa ảnh dự án.</span></a>
+      <% } %>
+      <% if (pageKey === 'tin-tuc') { %>
+        <a class="admin-action-link" href="/admin/bai-viet"><strong>Bài viết &amp; Tin tức</strong><span>Thêm, sửa, xóa và xuất bản bài viết.</span></a>
+        <a class="admin-action-link" href="/admin/thu-vien"><strong>Ảnh/video dự án</strong><span>Thêm, sửa, xóa tài nguyên minh họa.</span></a>
+      <% } %>
+      <% if (pageKey === 'hop-tac') { %>
+        <%- include('partials/settings-image-block', { id: 'editor-contact-image', label: 'Ảnh banner Hợp tác', value: settings.contactImage, actionUrl: '/admin/cai-dat/anh-linh-vuc/contact', deleteUrl: '/admin/cai-dat/anh-linh-vuc/contact/xoa' }) %>
+        <details class="settings-sub-block" id="editor-company-profile">
+          <summary>Hồ sơ năng lực</summary>
+          <div class="settings-sub-form">
+            <% if (settings.companyProfile) { %><a class="admin-action-link" href="<%= settings.companyProfile %>" target="_blank" rel="noopener"><strong>Xem file hiện tại</strong><span>Mở tài liệu hồ sơ năng lực.</span></a><% } %>
+            <form method="POST" enctype="multipart/form-data" action="/admin/cai-dat/ho-so-nang-luc">
+              <label>Chọn file hồ sơ (PDF, Word, PowerPoint, Excel hoặc ZIP)<input type="file" name="companyProfile" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip" required></label>
+              <button type="submit" class="btn btn-primary">Tải lên / thay hồ sơ</button>
+            </form>
+            <% if (settings.companyProfile) { %><form method="POST" action="/admin/cai-dat/ho-so-nang-luc/xoa" class="inline-form" data-confirm-title="Xóa hồ sơ năng lực hiện tại?"><button type="submit" class="btn btn-ghost">Xóa hồ sơ</button></form><% } %>
+          </div>
+        </details>
+        <a class="admin-action-link" href="/admin/lien-he"><strong>Yêu cầu hợp tác</strong><span>Xem, đổi trạng thái và xóa yêu cầu đã nhận.</span></a>
+      <% } %>
+    </div>
+  </main>
+
+  <aside class="admin-page-actions">
+    <div class="admin-editor-panel">
+      <h2>Quản lý dữ liệu trang</h2>
+      <% if (pageKey === 'dao-tao' || pageKey === 'khoa-hoc') { %>
+        <a class="admin-action-link" href="/admin/khoa-hoc"><strong>Khóa học</strong><span>Thêm, sửa, xóa khóa học và tài liệu</span></a>
+        <a class="admin-action-link" href="/admin/video-khoa-hoc"><strong>Video tập huấn giáo viên</strong><span>Quản lý video và bài giảng mẫu</span></a>
+      <% } %>
+      <% if (pageKey === 'tin-tuc') { %>
+        <a class="admin-action-link" href="/admin/bai-viet"><strong>Bài viết &amp; Tin tức</strong><span>Thêm, sửa, xóa và xuất bản bài viết</span></a>
+        <a class="admin-action-link" href="/admin/thu-vien"><strong>Dự án &amp; hoạt động nổi bật</strong><span>Quản lý ảnh/video hiển thị</span></a>
+      <% } %>
+      <% if (pageKey === 'giai-phap') { %>
+        <a class="admin-action-link" href="/admin/cai-dat#solution-image"><strong>Ảnh giải pháp</strong><span>Cập nhật ảnh minh họa trên trang</span></a>
+        <a class="admin-action-link" href="/admin/cai-dat#project-images"><strong>Dự án nổi bật</strong><span>Quản lý thư viện ảnh dự án</span></a>
+      <% } %>
+      <% if (pageKey === 'hop-tac') { %>
+        <a class="admin-action-link" href="/admin/cai-dat#company-profile"><strong>Hồ sơ năng lực</strong><span>Thay hoặc xóa file tải xuống</span></a>
+        <a class="admin-action-link" href="/admin/lien-he"><strong>Yêu cầu hợp tác</strong><span>Xem và xử lý thông tin đã gửi</span></a>
+      <% } %>
+    </div>
+  </aside>
+</div>
+
+<%- include('partials/foot') %>

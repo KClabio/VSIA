@@ -196,15 +196,9 @@
       <p class="lead-new"><%= hero.homeTrainingLead %></p>
     </div>
 
-    <% if (featuredCourses.length === 0) { %>
-      <p class="empty-state" style="margin-top:44px;"><%= hero.homeTrainingEmpty %></p>
-    <% } else { %>
-      <div class="course-grid" style="margin-top:44px;">
-        <% featuredCourses.forEach(course => { %>
-          <div class="reveal"><%- include('partials/course-card', { course }) %></div>
-        <% }) %>
-      </div>
-    <% } %>
+    <div style="margin-top:44px;">
+      <%- include('partials/training-roadmap', { hero, showHeading: false }) %>
+    </div>
 
     <div class="section-cta">
       <a href="/khoa-hoc" class="btn btn-primary"><%= hero.homeViewAllText %></a>
@@ -308,9 +302,33 @@
     <% if (partners.length === 0) { %>
       <p class="empty-state" style="margin-top:38px;"><%= hero.homePartnersEmpty %></p>
     <% } else { %>
+      <%
+        const normalizePartnerName = (name) => (name || '')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase();
+        const partnerPriority = [
+          'petro', 'petrovietnam', 's3', 'kc', 'edupark', 'kdi', 'ha an',
+          'stem for vn', 'stem for vietnam', 'nexta', 'teky', 'aig',
+        ];
+        const partnerRank = (partner) => {
+          const name = normalizePartnerName(partner.name);
+          const rank = partnerPriority.findIndex((keyword) => name.includes(keyword));
+          return rank === -1 ? partnerPriority.length : rank;
+        };
+        const orderedPartners = [...partners].sort((a, b) => partnerRank(a) - partnerRank(b));
+        const featuredPartner = orderedPartners.find((partner) => {
+          const name = normalizePartnerName(partner.name);
+          return name.includes('petro') || name.includes('petrovietnam');
+        });
+        const standardPartners = orderedPartners.filter((partner) => partner !== featuredPartner);
+      %>
       <div class="plogos reveal" style="margin-top:38px;">
-        <% partners.forEach(partner => { %>
-          <%- include('partials/partner-tile', { name: partner.name, logo: partner.logo }) %>
+        <% if (featuredPartner) { %>
+          <%- include('partials/partner-tile', { name: featuredPartner.name, logo: featuredPartner.logo, featured: true }) %>
+        <% } %>
+        <% standardPartners.forEach(partner => { %>
+          <%- include('partials/partner-tile', { name: partner.name, logo: partner.logo, featured: false }) %>
         <% }) %>
       </div>
     <% } %>

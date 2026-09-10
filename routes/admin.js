@@ -17,7 +17,7 @@ const { computeStats, computeDashboardCards, addClient, removeClient, broadcastS
 const { unlinkUploaded } = require('../lib/files');
 const { matchesSearchQuery } = require('../lib/search');
 const { getSiteSettings } = require('../lib/settings');
-const { getAllPageContents, PAGE_DEFAULTS } = require('../lib/pageContent');
+const { getPageContent, getAllPageContents, PAGE_DEFAULTS } = require('../lib/pageContent');
 const PageContent = require('../models/PageContent');
 const ContactRequest = require('../models/ContactRequest');
 const Enrollment = require('../models/Enrollment');
@@ -1021,13 +1021,50 @@ router.post('/lien-he/:id/xoa', async (req, res) => {
 
 // --- Cài đặt (logo trang web, ảnh minh hoạ, nội dung Hero từng trang) ---
 
-async function renderSettings(res, error) {
+async function renderSettings(res, error, success = null) {
   const [settings, pages] = await Promise.all([getSiteSettings(), getAllPageContents()]);
-  res.render('admin/settings', { settings, pages, error, active: 'cai-dat' });
+  res.render('admin/settings', { settings, pages, error, success, active: 'cai-dat' });
 }
 
 router.get('/cai-dat', async (req, res) => {
-  await renderSettings(res, null);
+  await renderSettings(res, null, req.query.saved === '1' ? 'Đã lưu nội dung thành công.' : null);
+});
+
+const ADMIN_PAGE_CONFIG = {
+  home: { label: 'Trang chủ', pageKey: 'home' },
+  'dao-tao': { label: 'Đào tạo bồi dưỡng chuyên môn', pageKey: 'home' },
+  lab: { label: 'Thiết kế và chuyển giao chương trình giáo dục', pageKey: 'lab-consulting' },
+  'su-kien': { label: 'Tổ chức & thẩm định cuộc thi, sự kiện', pageKey: 'stem-events' },
+  'giai-phap': { label: 'Giải pháp', pageKey: 'giai-phap' },
+  'khoa-hoc': { label: 'Khóa học', pageKey: 'home' },
+  'tin-tuc': { label: 'Tin tức', pageKey: 'home' },
+  'hop-tac': { label: 'Hợp tác', pageKey: 'lien-he' },
+};
+
+router.get('/trang/:pageKey', async (req, res) => {
+  const config = ADMIN_PAGE_CONFIG[req.params.pageKey];
+  if (!config) return res.status(404).render('404');
+  const [page, settings] = await Promise.all([getPageContent(config.pageKey), getSiteSettings()]);
+  res.render('admin/page-editor', {
+    pageTitle: config.label,
+    active: 'page-' + req.params.pageKey,
+    pageKey: req.params.pageKey,
+    page,
+    settings,
+    saved: req.query.saved === '1',
+  });
+});
+
+router.post('/trang/:pageKey/save', async (req, res) => {
+  const config = ADMIN_PAGE_CONFIG[req.params.pageKey];
+  if (!config) return res.status(404).render('404');
+  const allowedFields = Object.keys(PAGE_DEFAULTS[config.pageKey] || {}).filter((field) => field !== 'label');
+  const updates = {};
+  allowedFields.forEach((field) => {
+    if (Object.prototype.hasOwnProperty.call(req.body, field)) updates[field] = req.body[field];
+  });
+  await PageContent.findOneAndUpdate({ pageKey: config.pageKey }, { $set: updates }, { upsert: true });
+  res.redirect('/admin/trang/' + req.params.pageKey + '?saved=1');
 });
 
 router.post('/cai-dat/logo', wrapUpload(uploadImage.single('logo'), async (err, req, res) => {
@@ -1188,7 +1225,7 @@ router.post('/cai-dat/trang/:pageKey', async (req, res) => {
     updates,
     { upsert: true },
   );
-  res.redirect('/admin/cai-dat#hero-' + req.params.pageKey);
+  res.redirect('/admin/cai-dat?saved=1#hero-' + req.params.pageKey);
 });
 
 // --- Tìm kiếm nhanh (thanh admin) ---

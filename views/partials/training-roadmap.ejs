@@ -1,5 +1,20 @@
-<h2 class="section-title">CÁC CHƯƠNG TRÌNH TẬP HUẤN VÀ ĐÀO TẠO GIÁO VIÊN</h2>
-<p class="section-subtitle">Lộ trình cơ bản đến chuyên sâu, từ kỹ thuật thiết bị đến hướng dẫn học sinh nghiên cứu khoa học.</p>
+<%
+  const trainingDefaults = [
+    ['Tập huấn, đào tạo kỹ thuật', 'Hướng dẫn giáo viên sử dụng, vận hành và khai thác thiết bị STEM, Robotics, AI trong phòng thực hành.'],
+    ['Tổng quan giáo dục STEM trong CTGDPT', 'Trang bị kiến thức nền tảng về giáo dục STEM và định hướng triển khai trong Chương trình giáo dục phổ thông.'],
+    ['Thực hành xây dựng các chủ đề dạy học STEM', 'Thực hành thiết kế và tổ chức các chủ đề dạy học STEM gắn với thực tiễn lớp học.'],
+    ['Nghiên cứu KHKT trong Giáo dục phổ thông', 'Trang bị phương pháp tổ chức và hướng dẫn học sinh thực hiện nghiên cứu khoa học kỹ thuật.'],
+    ['Thực hành các chủ đề nghiên cứu KHKT', 'Thực hành xây dựng đề tài, dự án nghiên cứu khoa học kỹ thuật cùng học sinh.'],
+  ];
+  const trainingPrograms = trainingDefaults.map((item, index) => [
+    (hero && hero['trainingProgram' + (index + 1) + 'Title']) || item[0],
+    (hero && hero['trainingProgram' + (index + 1) + 'Text']) || item[1],
+  ]);
+%>
+<% if (typeof showHeading === 'undefined' || showHeading !== false) { %>
+  <h2 class="section-title">CÁC CHƯƠNG TRÌNH TẬP HUẤN VÀ ĐÀO TẠO GIÁO VIÊN</h2>
+  <p class="section-subtitle">Lộ trình cơ bản đến chuyên sâu, từ kỹ thuật thiết bị đến hướng dẫn học sinh nghiên cứu khoa học.</p>
+<% } %>
 
 <div class="path">
   <div class="path-spine"></div>
@@ -17,8 +32,8 @@
             <rect x="8" y="17.4" width="8" height="1.6" rx=".8" fill="#1a8fd1"/>
           </svg>
         </div>
-        <h3>Tập huấn, đào tạo kỹ thuật</h3>
-        <p>Hướng dẫn giáo viên sử dụng, vận hành và khai thác thiết bị STEM, Robotics, AI trong phòng thực hành.</p>
+        <h3><%= trainingPrograms[0][0] %></h3>
+        <p><%= trainingPrograms[0][1] %></p>
       </a>
       <div class="path-num">1</div>
       <div></div>
@@ -37,8 +52,8 @@
             <path d="M18.2 2.2l.55 1.35 1.35.55-1.35.55-.55 1.35-.55-1.35-1.35-.55 1.35-.55.55-1.35Z" fill="#d8a13a"/>
           </svg>
         </div>
-        <h3>Tổng quan giáo dục STEM trong CTGDPT</h3>
-        <p>Trang bị kiến thức nền tảng về giáo dục STEM và định hướng triển khai trong Chương trình giáo dục phổ thông.</p>
+        <h3><%= trainingPrograms[1][0] %></h3>
+        <p><%= trainingPrograms[1][1] %></p>
       </a>
     </div>
   </div>
@@ -56,8 +71,8 @@
             <rect x="18" y="15.2" width="3.6" height="1" rx=".5" fill="#fff"/>
           </svg>
         </div>
-        <h3>Thực hành xây dựng các chủ đề dạy học STEM</h3>
-        <p>Thực hành thiết kế và tổ chức các chủ đề dạy học STEM gắn với thực tiễn lớp học.</p>
+        <h3><%= trainingPrograms[2][0] %></h3>
+        <p><%= trainingPrograms[2][1] %></p>
       </a>
       <div class="path-num">3</div>
       <div></div>
@@ -78,8 +93,8 @@
             <rect x="6.5" y="14.5" width="9" height="2" rx="1" fill="#1a8f5a"/>
           </svg>
         </div>
-        <h3>Nghiên cứu KHKT trong Giáo dục phổ thông</h3>
-        <p>Trang bị phương pháp tổ chức và hướng dẫn học sinh thực hiện nghiên cứu khoa học kỹ thuật.</p>
+        <h3><%= trainingPrograms[3][0] %></h3>
+        <p><%= trainingPrograms[3][1] %></p>
       </a>
     </div>
   </div>
@@ -97,8 +112,8 @@
             <rect x="9" y="17" width="6" height="2" rx="1" fill="#1a8fd1"/>
           </svg>
         </div>
-        <h3>Thực hành các chủ đề nghiên cứu KHKT</h3>
-        <p>Thực hành xây dựng đề tài, dự án nghiên cứu khoa học kỹ thuật cùng học sinh.</p>
+        <h3><%= trainingPrograms[4][0] %></h3>
+        <p><%= trainingPrograms[4][1] %></p>
       </a>
       <div class="path-num">5</div>
       <div></div>

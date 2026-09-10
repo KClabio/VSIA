@@ -63,66 +63,33 @@
         </a>
         <% } %>
 
-        <% if (canAccessModule('khoa-hoc') || canAccessModule('tien-do') || canAccessModule('video-khoa-hoc') || canAccessModule('hoi-thao')) { %>
-        <p class="admin-nav-section-title">Đào tạo và bồi dưỡng</p>
+        <p class="admin-nav-section-title">Website</p>
+        <% if (canAccessModule('cai-dat')) { %>
+        <a href="/admin/trang/home" class="admin-nav-page-link <%= active === 'page-home' ? 'active' : '' %>">
+          <svg class="admin-nav-icon"><use href="#i-home"/></svg> Trang chủ
+        </a>
+        <div class="admin-nav-parent"><svg class="admin-nav-icon"><use href="#i-grid"/></svg> Lĩnh vực hoạt động</div>
+        <a href="/admin/trang/dao-tao" class="admin-nav-page-link admin-nav-page-child <%= active === 'page-dao-tao' ? 'active' : '' %>">Đào tạo bồi dưỡng chuyên môn</a>
+        <a href="/admin/trang/lab" class="admin-nav-page-link admin-nav-page-child <%= active === 'page-lab' ? 'active' : '' %>">Thiết kế và chuyển giao chương trình giáo dục</a>
+        <a href="/admin/trang/su-kien" class="admin-nav-page-link admin-nav-page-child <%= active === 'page-su-kien' ? 'active' : '' %>">Tổ chức &amp; thẩm định cuộc thi, sự kiện</a>
+        <a href="/admin/trang/giai-phap" class="admin-nav-page-link <%= active === 'page-giai-phap' ? 'active' : '' %>">
+          <svg class="admin-nav-icon"><use href="#i-file"/></svg> Giải pháp
+        </a>
+        <% } %>
         <% if (canAccessModule('khoa-hoc')) { %>
-        <a href="/admin/khoa-hoc" class="<%= active === 'khoa-hoc' ? 'active' : '' %>">
-          <svg class="admin-nav-icon"><use href="#i-book"/></svg> Khoá học
+        <a href="/admin/trang/khoa-hoc" class="admin-nav-page-link <%= active === 'page-khoa-hoc' ? 'active' : '' %>">
+          <svg class="admin-nav-icon"><use href="#i-book"/></svg> Khóa học
         </a>
         <% } %>
-        <% if (canAccessModule('video-khoa-hoc')) { %>
-        <a href="/admin/video-khoa-hoc" class="<%= active === 'video-khoa-hoc' ? 'active' : '' %>">
-          <svg class="admin-nav-icon"><use href="#i-play"/></svg> Video bài giảng
-        </a>
-        <% } %>
-        <% if (canAccessModule('hoi-thao')) { %>
-        <a href="/admin/hoi-thao" class="<%= active === 'hoi-thao' ? 'active' : '' %>">
-          <svg class="admin-nav-icon"><use href="#i-chat"/></svg> Hội thảo trực tuyến
-        </a>
-        <% } %>
-        <% if (canAccessModule('tien-do')) { %>
-        <a href="/admin/tien-do" class="<%= active === 'tien-do' ? 'active' : '' %>">
-          <svg class="admin-nav-icon"><use href="#i-trend"/></svg> Tiến độ học tập
-        </a>
-        <% } %>
-        <% } %>
-
-        <% if (canAccessModule('bai-viet') || canAccessModule('thu-vien') || canAccessModule('doi-ngu') || canAccessModule('doi-tac')) { %>
-        <p class="admin-nav-section-title">Nội dung &amp; Giới thiệu</p>
         <% if (canAccessModule('bai-viet')) { %>
-        <a href="/admin/bai-viet" class="<%= active === 'bai-viet' ? 'active' : '' %>">
-          <svg class="admin-nav-icon"><use href="#i-file"/></svg> Bài viết &amp; Tin tức
+        <a href="/admin/trang/tin-tuc" class="admin-nav-page-link <%= active === 'page-tin-tuc' ? 'active' : '' %>">
+          <svg class="admin-nav-icon"><use href="#i-file"/></svg> Tin tức
         </a>
         <% } %>
-        <% if (canAccessModule('thu-vien')) { %>
-        <a href="/admin/thu-vien" class="<%= active === 'thu-vien' ? 'active' : '' %>">
-          <svg class="admin-nav-icon"><use href="#i-image"/></svg> Thư viện ảnh/video
-        </a>
-        <% } %>
-        <% if (canAccessModule('doi-ngu')) { %>
-        <a href="/admin/doi-ngu" class="<%= active === 'doi-ngu' ? 'active' : '' %>">
-          <svg class="admin-nav-icon"><use href="#i-users"/></svg> Đội ngũ chuyên gia
-        </a>
-        <% } %>
-        <% if (canAccessModule('doi-tac')) { %>
-        <a href="/admin/doi-tac" class="<%= active === 'doi-tac' ? 'active' : '' %>">
-          <svg class="admin-nav-icon"><use href="#i-link"/></svg> Đối tác đồng hành
-        </a>
-        <% } %>
-        <% } %>
-
-        <% if (canAccessModule('lien-he') || canAccessModule('nguoi-dung')) { %>
-        <p class="admin-nav-section-title">Khách hàng &amp; Người dùng</p>
         <% if (canAccessModule('lien-he')) { %>
-        <a href="/admin/lien-he" class="<%= active === 'lien-he' ? 'active' : '' %>">
-          <svg class="admin-nav-icon"><use href="#i-chat"/></svg> Liên hệ tư vấn
+        <a href="/admin/trang/hop-tac" class="admin-nav-page-link <%= active === 'page-hop-tac' ? 'active' : '' %>">
+          <svg class="admin-nav-icon"><use href="#i-chat"/></svg> Hợp tác
         </a>
-        <% } %>
-        <% if (canAccessModule('nguoi-dung')) { %>
-        <a href="/admin/nguoi-dung" class="<%= active === 'nguoi-dung' ? 'active' : '' %>">
-          <svg class="admin-nav-icon"><use href="#i-lock"/></svg> Tài khoản hệ thống
-        </a>
-        <% } %>
         <% } %>
 
         <% if (canAccessModule('cai-dat')) { %>

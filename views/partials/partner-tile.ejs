@@ -5,7 +5,7 @@
   ];
   const pal = fallbackColors[name.length % fallbackColors.length];
 %>
-<div class="plogo" title="<%= name %>">
+<div class="plogo <%= featured ? 'plogo-featured' : '' %>" title="<%= name %>">
   <% if (logo) { %>
     <img class="plogo-img" src="<%= logo %>" alt="<%= name %>" loading="lazy">
   <% } else { %>

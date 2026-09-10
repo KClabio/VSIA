@@ -1,6 +1,6 @@
 <details class="settings-sub-block">
   <summary>Nội dung đầu trang (Hero)</summary>
-  <form method="POST" action="/admin/cai-dat/trang/<%= page.key %>" class="settings-sub-form">
+  <form method="POST" action="<%= typeof actionUrl !== 'undefined' ? actionUrl : '/admin/cai-dat/trang/' + page.key %>" class="settings-sub-form">
     <label>Badge nhỏ phía trên tiêu đề
       <input type="text" name="heroBadge" value="<%= page.heroBadge %>">
     </label>

@@ -1,7 +1,7 @@
 <details class="settings-page-block" open>
   <summary>Nội dung các khối trang chủ</summary>
   <div class="settings-page-form">
-    <form method="POST" action="/admin/cai-dat/trang/<%= page.key %>" class="settings-sub-form">
+    <form method="POST" action="<%= typeof actionUrl !== 'undefined' ? actionUrl : '/admin/cai-dat/trang/' + page.key %>" class="settings-sub-form">
       <h3 class="settings-form-heading">Hero</h3>
       <div class="admin-form-row">
         <label>Nút liên hệ
@@ -114,6 +114,17 @@
       <label>Mô tả chương trình đào tạo
         <textarea name="homeTrainingLead" rows="2"><%= page.homeTrainingLead %></textarea>
       </label>
+      <h3 class="settings-form-heading">5 chương trình đào tạo</h3>
+      <% for (let i = 1; i <= 5; i += 1) { %>
+        <div class="admin-form-row">
+          <label>Chương trình <%= i %> - Tiêu đề
+            <input type="text" name="trainingProgram<%= i %>Title" value="<%= page['trainingProgram' + i + 'Title'] %>" required>
+          </label>
+          <label>Chương trình <%= i %> - Mô tả
+            <textarea name="trainingProgram<%= i %>Text" rows="2" required><%= page['trainingProgram' + i + 'Text'] %></textarea>
+          </label>
+        </div>
+      <% } %>
       <div class="admin-form-row">
         <label>Nhãn Hình ảnh
           <input type="text" name="homeGalleryEyebrow" value="<%= page.homeGalleryEyebrow %>">

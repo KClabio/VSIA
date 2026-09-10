@@ -944,6 +944,8 @@
   height: 224px; display: flex; align-items: center; justify-content: center;
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
+.plogo-featured { grid-column: 1 / -1; height: 276px; padding: 28px; border-color: var(--blue); }
+.plogo-featured .plogo-img { max-height: 220px; }
 .plogo:hover { transform: translateY(-5px); border-color: var(--blue); box-shadow: var(--shadow-sm); }
 .plogo .plogo-img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .plogo .dot-fallback {
@@ -952,7 +954,11 @@
 }
 
 @media (max-width: 900px) { .plogos { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 640px) { .plogos { grid-template-columns: 1fr; gap: 14px; } .plogo { height: 176px; padding: 18px; } }
+@media (max-width: 640px) {
+  .plogos { grid-template-columns: 1fr; gap: 14px; }
+  .plogo { height: 176px; padding: 18px; }
+  .plogo-featured { height: 210px; padding: 22px; }
+}
 
 /* ============ CTA BANNER ============ */
 .cta { background: var(--navy); color: #fff; text-align: center; position: relative; overflow: hidden; }
