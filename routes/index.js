@@ -36,19 +36,15 @@ router.get('/ngay-hoi-cuoc-thi', async (req, res) => {
   res.render('stem-events', { hero });
 });
 
-async function renderContactPage(req, res) {
+router.get('/lien-he', async (req, res) => {
   const hero = await getPageContent('lien-he');
   res.render('contact', { hero });
-}
-
-router.get('/lien-he', renderContactPage);
-router.get('/hop-tac', renderContactPage);
+});
 
 router.get('/khoa-hoc', async (req, res) => {
-  const hero = await getPageContent('home');
   const courses = await Course.find().sort({ createdAt: -1 }).lean();
   const courseVideos = await CourseVideo.find().sort({ featured: -1, order: 1, createdAt: -1 }).lean();
-  res.render('courses', { hero, courses, courseVideos });
+  res.render('courses', { courses, courseVideos });
 });
 
 router.get('/khoa-hoc/:id', async (req, res) => {
@@ -70,11 +66,8 @@ router.get('/hoi-thao-truc-tuyen', async (req, res) => {
 });
 
 router.get('/tin-tuc', async (req, res) => {
-  const allArticles = await Article.find({ published: true }).sort({ createdAt: -1 }).lean();
-  const isInternational = (article) => /quốc tế|international|global|world/i.test(article.category || '');
-  const internationalArticles = allArticles.filter(isInternational);
-  const articles = allArticles.filter((article) => !isInternational(article));
-  res.render('news', { articles, internationalArticles });
+  const articles = await Article.find({ published: true }).sort({ createdAt: -1 }).lean();
+  res.render('news', { articles });
 });
 
 router.get('/tin-tuc/:id', async (req, res) => {
