@@ -1034,7 +1034,7 @@ const ADMIN_PAGE_CONFIG = {
   home: { label: 'Trang chủ', pageKey: 'home' },
   'dao-tao': { label: 'Đào tạo bồi dưỡng chuyên môn', pageKey: 'home' },
   lab: { label: 'Thiết kế và chuyển giao chương trình giáo dục', pageKey: 'lab-consulting' },
-  'su-kien': { label: 'Tổ chức & thẩm định cuộc thi, sự kiện', pageKey: 'stem-events' },
+  'su-kien': { label: 'Tổ chức ngày hội & cuộc thi STEM', pageKey: 'stem-events' },
   'giai-phap': { label: 'Giải pháp', pageKey: 'giai-phap' },
   'khoa-hoc': { label: 'Khóa học', pageKey: 'home' },
   'tin-tuc': { label: 'Tin tức', pageKey: 'home' },

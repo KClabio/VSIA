@@ -30,7 +30,7 @@ const pageContentSchema = new mongoose.Schema({
   homeWhyItem3Text: { type: String, default: 'VSIA không chỉ cung cấp công cụ mà còn giải quyết bài toán giáo dục một cách triệt để thông qua mô hình tích hợp: Thiết kế không gian - Xây dựng chương trình - Đào tạo con người - Vận hành hiệu quả.' },
   homeBusinessEyebrow: { type: String, default: 'Lĩnh vực hoạt động' },
   homeBusiness1Title: { type: String, default: 'ĐÀO TẠO BỒI DƯỠNG CHUYÊN MÔN' },
-  homeBusiness2Title: { type: String, default: 'TỔ CHỨC & THẨM ĐỊNH CUỘC THI, SỰ KIỆN' },
+  homeBusiness2Title: { type: String, default: 'TỔ CHỨC NGÀY HỘI & CUỘC THI STEM' },
   homeBusiness3Title: { type: String, default: 'THIẾT KẾ VÀ CHUYỂN GIAO CHƯƠNG TRÌNH GIÁO DỤC' },
   homeLearnMoreText: { type: String, default: 'Tìm hiểu thêm →' },
   homeTrainingEyebrow: { type: String, default: 'Chương trình đào tạo' },
