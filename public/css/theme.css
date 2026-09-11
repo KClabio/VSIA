@@ -290,23 +290,25 @@
     linear-gradient(180deg, rgba(4, 20, 36, .4) 0%, transparent 42%, rgba(4, 20, 36, .7) 100%),
     linear-gradient(90deg, rgba(8, 22, 44, .85) 0%, rgba(8, 22, 44, .45) 55%, rgba(8, 22, 44, .2) 100%);
 }
-/* Ảnh nền thật do admin tải lên: bỏ filter để ảnh rõ nét nhất */
+/* Ảnh nền thật do admin tải lên: bỏ hiệu ứng mờ (blur), giữ tối nhẹ để nổi bật chữ */
 .hero-home-bg.has-photo {
-  filter: none;
+  filter: brightness(0.78);
 }
 /* Slideshow nhiều ảnh nền: các lớp xếp chồng, chỉ lớp .active hiện, chuyển dần (crossfade) */
 .hero-home-bg-slides { position: absolute; inset: 0; z-index: 0; }
 .hero-home-bg-slide {
   position: absolute; inset: 0;
   background-size: cover; background-position: center;
-  filter: none;
+  filter: brightness(0.78);
   opacity: 0;
   transition: opacity 1.4s ease;
 }
 .hero-home-bg-slide.active { opacity: 1; }
 .hero-home-overlay {
   position: absolute; inset: 0; z-index: 1;
-  background: none;
+  background:
+    linear-gradient(100deg, rgba(3, 14, 26, .8) 0%, rgba(3, 14, 26, .5) 45%, rgba(3, 14, 26, .24) 100%),
+    linear-gradient(180deg, rgba(3, 14, 26, .1) 0%, transparent 35%, rgba(3, 14, 26, .55) 100%);
 }
 .hero-home .hexlayer { z-index: 2; opacity: .5; color: rgba(255, 255, 255, .09); }
 .hero-home-bg.has-photo ~ .hexlayer,
@@ -754,7 +756,7 @@
 .page-hero { position: relative; overflow: hidden; min-height: 420px; display: flex; align-items: center; padding: 90px 0 64px; }
 .page-hero-bg { position: absolute; inset: 0; background: linear-gradient(140deg, var(--navy-dark), var(--navy2)); }
 .page-hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.page-hero-overlay { position: absolute; inset: 0; background: none; }
+.page-hero-overlay { position: absolute; inset: 0; background: linear-gradient(100deg, rgba(6, 37, 68, .92) 20%, rgba(6, 37, 68, .72) 55%, rgba(6, 37, 68, .5)); }
 .page-hero-inner { position: relative; z-index: 2; max-width: var(--maxw); margin: 0 auto; padding: 0 26px; transform: translateX(10px); }
 .hero-pill {
   display: inline-flex; align-items: center; font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
@@ -767,7 +769,7 @@
 .breadcrumb a:hover { color: #fff; }
 .hero-gradient-text { background: linear-gradient(100deg, var(--green), var(--yellow)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .partnership-hero .page-hero-bg { background: linear-gradient(140deg, var(--navy-dark), var(--navy2)); }
-.partnership-hero .page-hero-overlay { background: none; }
+.partnership-hero .page-hero-overlay { background: linear-gradient(100deg, rgba(6, 37, 68, .92) 20%, rgba(6, 37, 68, .72) 55%, rgba(6, 37, 68, .5)); }
 .page-hero-ctas { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 28px; }
 .page-hero-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
 .page-hero .badge-pill {
