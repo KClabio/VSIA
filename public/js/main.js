@@ -429,3 +429,31 @@ if (contactToggleBtns.length && contactOverlay) {
     }
   });
 }
+
+// ============ Nút hiện/ẩn mật khẩu (trang Đăng nhập, Đăng ký) ============
+// Bắt sự kiện ở document nên áp dụng cho mọi ô mật khẩu có nút .pw-toggle, kể cả ô
+// được thêm vào sau này — không phải sửa lại file này mỗi lần thêm form mới.
+document.addEventListener('click', (e) => {
+  const toggle = e.target.closest('.pw-toggle');
+  if (!toggle) return;
+
+  const input = toggle.parentElement?.querySelector('input');
+  if (!input) return;
+
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+
+  toggle.setAttribute('aria-pressed', show ? 'true' : 'false');
+  const label = show ? 'Ẩn mật khẩu' : 'Hiện mật khẩu';
+  toggle.setAttribute('aria-label', label);
+  toggle.title = label;
+
+  // Đổi type làm trình duyệt đưa con trỏ về đầu ô; trả con trỏ về cuối để gõ tiếp được ngay.
+  const end = input.value.length;
+  input.focus();
+  try {
+    input.setSelectionRange(end, end);
+  } catch (err) {
+    // Một số loại input không cho setSelectionRange — không quan trọng, bỏ qua.
+  }
+});

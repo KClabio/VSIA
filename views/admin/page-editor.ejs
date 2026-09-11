@@ -28,8 +28,8 @@
           <label>Mô tả chương trình đào tạo<textarea name="homeTrainingLead" rows="2"><%= page.homeTrainingLead %></textarea></label>
           <% for (let i = 1; i <= 5; i += 1) { %>
             <div class="admin-form-row">
-              <label>Mục <%= i %> - Tiêu đề<input type="text" name="trainingProgram<%= i %>Title" value="<%= page['trainingProgram' + i + 'Title'] %>" required></label>
-              <label>Mục <%= i %> - Mô tả<textarea name="trainingProgram<%= i %>Text" rows="2" required><%= page['trainingProgram' + i + 'Text'] %></textarea></label>
+              <label>Mục <%= i %> - Tiêu đề<input type="text" name="trainingProgram<%= i %>Title" value="<%= page['trainingProgram' + i + 'Title'] %>"></label>
+              <label>Mục <%= i %> - Mô tả<textarea name="trainingProgram<%= i %>Text" rows="2"><%= page['trainingProgram' + i + 'Text'] %></textarea></label>
             </div>
           <% } %>
           <div class="admin-form-actions"><button class="btn btn-primary" type="submit">Lưu nội dung đào tạo</button></div>

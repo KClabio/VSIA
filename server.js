@@ -8,9 +8,11 @@ const path = require('path');
 const connectDB = require('./config/db');
 const { loadUser } = require('./middleware/auth');
 const { loadSiteSettings } = require('./lib/settings');
+const { loadSiteContent, installContentDefaults } = require('./lib/siteContent');
 const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
+const contentAdminRoutes = require('./routes/contentAdmin');
 const learningRoutes = require('./routes/learning');
 const widgetRoutes = require('./routes/widgets');
 
@@ -32,6 +34,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.set('view engine', 'ejs');
+// Bản mặc định của txt()/ed()/pic()... cho mọi view. Phải đặt trước mọi route: trang lỗi 500
+// được render từ error handler, có thể chạy trước cả middleware loadSiteContent bên dưới.
+installContentDefaults(app);
 // Chỉ bật khi thật sự đứng sau reverse proxy (Nginx/Vercel/Render...) — nếu bật sai khi không có
 // proxy, req.ip có thể bị giả mạo qua header X-Forwarded-For, làm rate limit vô hiệu.
 if (process.env.TRUST_PROXY) app.set('trust proxy', process.env.TRUST_PROXY);
@@ -68,11 +73,15 @@ app.use(session({
 
 app.use(loadUser);
 app.use(loadSiteSettings);
+app.use(loadSiteContent);
 
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 app.use('/', learningRoutes);
 app.use('/', widgetRoutes);
+// Phải đứng trước adminRoutes: router này có tầng quyền riêng (requireModule('noi-dung')) để
+// biên tập viên sửa được nội dung mà không cần mở quyền vào toàn bộ trang Cài đặt.
+app.use('/admin/noi-dung', contentAdminRoutes);
 app.use('/admin', adminRoutes);
 
 app.use((req, res) => {

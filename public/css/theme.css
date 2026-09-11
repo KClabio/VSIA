@@ -1203,3 +1203,37 @@
 }
 .nav-compact .nav-subdropdown-menu::before { display: none; }
 .nav-compact .nav-subdropdown.open .nav-subdropdown-menu { display: block; }
+
+/* ============ Nút hiện/ẩn mật khẩu ============ */
+/* Dùng ở trang Đăng nhập và Đăng ký. Markup: views/partials/password-toggle.ejs
+   Xử lý: cuối public/js/main.js. Thẻ bọc ngoài phải có class "has-toggle". */
+.auth-input-wrap.has-toggle input { padding-right: 46px; }
+
+.pw-toggle {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--steel);
+  cursor: pointer;
+  transition: color .18s, background-color .18s;
+}
+.pw-toggle:hover { color: var(--blue); background: rgba(26, 143, 209, .1); }
+.pw-toggle:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+.pw-toggle svg { display: block; pointer-events: none; }
+
+/* Mặc định (mật khẩu đang bị che): hiện icon con mắt mở — nghĩa là "bấm để xem".
+   Khi đã hiện mật khẩu (aria-pressed="true"): đổi sang icon mắt gạch chéo. */
+.pw-toggle .pw-icon-off { display: none; }
+.pw-toggle[aria-pressed="true"] { color: var(--blue); }
+.pw-toggle[aria-pressed="true"] .pw-icon-on { display: none; }
+.pw-toggle[aria-pressed="true"] .pw-icon-off { display: block; }

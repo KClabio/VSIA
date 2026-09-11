@@ -118,10 +118,10 @@
       <% for (let i = 1; i <= 5; i += 1) { %>
         <div class="admin-form-row">
           <label>Chương trình <%= i %> - Tiêu đề
-            <input type="text" name="trainingProgram<%= i %>Title" value="<%= page['trainingProgram' + i + 'Title'] %>" required>
+            <input type="text" name="trainingProgram<%= i %>Title" value="<%= page['trainingProgram' + i + 'Title'] %>">
           </label>
           <label>Chương trình <%= i %> - Mô tả
-            <textarea name="trainingProgram<%= i %>Text" rows="2" required><%= page['trainingProgram' + i + 'Text'] %></textarea>
+            <textarea name="trainingProgram<%= i %>Text" rows="2"><%= page['trainingProgram' + i + 'Text'] %></textarea>
           </label>
         </div>
       <% } %>
