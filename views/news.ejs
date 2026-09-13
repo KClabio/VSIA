@@ -1,17 +1,17 @@
-<%- include('partials/header', { title: 'Tin tức - VSIA' }) %>
+<%- include('partials/header', { title: 'Tin tức - VSIA', pageId: 'tin-tuc' }) %>
 
 <% const internationalNews = typeof internationalArticles !== 'undefined' ? internationalArticles : []; %>
 
 <section class="section">
   <div class="container">
     <div class="news-head">
-      <span class="eyebrow">— VSIA</span>
-      <h1 class="page-title" style="margin-top:12px; text-align:left;">Tin tức &amp; Bài viết</h1>
-      <p class="section-subtitle" style="margin:12px 0 0; text-align:left;">Cập nhật hoạt động, sự kiện và câu chuyện giáo dục STEM từ VSIA cùng các đối tác đồng hành.</p>
+      <span class="eyebrow"><%- ed('tintuc.eyebrow', '— VSIA') %></span>
+      <h1 class="page-title" style="margin-top:12px; text-align:left;"><%- ed('tintuc.title', 'Tin tức & Bài viết') %></h1>
+      <p class="section-subtitle" style="margin:12px 0 0; text-align:left;"><%- ed('tintuc.lead', 'Cập nhật hoạt động, sự kiện và câu chuyện giáo dục STEM từ VSIA cùng các đối tác đồng hành.', { multiline: true }) %></p>
     </div>
 
     <% if (articles.length === 0) { %>
-      <p class="empty-state" style="margin-top:40px;">Chưa có bài viết nào.</p>
+      <p class="empty-state" style="margin-top:40px;"><%- ed('tintuc.empty', 'Chưa có bài viết nào.') %></p>
     <% } else { %>
       <%
         const featured = articles[0]; const rest = articles.slice(1); const highlights = articles.slice(0, 4);
@@ -19,7 +19,7 @@
         const featuredDay = String(featuredDate.getDate()).padStart(2, '0');
         const featuredMonth = 'Th' + (featuredDate.getMonth() + 1);
       %>
-      <h2 class="news-section-title">TIN TỨC TRONG NƯỚC</h2>
+      <h2 class="news-section-title"><%- ed('tintuc.domestic.title', 'TIN TỨC TRONG NƯỚC') %></h2>
       <div class="news-layout">
         <div class="news-main">
 
@@ -32,7 +32,7 @@
             <div class="news-featured-body">
               <h2><%= featured.title %></h2>
               <p><%= featured.summary %></p>
-              <span class="news-read-link">Đọc bài viết <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              <span class="news-read-link"><%- ed('tintuc.readMore', 'Đọc bài viết') %> <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
             </div>
           </a>
 
@@ -52,7 +52,7 @@
                   <div class="news-card-body">
                     <h3><%= article.title %></h3>
                     <p><%= article.summary %></p>
-                    <span class="news-read-link news-read-link-sm">Xem thêm <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                    <span class="news-read-link news-read-link-sm"><%- ed('tintuc.seeMore', 'Xem thêm') %> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
                   </div>
                 </a>
               <% }) %>
@@ -61,7 +61,7 @@
         </div>
 
         <aside class="news-sidebar">
-          <h4>Nổi bật</h4>
+          <h4><%- ed('tintuc.sidebar.title', 'Nổi bật') %></h4>
           <div class="news-sidebar-rule"></div>
           <% highlights.forEach((article, i) => { %>
             <div class="news-side-item">
@@ -78,7 +78,7 @@
       </div>
       <% if (internationalNews.length > 0) { %>
         <section class="news-international-section">
-          <h2 class="news-section-title">TIN TỨC QUỐC TẾ</h2>
+          <h2 class="news-section-title"><%- ed('tintuc.international.title', 'TIN TỨC QUỐC TẾ') %></h2>
           <div class="news-grid news-international-grid">
             <% internationalNews.forEach(article => {
               const cardDate = new Date(article.createdAt);
@@ -94,7 +94,7 @@
                 <div class="news-card-body">
                   <h3><%= article.title %></h3>
                   <p><%= article.summary %></p>
-                  <span class="news-read-link news-read-link-sm">Xem thêm <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                  <span class="news-read-link news-read-link-sm"><%- ed('tintuc.seeMore', 'Xem thêm') %> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
                 </div>
               </a>
             <% }) %>

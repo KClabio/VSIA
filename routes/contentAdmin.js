@@ -4,6 +4,7 @@ const router = express.Router();
 const SiteSettings = require('../models/SiteSettings');
 const PageContent = require('../models/PageContent');
 const { PAGE_DEFAULTS } = require('../lib/pageContent');
+const { CONTENT_SECTIONS } = require('../lib/contentSections');
 const { requireAuth, requireStaff, requireModule } = require('../middleware/auth');
 const { uploadImage, wrapUpload, friendlyUploadError, fileUrl } = require('../middleware/upload');
 const { unlinkUploaded } = require('../lib/files');
@@ -49,6 +50,89 @@ function pageFieldFor(key) {
   if (!defaults || field === 'label' || !Object.prototype.hasOwnProperty.call(defaults, field)) return null;
   return { pageKey, field };
 }
+
+// Ghi một ô: khoá dạng page.* đi vào PageContent (cùng chỗ form hero ghi), còn lại vào SiteContent.
+async function saveOneField(key, type, value, userId) {
+  const pageField = pageFieldFor(key);
+  if (pageField) {
+    await PageContent.findOneAndUpdate(
+      { pageKey: pageField.pageKey },
+      { $set: { [pageField.field]: value } },
+      { upsert: true },
+    );
+    return;
+  }
+  await setContent(key, type, value, userId);
+}
+
+// ---- Form "nội dung theo từng phần" trong trang quản trị ----
+// Lưu mọi ô của MỘT phần. Chỉ nhận những khoá đã khai báo trong lib/contentSections.js cho
+// đúng trang đó, nên không thể nhồi khoá lạ vào database qua form.
+router.post('/luu/:pageKey', async (req, res) => {
+  const pageSlug = req.params.pageKey;
+  const page = CONTENT_SECTIONS[pageSlug];
+  if (!page) return res.status(404).render('404');
+
+  const back = '/admin/trang/' + encodeURIComponent(pageSlug);
+  const badLinks = [];
+  let saved = 0;
+
+  for (const section of page.sections) {
+    for (const field of section.fields) {
+      if (field.type === 'image') continue;
+      if (!Object.prototype.hasOwnProperty.call(req.body, field.key)) continue;
+
+      if (field.type === 'link') {
+        const value = normalizeLink(req.body[field.key]);
+        if (value === null) { badLinks.push(field.label); continue; }
+        await saveOneField(field.key, 'link', value, req.user._id);
+      } else {
+        const value = normalizeText(req.body[field.key]);
+        if (value === null) continue;
+        await saveOneField(field.key, 'text', value, req.user._id);
+      }
+      saved += 1;
+    }
+  }
+
+  if (badLinks.length) {
+    const msg = 'link không hợp lệ ở ô: ' + badLinks.join(', ')
+      + '. Link phải bắt đầu bằng /, #, http://, https://, mailto: hoặc tel:';
+    return res.redirect(back + '?loi=' + encodeURIComponent(msg));
+  }
+  res.redirect(back + (saved ? '?noidung=1' : ''));
+});
+
+// Thay ảnh của một ô trong form theo phần. Khoá phải là settings.<field> đã khai báo.
+router.post('/anh/:pageKey/:key', wrapUpload(uploadImage.single('image'), async (err, req, res) => {
+  const back = '/admin/trang/' + encodeURIComponent(req.params.pageKey);
+  if (err) return res.redirect(back + '?loi=' + encodeURIComponent(friendlyUploadError(err)));
+
+  const field = settingsFieldFor(req.params.key);
+  if (!field) {
+    if (req.file) unlinkUploaded(fileUrl(req.file, 'images'));
+    return res.redirect(back + '?loi=' + encodeURIComponent('Ô ảnh không hợp lệ.'));
+  }
+  if (!req.file) return res.redirect(back + '?loi=' + encodeURIComponent('Vui lòng chọn ảnh.'));
+
+  const settings = await getSiteSettings();
+  unlinkUploaded(settings[field]);
+  settings[field] = fileUrl(req.file, 'images');
+  await settings.save();
+  res.redirect(back + '?noidung=1');
+}));
+
+router.post('/anh/:pageKey/:key/xoa', async (req, res) => {
+  const back = '/admin/trang/' + encodeURIComponent(req.params.pageKey);
+  const field = settingsFieldFor(req.params.key);
+  if (!field) return res.redirect(back + '?loi=' + encodeURIComponent('Ô ảnh không hợp lệ.'));
+
+  const settings = await getSiteSettings();
+  unlinkUploaded(settings[field]);
+  settings[field] = null;
+  await settings.save();
+  res.redirect(back + '?noidung=1');
+});
 
 router.post('/text', async (req, res) => {
   const { key } = req.body;

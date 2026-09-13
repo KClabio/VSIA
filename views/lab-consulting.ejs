@@ -1,4 +1,4 @@
-<%- include('partials/header', { title: 'Tư vấn thiết kế phòng Lab STEM - VSIA' }) %>
+<%- include('partials/header', { title: 'Tư vấn thiết kế phòng Lab STEM - VSIA', pageId: 'lab-consulting' }) %>
 
 <section class="page-hero">
   <div class="page-hero-bg">
@@ -6,56 +6,56 @@
   </div>
   <div class="page-hero-overlay"></div>
   <div class="page-hero-inner">
-    <span class="hero-pill"><%= hero.heroBadge %></span>
-    <h1><%= hero.heroTitleLine1 %><% if (hero.heroTitleLine2) { %> <%= hero.heroTitleLine2 %><% } %></h1>
-    <p class="lead"><%= hero.heroSubtitle %></p>
+    <span class="hero-pill"><%- ed('page.lab-consulting.heroBadge', hero.heroBadge) %></span>
+    <h1><%- ed('page.lab-consulting.heroTitleLine1', hero.heroTitleLine1) %><% if (hero.heroTitleLine2) { %> <%- ed('page.lab-consulting.heroTitleLine2', hero.heroTitleLine2) %><% } %></h1>
+    <p class="lead"><%- ed('page.lab-consulting.heroSubtitle', hero.heroSubtitle, { multiline: true }) %></p>
     <div class="page-hero-ctas">
-      <a class="btn btn-primary" href="#" data-open-contact><%= hero.heroCtaText %></a>
-      <a class="btn btn-ghost" href="#dich-vu">Xem dịch vụ</a>
+      <a class="btn btn-primary" href="#" data-open-contact><%- ed('page.lab-consulting.heroCtaText', hero.heroCtaText) %></a>
+      <a class="btn btn-ghost" href="<%= lnk('lab.hero.cta2.link', '#dich-vu') %>"<%- lnkAttr('lab.hero.cta2.link') %>><%- ed('lab.hero.cta2.label', 'Xem dịch vụ') %></a>
     </div>
     <div class="page-hero-badges">
-      <span class="badge-pill">Khảo sát đến vận hành trọn gói</span>
-      <span class="badge-pill">Phù hợp ngân sách &amp; cấp học</span>
-      <span class="badge-pill">Đồng hành lâu dài sau bàn giao</span>
+      <span class="badge-pill"><%- ed('lab.hero.badge1', 'Khảo sát đến vận hành trọn gói') %></span>
+      <span class="badge-pill"><%- ed('lab.hero.badge2', 'Phù hợp ngân sách & cấp học') %></span>
+      <span class="badge-pill"><%- ed('lab.hero.badge3', 'Đồng hành lâu dài sau bàn giao') %></span>
     </div>
   </div>
 </section>
 
 <section class="section" id="dich-vu">
   <div class="container">
-    <h2 class="section-title">DỊCH VỤ BAO GỒM</h2>
-    <p class="section-subtitle">Cung cấp giải pháp toàn diện từ thiết kế không gian vật lý đến khung chương trình học liệu cho các nhà trường và đối tác doanh nghiệp, địa phương.</p>
+    <h2 class="section-title"><%- ed('lab.services.title', 'DỊCH VỤ BAO GỒM') %></h2>
+    <p class="section-subtitle"><%- ed('lab.services.subtitle', 'Cung cấp giải pháp toàn diện từ thiết kế không gian vật lý đến khung chương trình học liệu cho các nhà trường và đối tác doanh nghiệp, địa phương.', { multiline: true }) %></p>
 
     <div class="info-grid">
       <div class="info-card reveal">
         <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m21 21-4.3-4.3"/></svg></div>
-        <h3>Khảo sát &amp; đánh giá không gian</h3>
-        <p>Khảo sát thực tế phòng học, diện tích, hệ thống điện, an toàn để đưa ra phương án bố trí phù hợp.</p>
+        <h3><%- ed('lab.svc1.title', 'Khảo sát & đánh giá không gian') %></h3>
+        <p><%- ed('lab.svc1.text', 'Khảo sát thực tế phòng học, diện tích, hệ thống điện, an toàn để đưa ra phương án bố trí phù hợp.', { multiline: true }) %></p>
       </div>
       <div class="info-card reveal">
         <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <h3>Thiết kế bố trí phòng Lab</h3>
-        <p>Đề xuất sơ đồ bố trí bàn ghế, khu vực thực hành, khu trưng bày sản phẩm theo từng cấp học.</p>
+        <h3><%- ed('lab.svc2.title', 'Thiết kế bố trí phòng Lab') %></h3>
+        <p><%- ed('lab.svc2.text', 'Đề xuất sơ đồ bố trí bàn ghế, khu vực thực hành, khu trưng bày sản phẩm theo từng cấp học.', { multiline: true }) %></p>
       </div>
       <div class="info-card reveal">
         <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 4v-.5M16 4v-.5"/></svg></div>
-        <h3>Danh mục thiết bị</h3>
-        <p>Tư vấn danh mục thiết bị STEM/Robotics phù hợp mục tiêu giảng dạy và ngân sách nhà trường.</p>
+        <h3><%- ed('lab.svc3.title', 'Danh mục thiết bị') %></h3>
+        <p><%- ed('lab.svc3.text', 'Tư vấn danh mục thiết bị STEM/Robotics phù hợp mục tiêu giảng dạy và ngân sách nhà trường.', { multiline: true }) %></p>
       </div>
       <div class="info-card reveal">
         <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.83 2.83-2.83-.7-.7-2.83L14.7 6.3Z"/></svg></div>
-        <h3>Triển khai &amp; lắp đặt</h3>
-        <p>Hỗ trợ giám sát thi công, lắp đặt thiết bị, đảm bảo đúng thiết kế đã thống nhất.</p>
+        <h3><%- ed('lab.svc4.title', 'Triển khai & lắp đặt') %></h3>
+        <p><%- ed('lab.svc4.text', 'Hỗ trợ giám sát thi công, lắp đặt thiết bị, đảm bảo đúng thiết kế đã thống nhất.', { multiline: true }) %></p>
       </div>
       <div class="info-card reveal">
         <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <h3>Đào tạo sử dụng</h3>
-        <p>Tập huấn giáo viên sử dụng, bảo quản thiết bị và khai thác phòng Lab hiệu quả sau bàn giao.</p>
+        <h3><%- ed('lab.svc5.title', 'Đào tạo sử dụng') %></h3>
+        <p><%- ed('lab.svc5.text', 'Tập huấn giáo viên sử dụng, bảo quản thiết bị và khai thác phòng Lab hiệu quả sau bàn giao.', { multiline: true }) %></p>
       </div>
       <div class="info-card reveal">
         <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3ZM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3Z"/></svg></div>
-        <h3>Hỗ trợ vận hành</h3>
-        <p>Đồng hành lâu dài, tư vấn nâng cấp và giải đáp trong quá trình vận hành phòng Lab.</p>
+        <h3><%- ed('lab.svc6.title', 'Hỗ trợ vận hành') %></h3>
+        <p><%- ed('lab.svc6.text', 'Đồng hành lâu dài, tư vấn nâng cấp và giải đáp trong quá trình vận hành phòng Lab.', { multiline: true }) %></p>
       </div>
     </div>
   </div>
@@ -63,8 +63,8 @@
 
 <section class="section section-alt">
   <div class="container">
-    <h2 class="section-title">LỘ TRÌNH TƯ VẤN XÂY DỰNG PHÒNG THỰC HÀNH STEM</h2>
-    <p class="section-subtitle">6 bước đồng hành cùng nhà trường, từ khảo sát đến vận hành và kết nối lâu dài.</p>
+    <h2 class="section-title"><%- ed('lab.path.title', 'LỘ TRÌNH TƯ VẤN XÂY DỰNG PHÒNG THỰC HÀNH STEM') %></h2>
+    <p class="section-subtitle"><%- ed('lab.path.subtitle', '6 bước đồng hành cùng nhà trường, từ khảo sát đến vận hành và kết nối lâu dài.', { multiline: true }) %></p>
 
     <div class="path">
       <div class="path-spine"></div>
@@ -75,8 +75,8 @@
             <div class="path-icon tint-blue">
               <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="13" height="17" rx="2" fill="#0a3d66"/><rect x="7.5" y="1.5" width="6" height="3" rx="1" fill="#1a8fd1"/><rect x="6.5" y="8.5" width="8" height="1.6" rx=".8" fill="#fff"/><rect x="6.5" y="12" width="8" height="1.6" rx=".8" fill="#fff"/><circle cx="18.5" cy="18" r="3.4" fill="#d8a13a"/></svg>
             </div>
-            <h3>Khảo sát thực tế</h3>
-            <p>Thông tin mặt bằng, tình hình thực tế của nhà trường, đơn vị.</p>
+            <h3><%- ed('lab.step1.title', 'Khảo sát thực tế') %></h3>
+            <p><%- ed('lab.step1.text', 'Thông tin mặt bằng, tình hình thực tế của nhà trường, đơn vị.', { multiline: true }) %></p>
           </div>
           <div class="path-num">1</div>
           <div></div>
@@ -91,8 +91,8 @@
             <div class="path-icon tint-gold">
               <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="2" fill="#0a3d66"/><rect x="5" y="6" width="6" height="4.5" rx="1" fill="#1a8fd1"/><rect x="13" y="6" width="6" height="4.5" rx="1" fill="#eaf4fb"/><rect x="5" y="12.5" width="14" height="3" rx="1" fill="#d8a13a"/></svg>
             </div>
-            <h3>Tư vấn mô hình phòng STEM phù hợp</h3>
-            <p>Danh mục thiết bị, thiết kế và bố trí không gian.</p>
+            <h3><%- ed('lab.step2.title', 'Tư vấn mô hình phòng STEM phù hợp') %></h3>
+            <p><%- ed('lab.step2.text', 'Danh mục thiết bị, thiết kế và bố trí không gian.', { multiline: true }) %></p>
           </div>
         </div>
       </div>
@@ -103,8 +103,8 @@
             <div class="path-icon tint-blue">
               <svg viewBox="0 0 24 24" fill="none"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.83 2.83-2.83-.7-.7-2.83L14.7 6.3Z" fill="#0a3d66"/><circle cx="19" cy="5" r="2.4" fill="#1a8fd1"/></svg>
             </div>
-            <h3>Đồng hành thi công</h3>
-            <p>Theo sát tiến độ, chất lượng thi công; phối hợp nghiệm thu hạng mục hoàn thiện.</p>
+            <h3><%- ed('lab.step3.title', 'Đồng hành thi công') %></h3>
+            <p><%- ed('lab.step3.text', 'Theo sát tiến độ, chất lượng thi công; phối hợp nghiệm thu hạng mục hoàn thiện.', { multiline: true }) %></p>
           </div>
           <div class="path-num">3</div>
           <div></div>
@@ -119,8 +119,8 @@
             <div class="path-icon tint-green">
               <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 8l10 5 10-5-10-5Z" fill="#0a3d66"/><path d="M6 11v5c0 1.6 2.7 3 6 3s6-1.4 6-3v-5" stroke="#1a8fd1" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M21 9v6" stroke="#d8a13a" stroke-width="1.8" stroke-linecap="round"/></svg>
             </div>
-            <h3>Tập huấn, đào tạo</h3>
-            <p>Hướng dẫn sử dụng thiết bị; chương trình giáo dục STEM bám sát CT GDPT, khai thác hiệu quả thiết bị của phòng.</p>
+            <h3><%- ed('lab.step4.title', 'Tập huấn, đào tạo') %></h3>
+            <p><%- ed('lab.step4.text', 'Hướng dẫn sử dụng thiết bị; chương trình giáo dục STEM bám sát CT GDPT, khai thác hiệu quả thiết bị của phòng.', { multiline: true }) %></p>
           </div>
         </div>
       </div>
@@ -131,8 +131,8 @@
             <div class="path-icon tint-gold">
               <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" fill="#0a3d66"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1" stroke="#1a8fd1" stroke-width="1.8" stroke-linecap="round"/></svg>
             </div>
-            <h3>Chuyển giao quy trình vận hành</h3>
-            <p>Tư vấn và xây dựng quy trình vận hành, quản lý, kiểm tra và đánh giá phòng STEM.</p>
+            <h3><%- ed('lab.step5.title', 'Chuyển giao quy trình vận hành') %></h3>
+            <p><%- ed('lab.step5.text', 'Tư vấn và xây dựng quy trình vận hành, quản lý, kiểm tra và đánh giá phòng STEM.', { multiline: true }) %></p>
           </div>
           <div class="path-num">5</div>
           <div></div>
@@ -147,8 +147,8 @@
             <div class="path-icon tint-blue">
               <svg viewBox="0 0 24 24" fill="none"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke="#0a3d66" stroke-width="2.2" stroke-linecap="round"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke="#1a8fd1" stroke-width="2.2" stroke-linecap="round"/></svg>
             </div>
-            <h3>Đồng hành và kết nối</h3>
-            <p>Hỗ trợ vận hành; kết nối các cuộc thi trong nước và chương trình quốc tế.</p>
+            <h3><%- ed('lab.step6.title', 'Đồng hành và kết nối') %></h3>
+            <p><%- ed('lab.step6.text', 'Hỗ trợ vận hành; kết nối các cuộc thi trong nước và chương trình quốc tế.', { multiline: true }) %></p>
           </div>
         </div>
       </div>
@@ -159,10 +159,10 @@
 <div class="cta-strip">
   <div class="cta-strip-inner">
     <div>
-      <h3>Nhà trường bạn muốn xây dựng phòng thực hành STEM?</h3>
-      <p>VSIA đồng hành từ khảo sát, thiết kế đến vận hành phòng Lab đạt chuẩn, phù hợp ngân sách và cấp học.</p>
+      <h3><%- ed('lab.cta.title', 'Nhà trường bạn muốn xây dựng phòng thực hành STEM?') %></h3>
+      <p><%- ed('lab.cta.text', 'VSIA đồng hành từ khảo sát, thiết kế đến vận hành phòng Lab đạt chuẩn, phù hợp ngân sách và cấp học.', { multiline: true }) %></p>
     </div>
-    <a class="btn btn-white" href="#" data-open-contact>Liên hệ tư vấn thiết kế</a>
+    <a class="btn btn-white" href="#" data-open-contact><%- ed('lab.cta.button', 'Liên hệ tư vấn thiết kế') %></a>
   </div>
 </div>
 

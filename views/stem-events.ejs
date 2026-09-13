@@ -1,4 +1,4 @@
-<%- include('partials/header', { title: 'Ngày hội & Cuộc thi STEM - VSIA' }) %>
+<%- include('partials/header', { title: 'Ngày hội & Cuộc thi STEM - VSIA', pageId: 'stem-events' }) %>
 
 <section class="page-hero">
   <div class="page-hero-bg">
@@ -6,52 +6,52 @@
   </div>
   <div class="page-hero-overlay"></div>
   <div class="page-hero-inner">
-    <span class="hero-pill"><%= hero.heroBadge %></span>
-    <h1><%= hero.heroTitleLine1 %><% if (hero.heroTitleLine2) { %> <%= hero.heroTitleLine2 %><% } %></h1>
-    <p class="lead"><%= hero.heroSubtitle %></p>
+    <span class="hero-pill"><%- ed('page.stem-events.heroBadge', hero.heroBadge) %></span>
+    <h1><%- ed('page.stem-events.heroTitleLine1', hero.heroTitleLine1) %><% if (hero.heroTitleLine2) { %> <%- ed('page.stem-events.heroTitleLine2', hero.heroTitleLine2) %><% } %></h1>
+    <p class="lead"><%- ed('page.stem-events.heroSubtitle', hero.heroSubtitle, { multiline: true }) %></p>
     <div class="page-hero-ctas">
-      <a class="btn btn-primary" href="#" data-open-contact><%= hero.heroCtaText %></a>
-      <a class="btn btn-ghost" href="#hinh-thuc">Xem hình thức tổ chức</a>
+      <a class="btn btn-primary" href="#" data-open-contact><%- ed('page.stem-events.heroCtaText', hero.heroCtaText) %></a>
+      <a class="btn btn-ghost" href="<%= lnk('sukien.hero.cta2.link', '#hinh-thuc') %>"<%- lnkAttr('sukien.hero.cta2.link') %>><%- ed('sukien.hero.cta2.label', 'Xem hình thức tổ chức') %></a>
     </div>
     <div class="page-hero-badges">
-      <span class="badge-pill">Từ cấp cơ sở đến quốc gia, quốc tế</span>
-      <span class="badge-pill">Tư vấn chuyên môn &amp; tổ chức</span>
-      <span class="badge-pill">Đồng hành trọn gói tổ chức</span>
+      <span class="badge-pill"><%- ed('sukien.hero.badge1', 'Từ cấp cơ sở đến quốc gia, quốc tế') %></span>
+      <span class="badge-pill"><%- ed('sukien.hero.badge2', 'Tư vấn chuyên môn & tổ chức') %></span>
+      <span class="badge-pill"><%- ed('sukien.hero.badge3', 'Đồng hành trọn gói tổ chức') %></span>
     </div>
   </div>
 </section>
 
 <section class="section" id="hinh-thuc">
   <div class="container">
-    <h2 class="section-title">HÌNH THỨC TỔ CHỨC</h2>
-    <p class="section-subtitle">Đơn vị tổ chức, điều phối và tư vấn chuyên môn cho các sân chơi công nghệ, ngày hội sáng tạo, giải đấu Robotics từ cấp trường đến cấp quốc gia.</p>
+    <h2 class="section-title"><%- ed('sukien.forms.title', 'HÌNH THỨC TỔ CHỨC') %></h2>
+    <p class="section-subtitle"><%- ed('sukien.forms.subtitle', 'Đơn vị tổ chức, điều phối và tư vấn chuyên môn cho các sân chơi công nghệ, ngày hội sáng tạo, giải đấu Robotics từ cấp trường đến cấp quốc gia.', { multiline: true }) %></p>
 
     <div class="info-grid">
       <div class="info-card reveal">
         <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 22V4M4 4h14l-2 4 2 4H4"/></svg></div>
-        <h3>Ngày hội trải nghiệm STEM</h3>
-        <p>Các gian trải nghiệm Robotics, lập trình, khoa học vui... để học sinh toàn trường tham gia trực tiếp.</p>
+        <h3><%- ed('sukien.card1.title', 'Ngày hội trải nghiệm STEM') %></h3>
+        <p><%- ed('sukien.card1.text', 'Các gian trải nghiệm Robotics, lập trình, khoa học vui... để học sinh toàn trường tham gia trực tiếp.', { multiline: true }) %></p>
       </div>
       <div class="info-card reveal">
         <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.85 1.03.85 1.7v.5h5.5v-.5c0-.67.35-1.3.85-1.7A6 6 0 0 0 12 3Z"/></svg></div>
-        <h3>Cuộc thi sáng tạo theo chủ đề</h3>
-        <p>Học sinh làm việc nhóm, thực hiện sản phẩm STEM theo chủ đề do nhà trường và VSIA thống nhất.</p>
+        <h3><%- ed('sukien.card2.title', 'Cuộc thi sáng tạo theo chủ đề') %></h3>
+        <p><%- ed('sukien.card2.text', 'Học sinh làm việc nhóm, thực hiện sản phẩm STEM theo chủ đề do nhà trường và VSIA thống nhất.', { multiline: true }) %></p>
       </div>
       <div class="info-card reveal">
         <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="m9 13 2 2 4-4"/></svg></div>
-        <h3>Hội đồng cố vấn chuyên môn</h3>
-        <p>Đảm nhận vai trò giám khảo, hội đồng cố vấn cho các cuộc thi khoa học kỹ thuật, AI, Robotics từ cấp cơ sở đến quốc gia, quốc tế.</p>
+        <h3><%- ed('sukien.card3.title', 'Hội đồng cố vấn chuyên môn') %></h3>
+        <p><%- ed('sukien.card3.text', 'Đảm nhận vai trò giám khảo, hội đồng cố vấn cho các cuộc thi khoa học kỹ thuật, AI, Robotics từ cấp cơ sở đến quốc gia, quốc tế.', { multiline: true }) %></p>
       </div>
       <div class="info-card reveal">
         <div class="info-card-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 5h3a2 2 0 0 1-2 4M7 5H4a2 2 0 0 0 2 4"/></svg></div>
-        <h3>Trưng bày &amp; chung kết trao giải</h3>
-        <p>Trưng bày sản phẩm dự thi, chấm giải và trao giải nhằm khích lệ tinh thần sáng tạo của học sinh.</p>
+        <h3><%- ed('sukien.card4.title', 'Trưng bày & chung kết trao giải') %></h3>
+        <p><%- ed('sukien.card4.text', 'Trưng bày sản phẩm dự thi, chấm giải và trao giải nhằm khích lệ tinh thần sáng tạo của học sinh.', { multiline: true }) %></p>
       </div>
     </div>
 
     <div class="info-note">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
-      <p>Thông tin lịch cụ thể từng ngày hội/cuộc thi sẽ được cập nhật trong thời gian tới. Nếu trường bạn quan tâm tổ chức, hãy liên hệ VSIA để được tư vấn.</p>
+      <p><%- ed('sukien.note', 'Thông tin lịch cụ thể từng ngày hội/cuộc thi sẽ được cập nhật trong thời gian tới. Nếu trường bạn quan tâm tổ chức, hãy liên hệ VSIA để được tư vấn.', { multiline: true }) %></p>
     </div>
   </div>
 </section>
@@ -59,11 +59,10 @@
 <div class="cta-strip">
   <div class="cta-strip-inner">
     <div>
-      <h3>Trường bạn muốn tổ chức ngày hội hoặc cuộc thi STEM?</h3>
-      <p>VSIA đồng hành tư vấn chuyên môn, tổ chức và điều phối — từ cấp cơ sở đến cấp quốc gia, quốc tế.</p>
+      <h3><%- ed('sukien.cta.title', 'Trường bạn muốn tổ chức ngày hội hoặc cuộc thi STEM?') %></h3>
+      <p><%- ed('sukien.cta.text', 'VSIA đồng hành tư vấn chuyên môn, tổ chức và điều phối — từ cấp cơ sở đến cấp quốc gia, quốc tế.', { multiline: true }) %></p>
     </div>
-    </div>
-    <a class="btn btn-white" href="#" data-open-contact>Đăng ký tổ chức tại trường</a>
+    <a class="btn btn-white" href="#" data-open-contact><%- ed('sukien.cta.button', 'Đăng ký tổ chức tại trường') %></a>
   </div>
 </div>
 

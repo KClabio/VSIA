@@ -114,6 +114,14 @@
       <label>Mô tả chương trình đào tạo
         <textarea name="homeTrainingLead" rows="2"><%= page.homeTrainingLead %></textarea>
       </label>
+      <div class="admin-form-row">
+        <label>Chữ khi chưa có khoá học nào
+          <input type="text" name="homeTrainingEmpty" value="<%= page.homeTrainingEmpty %>">
+        </label>
+        <label>Nút xem tất cả khoá học
+          <input type="text" name="homeViewAllText" value="<%= page.homeViewAllText %>">
+        </label>
+      </div>
       <h3 class="settings-form-heading">5 chương trình đào tạo</h3>
       <% for (let i = 1; i <= 5; i += 1) { %>
         <div class="admin-form-row">
@@ -137,6 +145,14 @@
         <textarea name="homeGalleryLead" rows="2"><%= page.homeGalleryLead %></textarea>
       </label>
       <div class="admin-form-row">
+        <label>Chữ khi chưa có ảnh/video
+          <input type="text" name="homeGalleryEmpty" value="<%= page.homeGalleryEmpty %>">
+        </label>
+        <label>Nút xem tất cả Hình ảnh
+          <input type="text" name="homeGalleryViewAllText" value="<%= page.homeGalleryViewAllText %>">
+        </label>
+      </div>
+      <div class="admin-form-row">
         <label>Nhãn Tin tức
           <input type="text" name="homeNewsEyebrow" value="<%= page.homeNewsEyebrow %>">
         </label>
@@ -144,6 +160,9 @@
           <input type="text" name="homeNewsTitle" value="<%= page.homeNewsTitle %>">
         </label>
       </div>
+      <label>Chữ khi chưa có bài viết
+        <input type="text" name="homeNewsEmpty" value="<%= page.homeNewsEmpty %>">
+      </label>
       <div class="admin-form-row">
         <label>Nhãn Đội ngũ
           <input type="text" name="homeTeamEyebrow" value="<%= page.homeTeamEyebrow %>">
@@ -155,6 +174,9 @@
       <label>Mô tả Đội ngũ
         <textarea name="homeTeamLead" rows="2"><%= page.homeTeamLead %></textarea>
       </label>
+      <label>Chữ khi chưa có thành viên Hội đồng
+        <input type="text" name="homeTeamEmpty" value="<%= page.homeTeamEmpty %>">
+      </label>
       <div class="admin-form-row">
         <label>Nhãn Đối tác
           <input type="text" name="homePartnersEyebrow" value="<%= page.homePartnersEyebrow %>">
@@ -163,6 +185,9 @@
           <input type="text" name="homePartnersTitle" value="<%= page.homePartnersTitle %>">
         </label>
       </div>
+      <label>Chữ khi chưa có đối tác
+        <input type="text" name="homePartnersEmpty" value="<%= page.homePartnersEmpty %>">
+      </label>
 
       <h3 class="settings-form-heading">CTA cuối trang</h3>
       <label>Tiêu đề CTA

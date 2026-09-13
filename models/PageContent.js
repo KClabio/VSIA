@@ -58,7 +58,7 @@ const pageContentSchema = new mongoose.Schema({
   homeGalleryEmpty: { type: String, default: 'Chưa có ảnh/video, thêm ở trang quản trị (/admin/thu-vien).' },
   homeGalleryViewAllText: { type: String, default: 'Xem tất cả →' },
   homeNewsEyebrow: { type: String, default: 'TIN TỨC VÀ SỰ KIỆN GIÁO DỤC STEM' },
-  homeNewsTitle: { type: String, default: 'DỰ ÁN VÀ HOẠT ĐỘNG STEM NỔI BẬT' },
+  homeNewsTitle: { type: String, default: 'TIN TỨC STEM TRONG NƯỚC VÀ QUỐC TẾ' },
   homeNewsEmpty: { type: String, default: 'Chưa có bài viết nào.' },
   homeTeamEyebrow: { type: String, default: 'Đội ngũ' },
   homeTeamTitle: { type: String, default: 'HỘI ĐỒNG CỐ VẤN VÀ KHOA HỌC' },

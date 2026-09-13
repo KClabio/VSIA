@@ -1,20 +1,20 @@
-<%- include('partials/header', { title: 'Hợp tác - VSIA' }) %>
+<%- include('partials/header', { title: 'Hợp tác - VSIA', pageId: 'lien-he' }) %>
 
 <section class="page-hero partnership-hero">
   <div class="page-hero-bg"></div>
   <div class="page-hero-overlay"></div>
   <div class="page-hero-inner">
-    <span class="hero-pill">KẾT NỐI VỚI VSIA</span>
-    <h1>Liên hệ với chúng tôi</h1>
-    <p class="lead">VSIA luôn sẵn sàng lắng nghe và đồng hành cùng nhà trường, giáo viên<br>trên hành trình giáo dục STEM.</p>
+    <span class="hero-pill"><%- ed('lienhe.hero.badge', 'KẾT NỐI VỚI VSIA') %></span>
+    <h1><%- ed('lienhe.hero.title', 'Liên hệ với chúng tôi') %></h1>
+    <p class="lead"><%- ed('lienhe.hero.lead', 'VSIA luôn sẵn sàng lắng nghe và đồng hành cùng nhà trường, giáo viên\ntrên hành trình giáo dục STEM.', { multiline: true }) %></p>
     <div class="page-hero-ctas">
-      <a class="btn btn-primary" href="#dang-ky-tu-van">Đăng ký tư vấn</a>
-      <a class="btn btn-ghost" href="#thong-tin-lien-he">Xem thông tin liên hệ</a>
+      <a class="btn btn-primary" href="<%= lnk('lienhe.hero.cta1.link', '#dang-ky-tu-van') %>"<%- lnkAttr('lienhe.hero.cta1.link') %>><%- ed('lienhe.hero.cta1.label', 'Đăng ký tư vấn') %></a>
+      <a class="btn btn-ghost" href="<%= lnk('lienhe.hero.cta2.link', '#thong-tin-lien-he') %>"<%- lnkAttr('lienhe.hero.cta2.link') %>><%- ed('lienhe.hero.cta2.label', 'Xem thông tin liên hệ') %></a>
     </div>
     <div class="page-hero-badges">
-      <span class="badge-pill">Tư vấn miễn phí buổi đầu</span>
-      <span class="badge-pill">Đồng hành cùng nhà trường toàn quốc</span>
-      <span class="badge-pill">Phản hồi nhanh chóng</span>
+      <span class="badge-pill"><%- ed('lienhe.hero.badge1', 'Tư vấn miễn phí buổi đầu') %></span>
+      <span class="badge-pill"><%- ed('lienhe.hero.badge2', 'Đồng hành cùng nhà trường toàn quốc') %></span>
+      <span class="badge-pill"><%- ed('lienhe.hero.badge3', 'Phản hồi nhanh chóng') %></span>
     </div>
   </div>
 </section>
@@ -23,59 +23,59 @@
   <div class="container">
     <div class="contact-page-grid">
       <div class="contact-page-intro reveal">
-        <span class="eyebrow">Thông tin liên hệ</span>
-        <h1>Công ty TNHH Học viện Đổi mới Sáng tạo STEM Việt Nam</h1>
+        <span class="eyebrow"><%- ed('lienhe.info.eyebrow', 'Thông tin liên hệ') %></span>
+        <h1><%- ed('lienhe.info.company', 'Công ty TNHH Học viện Đổi mới Sáng tạo STEM Việt Nam') %></h1>
         <div class="contact-page-details">
-          <div class="contact-page-detail"><span class="contact-page-icon">⌖</span><div><small>TRỤ SỞ</small><strong><a href="https://www.google.com/maps/search/?api=1&query=S%E1%BB%91+23%2C+Ng%C3%B5+9%2C+X%C3%B3m+Trung+Thanh%2C+Th%C3%B4n+H%E1%BB%AFu+T%E1%BB%AB%2C+X%C3%A3+%C4%90%E1%BA%A1i+Thanh%2C+H%C3%A0+N%E1%BB%99i" target="_blank" rel="noopener">Số 23, Ngõ 9, Xóm Trung Thanh, Thôn Hữu Từ,<br>Xã Đại Thanh, Thành phố Hà Nội</a></strong></div></div>
-          <div class="contact-page-detail"><span class="contact-page-icon">⌕</span><div><small>HOTLINE</small><strong><a href="https://zalo.me/0862260526" target="_blank" rel="noopener">0862.26.05.26</a></strong></div></div>
-          <div class="contact-page-detail"><span class="contact-page-icon">@</span><div><small>EMAIL</small><strong><a href="https://mail.google.com/mail/u/0/?fs=1&to=info%40vsia.edu.vn&tf=cm" target="_blank" rel="noopener">info@vsia.edu.vn</a></strong></div></div>
-          <div class="contact-page-detail"><span class="contact-page-icon">◎</span><div><small>WEBSITE</small><strong><a href="https://www.vsia.edu.vn" target="_blank" rel="noopener">www.vsia.edu.vn</a></strong></div></div>
+          <div class="contact-page-detail"><span class="contact-page-icon">⌖</span><div><small><%- ed('lienhe.info.address.label', 'TRỤ SỞ') %></small><strong><a href="<%= lnk('lienhe.info.address.link', 'https://www.google.com/maps/search/?api=1&query=S%E1%BB%91+23%2C+Ng%C3%B5+9%2C+X%C3%B3m+Trung+Thanh%2C+Th%C3%B4n+H%E1%BB%AFu+T%E1%BB%AB%2C+X%C3%A3+%C4%90%E1%BA%A1i+Thanh%2C+H%C3%A0+N%E1%BB%99i') %>" target="_blank" rel="noopener"<%- lnkAttr('lienhe.info.address.link') %>><%- ed('lienhe.info.address.value', 'Số 23, Ngõ 9, Xóm Trung Thanh, Thôn Hữu Từ,\nXã Đại Thanh, Thành phố Hà Nội', { multiline: true }) %></a></strong></div></div>
+          <div class="contact-page-detail"><span class="contact-page-icon">⌕</span><div><small><%- ed('lienhe.info.phone.label', 'HOTLINE') %></small><strong><a href="<%= lnk('lienhe.info.phone.link', 'https://zalo.me/0862260526') %>" target="_blank" rel="noopener"<%- lnkAttr('lienhe.info.phone.link') %>><%- ed('lienhe.info.phone.value', '0862.26.05.26') %></a></strong></div></div>
+          <div class="contact-page-detail"><span class="contact-page-icon">@</span><div><small><%- ed('lienhe.info.email.label', 'EMAIL') %></small><strong><a href="<%= lnk('lienhe.info.email.link', 'https://mail.google.com/mail/u/0/?fs=1&to=info%40vsia.edu.vn&tf=cm') %>" target="_blank" rel="noopener"<%- lnkAttr('lienhe.info.email.link') %>><%- ed('lienhe.info.email.value', 'info@vsia.edu.vn') %></a></strong></div></div>
+          <div class="contact-page-detail"><span class="contact-page-icon">◎</span><div><small><%- ed('lienhe.info.web.label', 'WEBSITE') %></small><strong><a href="<%= lnk('lienhe.info.web.link', 'https://www.vsia.edu.vn') %>" target="_blank" rel="noopener"<%- lnkAttr('lienhe.info.web.link') %>><%- ed('lienhe.info.web.value', 'www.vsia.edu.vn') %></a></strong></div></div>
         </div>
         <% if (companyProfile) { %>
-          <a class="btn btn-primary contact-profile-btn" href="<%= companyProfile %>" download>↓ &nbsp; Tải Hồ sơ năng lực</a>
+          <a class="btn btn-primary contact-profile-btn" href="<%= companyProfile %>" download>↓ &nbsp; <%- ed('lienhe.info.profileButton', 'Tải Hồ sơ năng lực') %></a>
         <% } %>
       </div>
 
       <div class="contact-form-card contact-page-form reveal" id="dang-ky-tu-van">
-        <h2>Gửi yêu cầu tư vấn</h2>
-        <p>Các trường có dấu * là bắt buộc.</p>
+        <h2><%- ed('lienhe.form.title', 'Gửi yêu cầu tư vấn') %></h2>
+        <p><%- ed('lienhe.form.note', 'Các trường có dấu * là bắt buộc.') %></p>
       <form id="pageContactForm">
         <div class="contact-form-grid">
-        <label>Họ và tên *
+        <label><%- ed('lienhe.form.name.label', 'Họ và tên *') %>
           <div class="auth-input-wrap">
             <svg class="auth-input-ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
-            <input type="text" name="name" placeholder="Nguyễn Văn A" required maxlength="200">
+            <input type="text" name="name" placeholder="<%= txt('lienhe.form.name.placeholder', 'Nguyễn Văn A') %>" required maxlength="200">
           </div>
         </label>
-        <label>Đơn vị *
-          <input type="text" name="organization" placeholder="Trường / Sở / Doanh nghiệp" required maxlength="200">
+        <label><%- ed('lienhe.form.org.label', 'Đơn vị *') %>
+          <input type="text" name="organization" placeholder="<%= txt('lienhe.form.org.placeholder', 'Trường / Sở / Doanh nghiệp') %>" required maxlength="200">
         </label>
-        <label>Vai trò
-          <select name="role"><option value="">– Chọn vai trò –</option><option>Giáo viên</option><option>Cán bộ quản lý</option><option>Doanh nghiệp</option><option>Đối tác giáo dục</option></select>
+        <label><%- ed('lienhe.form.role.label', 'Vai trò') %>
+          <select name="role"><option value=""><%= txt('lienhe.form.role.option0', '– Chọn vai trò –') %></option><option><%= txt('lienhe.form.role.option1', 'Giáo viên') %></option><option><%= txt('lienhe.form.role.option2', 'Cán bộ quản lý') %></option><option><%= txt('lienhe.form.role.option3', 'Doanh nghiệp') %></option><option><%= txt('lienhe.form.role.option4', 'Đối tác giáo dục') %></option></select>
         </label>
-        <label>Tỉnh / Thành phố
-          <input type="text" name="city" placeholder="Hà Nội" maxlength="100">
+        <label><%- ed('lienhe.form.city.label', 'Tỉnh / Thành phố') %>
+          <input type="text" name="city" placeholder="<%= txt('lienhe.form.city.placeholder', 'Hà Nội') %>" maxlength="100">
         </label>
-        <label>Số điện thoại *
+        <label><%- ed('lienhe.form.phone.label', 'Số điện thoại *') %>
             <div class="auth-input-wrap">
               <svg class="auth-input-ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
-              <input type="tel" name="phone" placeholder="0912 345 678" required maxlength="30">
+              <input type="tel" name="phone" placeholder="<%= txt('lienhe.form.phone.placeholder', '0912 345 678') %>" required maxlength="30">
             </div>
         </label>
-        <label>Email
+        <label><%- ed('lienhe.form.email.label', 'Email') %>
             <div class="auth-input-wrap">
               <svg class="auth-input-ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-              <input type="email" name="email" placeholder="ten@email.com" maxlength="200">
+              <input type="email" name="email" placeholder="<%= txt('lienhe.form.email.placeholder', 'ten@email.com') %>" maxlength="200">
             </div>
         </label>
         </div>
-        <label>Nội dung cần tư vấn
-          <textarea name="message" rows="3" placeholder="Mô tả ngắn nhu cầu của đơn vị (phòng Lab, chương trình, ngày hội, hợp tác...)" required maxlength="2000"></textarea>
+        <label><%- ed('lienhe.form.message.label', 'Nội dung cần tư vấn') %>
+          <textarea name="message" rows="3" placeholder="<%= txt('lienhe.form.message.placeholder', 'Mô tả ngắn nhu cầu của đơn vị (phòng Lab, chương trình, ngày hội, hợp tác...)') %>" required maxlength="2000"></textarea>
         </label>
         <p id="pageContactFormMsg" class="form-error" style="display:none;"></p>
-        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">Gửi yêu cầu &nbsp; →</button>
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;"><%- ed('lienhe.form.submit', 'Gửi yêu cầu') %> &nbsp; →</button>
       </form>
-      <small class="contact-form-note">Thông tin của bạn sẽ được gửi tới <strong>info@vsia.edu.vn</strong>. VSIA sẽ liên hệ sớm nhất.</small>
+      <small class="contact-form-note"><%- ed('lienhe.form.footnote1', 'Thông tin của bạn sẽ được gửi tới') %> <strong><%- ed('lienhe.form.footnoteEmail', 'info@vsia.edu.vn') %></strong>. <%- ed('lienhe.form.footnote2', 'VSIA sẽ liên hệ sớm nhất.') %></small>
       </div>
     </div>
   </div>
@@ -84,30 +84,30 @@
 <section class="partnership-section" id="hinh-thuc-hop-tac">
   <div class="container">
     <div class="partnership-heading">
-      <span class="eyebrow">Đồng hành cùng VSIA</span>
-      <h2>Hình thức hợp tác</h2>
-      <p>Kết nối với VSIA qua những mô hình hợp tác phù hợp với nhu cầu của từng đơn vị.</p>
+      <span class="eyebrow"><%- ed('lienhe.partner.eyebrow', 'Đồng hành cùng VSIA') %></span>
+      <h2><%- ed('lienhe.partner.title', 'Hình thức hợp tác') %></h2>
+      <p><%- ed('lienhe.partner.lead', 'Kết nối với VSIA qua những mô hình hợp tác phù hợp với nhu cầu của từng đơn vị.', { multiline: true }) %></p>
     </div>
     <div class="partnership-grid">
       <article class="partnership-card">
-        <h3>Hợp tác với Sở Giáo dục các địa phương và nhà trường</h3>
-        <ul><li>Tư vấn và chuyển giao chương trình</li><li>Tư vấn xây dựng phòng thực hành STEM, khu trải nghiệm STEM</li><li>Đào tạo và tập huấn giáo viên</li></ul>
-        <a class="btn btn-primary" href="#thong-tin-lien-he">LIÊN HỆ</a>
+        <h3><%- ed('lienhe.partner1.title', 'Hợp tác với Sở Giáo dục các địa phương và nhà trường') %></h3>
+        <ul><li><%- ed('lienhe.partner1.item1', 'Tư vấn và chuyển giao chương trình') %></li><li><%- ed('lienhe.partner1.item2', 'Tư vấn xây dựng phòng thực hành STEM, khu trải nghiệm STEM') %></li><li><%- ed('lienhe.partner1.item3', 'Đào tạo và tập huấn giáo viên') %></li></ul>
+        <a class="btn btn-primary" href="<%= lnk('lienhe.partner.buttonLink', '#thong-tin-lien-he') %>"<%- lnkAttr('lienhe.partner.buttonLink') %>><%- ed('lienhe.partner.buttonLabel', 'LIÊN HỆ') %></a>
       </article>
       <article class="partnership-card">
-        <h3>Hợp tác với các Trung tâm Giáo dục và Tổ chức Giáo dục Tư nhân</h3>
-        <ul><li>Mô hình nhượng quyền chương trình (Franchise)</li><li>Đồng thương hiệu (Co-branding)</li></ul>
-        <a class="btn btn-primary" href="#thong-tin-lien-he">LIÊN HỆ</a>
+        <h3><%- ed('lienhe.partner2.title', 'Hợp tác với các Trung tâm Giáo dục và Tổ chức Giáo dục Tư nhân') %></h3>
+        <ul><li><%- ed('lienhe.partner2.item1', 'Mô hình nhượng quyền chương trình (Franchise)') %></li><li><%- ed('lienhe.partner2.item2', 'Đồng thương hiệu (Co-branding)') %></li></ul>
+        <a class="btn btn-primary" href="<%= lnk('lienhe.partner.buttonLink', '#thong-tin-lien-he') %>"<%- lnkAttr('lienhe.partner.buttonLink') %>><%- ed('lienhe.partner.buttonLabel', 'LIÊN HỆ') %></a>
       </article>
       <article class="partnership-card">
-        <h3>Hợp tác với các Doanh nghiệp</h3>
-        <ul><li>Tích hợp giải pháp</li><li>Hợp tác truyền thông trong việc phân phối học liệu, thiết bị</li></ul>
-        <a class="btn btn-primary" href="#thong-tin-lien-he">LIÊN HỆ</a>
+        <h3><%- ed('lienhe.partner3.title', 'Hợp tác với các Doanh nghiệp') %></h3>
+        <ul><li><%- ed('lienhe.partner3.item1', 'Tích hợp giải pháp') %></li><li><%- ed('lienhe.partner3.item2', 'Hợp tác truyền thông trong việc phân phối học liệu, thiết bị') %></li></ul>
+        <a class="btn btn-primary" href="<%= lnk('lienhe.partner.buttonLink', '#thong-tin-lien-he') %>"<%- lnkAttr('lienhe.partner.buttonLink') %>><%- ed('lienhe.partner.buttonLabel', 'LIÊN HỆ') %></a>
       </article>
       <article class="partnership-card">
-        <h3>Hợp tác tổ chức các Ngày hội, Giải đấu và Sự kiện STEM, AI, Robotics</h3>
-        <ul><li>Hội thảo và Diễn đàn</li><li>Các cuộc thi STEM, giải đấu Robotics</li></ul>
-        <a class="btn btn-primary" href="#thong-tin-lien-he">LIÊN HỆ</a>
+        <h3><%- ed('lienhe.partner4.title', 'Hợp tác tổ chức các Ngày hội, Giải đấu và Sự kiện STEM, AI, Robotics') %></h3>
+        <ul><li><%- ed('lienhe.partner4.item1', 'Hội thảo và Diễn đàn') %></li><li><%- ed('lienhe.partner4.item2', 'Các cuộc thi STEM, giải đấu Robotics') %></li></ul>
+        <a class="btn btn-primary" href="<%= lnk('lienhe.partner.buttonLink', '#thong-tin-lien-he') %>"<%- lnkAttr('lienhe.partner.buttonLink') %>><%- ed('lienhe.partner.buttonLabel', 'LIÊN HỆ') %></a>
       </article>
     </div>
   </div>

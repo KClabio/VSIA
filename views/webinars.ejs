@@ -1,4 +1,4 @@
-<%- include('partials/header', { title: 'Hội thảo STEM trực tuyến - VSIA' }) %>
+<%- include('partials/header', { title: 'Hội thảo STEM trực tuyến - VSIA', pageId: 'hoi-thao' }) %>
 
 <section class="page-hero">
   <div class="page-hero-bg">
@@ -6,30 +6,30 @@
   </div>
   <div class="page-hero-overlay"></div>
   <div class="page-hero-inner">
-    <span class="hero-pill"><%= hero.heroBadge %></span>
-    <h1><%= hero.heroTitleLine1 %><% if (hero.heroTitleLine2) { %> <%= hero.heroTitleLine2 %><% } %></h1>
-    <p class="lead"><%= hero.heroSubtitle %></p>
+    <span class="hero-pill"><%- ed('page.hoi-thao.heroBadge', hero.heroBadge) %></span>
+    <h1><%- ed('page.hoi-thao.heroTitleLine1', hero.heroTitleLine1) %><% if (hero.heroTitleLine2) { %> <%- ed('page.hoi-thao.heroTitleLine2', hero.heroTitleLine2) %><% } %></h1>
+    <p class="lead"><%- ed('page.hoi-thao.heroSubtitle', hero.heroSubtitle, { multiline: true }) %></p>
     <div class="page-hero-ctas">
-      <a class="btn btn-primary" href="#" data-open-contact><%= hero.heroCtaText %></a>
-      <a class="btn btn-ghost" href="#danh-sach">Xem danh sách hội thảo</a>
+      <a class="btn btn-primary" href="#" data-open-contact><%- ed('page.hoi-thao.heroCtaText', hero.heroCtaText) %></a>
+      <a class="btn btn-ghost" href="<%= lnk('hoithao.hero.cta2.link', '#danh-sach') %>"<%- lnkAttr('hoithao.hero.cta2.link') %>><%- ed('hoithao.hero.cta2.label', 'Xem danh sách hội thảo') %></a>
     </div>
     <div class="page-hero-badges">
-      <span class="badge-pill">Miễn phí xem lại</span>
-      <span class="badge-pill">Chuyên gia VSIA &amp; đối tác</span>
-      <span class="badge-pill">Cập nhật thường xuyên</span>
+      <span class="badge-pill"><%- ed('hoithao.hero.badge1', 'Miễn phí xem lại') %></span>
+      <span class="badge-pill"><%- ed('hoithao.hero.badge2', 'Chuyên gia VSIA & đối tác') %></span>
+      <span class="badge-pill"><%- ed('hoithao.hero.badge3', 'Cập nhật thường xuyên') %></span>
     </div>
   </div>
 </section>
 
 <section class="section" id="danh-sach">
   <div class="container">
-    <h2 class="section-title">CHƯƠNG TRÌNH TẬP HUẤN STEM INNOVATION PETROVIETNAM<br>HỘI THẢO STEM TRỰC TUYẾN 2026</h2>
-    <p class="section-subtitle">Xem lại các buổi hội thảo, webinar STEM đã phát sóng của VSIA.</p>
+    <h2 class="section-title"><%- ed('hoithao.list.title', 'CHƯƠNG TRÌNH TẬP HUẤN STEM INNOVATION PETROVIETNAM\nHỘI THẢO STEM TRỰC TUYẾN 2026', { multiline: true }) %></h2>
+    <p class="section-subtitle"><%- ed('hoithao.list.subtitle', 'Xem lại các buổi hội thảo, webinar STEM đã phát sóng của VSIA.', { multiline: true }) %></p>
 
     <% if (webinars.length === 0) { %>
       <div class="webinar-empty">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z"/></svg>
-        <p>Chưa có hội thảo nào được đăng. Các buổi hội thảo STEM trực tuyến mới sẽ sớm được cập nhật tại đây.</p>
+        <p><%- ed('hoithao.empty', 'Chưa có hội thảo nào được đăng. Các buổi hội thảo STEM trực tuyến mới sẽ sớm được cập nhật tại đây.', { multiline: true }) %></p>
       </div>
     <% } else {
       const initialCount = 5;
@@ -46,7 +46,7 @@
       </div>
       <% if (moreWebinars.length > 0) { %>
         <div class="webinar-more-cta">
-          <button type="button" class="btn btn-ghost" id="webinarShowMoreBtn">Xem thêm hội thảo (<%= moreWebinars.length %>) ↓</button>
+          <button type="button" class="btn btn-ghost" id="webinarShowMoreBtn"><%- ed('hoithao.more', 'Xem thêm hội thảo') %> (<%= moreWebinars.length %>) ↓</button>
         </div>
       <% } %>
     <% } %>

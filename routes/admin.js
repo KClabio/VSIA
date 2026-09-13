@@ -18,6 +18,8 @@ const { unlinkUploaded } = require('../lib/files');
 const { matchesSearchQuery } = require('../lib/search');
 const { getSiteSettings } = require('../lib/settings');
 const { getPageContent, getAllPageContents, PAGE_DEFAULTS } = require('../lib/pageContent');
+const { CONTENT_SECTIONS } = require('../lib/contentSections');
+const { getContentMap } = require('../lib/siteContent');
 const PageContent = require('../models/PageContent');
 const ContactRequest = require('../models/ContactRequest');
 const Enrollment = require('../models/Enrollment');
@@ -1044,7 +1046,23 @@ const ADMIN_PAGE_CONFIG = {
 router.get('/trang/:pageKey', async (req, res) => {
   const config = ADMIN_PAGE_CONFIG[req.params.pageKey];
   if (!config) return res.status(404).render('404');
-  const [page, settings] = await Promise.all([getPageContent(config.pageKey), getSiteSettings()]);
+  const [page, settings, contentMap] = await Promise.all([
+    getPageContent(config.pageKey), getSiteSettings(), getContentMap(),
+  ]);
+
+  // Giá trị đang có hiệu lực của một ô, theo đúng thứ tự ưu tiên mà view dùng khi render trang
+  // thật: bản admin đã lưu trước, chưa có thì lấy nội dung mặc định ghi trong code. Nhờ vậy form
+  // không bao giờ hiện ô trống cho một dòng chữ đang hiển thị trên web.
+  const contentValue = (field) => {
+    if (field.key.startsWith('settings.')) return settings[field.key.slice('settings.'.length)] || '';
+    if (field.key.startsWith('page.')) {
+      const name = field.key.split('.').pop();
+      return page[name] === undefined || page[name] === null ? (field.def || '') : page[name];
+    }
+    const stored = contentMap.get(field.key);
+    return stored === undefined || stored === null ? (field.def || '') : stored;
+  };
+
   res.render('admin/page-editor', {
     pageTitle: config.label,
     active: 'page-' + req.params.pageKey,
@@ -1052,6 +1070,10 @@ router.get('/trang/:pageKey', async (req, res) => {
     page,
     settings,
     saved: req.query.saved === '1',
+    contentSections: CONTENT_SECTIONS[req.params.pageKey] || null,
+    contentValue,
+    contentSaved: req.query.noidung === '1',
+    contentError: req.query.loi || null,
   });
 });
 
@@ -1218,13 +1240,22 @@ router.post('/cai-dat/ho-so-nang-luc/xoa', async (req, res) => {
 router.post('/cai-dat/trang/:pageKey', async (req, res) => {
   if (!PAGE_DEFAULTS[req.params.pageKey]) return res.status(404).render('404');
 
+  // CHỈ ghi những ô mà form vừa gửi lên. Trang /admin/cai-dat có nhiều form nhỏ cùng trỏ về đây
+  // (Hero, Nội dung các khối trang chủ...), mỗi form chỉ chứa một phần các ô của trang. Nếu ghi
+  // cả danh sách ô như trước thì bấm Lưu ở form Hero sẽ ghi chuỗi rỗng vào 62 ô của form kia —
+  // toàn bộ chữ trang chủ biến mất và không tự lấy lại được mặc định (vì '' khác null/undefined).
   const editableFields = Object.keys(PAGE_DEFAULTS[req.params.pageKey]).filter((field) => field !== 'label');
-  const updates = Object.fromEntries(editableFields.map((field) => [field, req.body[field] || '']));
-  await PageContent.findOneAndUpdate(
-    { pageKey: req.params.pageKey },
-    updates,
-    { upsert: true },
-  );
+  const updates = {};
+  editableFields.forEach((field) => {
+    if (Object.prototype.hasOwnProperty.call(req.body, field)) updates[field] = req.body[field];
+  });
+  if (Object.keys(updates).length) {
+    await PageContent.findOneAndUpdate(
+      { pageKey: req.params.pageKey },
+      { $set: updates },
+      { upsert: true },
+    );
+  }
   res.redirect('/admin/cai-dat?saved=1#hero-' + req.params.pageKey);
 });
 

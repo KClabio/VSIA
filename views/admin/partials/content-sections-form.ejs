@@ -1,0 +1,44 @@
+<%# Form sửa nội dung của trang, chia theo từng phần đúng như thứ tự hiển thị trên web.
+    Khai báo các phần: lib/contentSections.js (sinh tự động từ view nên không bao giờ lệch).
+    Nhận vào: contentSections, contentValue(field), pageKey %>
+<% contentSections.sections.forEach(function (section) {
+     const textFields = section.fields.filter(function (f) { return f.type !== 'image'; });
+     const imageFields = section.fields.filter(function (f) { return f.type === 'image'; });
+%>
+  <details class="settings-page-block">
+    <summary><%= section.title %> — <%= section.fields.length %> ô</summary>
+    <div class="settings-page-form">
+      <% if (section.note) { %>
+        <p class="admin-scope-note"><%= section.note %></p>
+      <% } %>
+
+      <% if (textFields.length) { %>
+        <form method="POST" action="/admin/noi-dung/luu/<%= pageKey %>" class="settings-sub-form">
+          <% textFields.forEach(function (field) { %>
+            <label>
+              <%= field.label %><% if (field.type === 'link') { %> <span class="admin-field-hint">(link: bắt đầu bằng / hoặc https:// hoặc mailto: hoặc tel:)</span><% } %>
+              <% if (field.type === 'textarea') { %>
+                <textarea name="<%= field.key %>" rows="3"><%= contentValue(field) %></textarea>
+              <% } else { %>
+                <input type="text" name="<%= field.key %>" value="<%= contentValue(field) %>">
+              <% } %>
+            </label>
+          <% }) %>
+          <div class="admin-form-actions">
+            <button type="submit" class="btn btn-primary">Lưu phần "<%= section.title %>"</button>
+          </div>
+        </form>
+      <% } %>
+
+      <% imageFields.forEach(function (field) { %>
+        <%- include('settings-image-block', {
+              id: 'anh-' + field.key.replace(/[^A-Za-z0-9]+/g, '-'),
+              label: field.label,
+              value: contentValue(field),
+              actionUrl: '/admin/noi-dung/anh/' + pageKey + '/' + field.key,
+              deleteUrl: '/admin/noi-dung/anh/' + pageKey + '/' + field.key + '/xoa'
+            }) %>
+      <% }) %>
+    </div>
+  </details>
+<% }) %>

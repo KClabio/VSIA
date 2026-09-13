@@ -1,19 +1,23 @@
 <%
-  const trainingDefaults = [
+  // Lộ trình đào tạo dùng chung ở nhiều trang, nên nội dung lưu theo khoá "roadmap.*" thay vì
+  // gắn vào một trang cụ thể — sửa ở trang nào thì mọi trang đều đổi theo.
+  const roadmapDefaults = [
     ['Tập huấn, đào tạo kỹ thuật', 'Hướng dẫn giáo viên sử dụng, vận hành và khai thác thiết bị STEM, Robotics, AI trong phòng thực hành.'],
     ['Tổng quan giáo dục STEM trong CTGDPT', 'Trang bị kiến thức nền tảng về giáo dục STEM và định hướng triển khai trong Chương trình giáo dục phổ thông.'],
     ['Thực hành xây dựng các chủ đề dạy học STEM', 'Thực hành thiết kế và tổ chức các chủ đề dạy học STEM gắn với thực tiễn lớp học.'],
     ['Nghiên cứu KHKT trong Giáo dục phổ thông', 'Trang bị phương pháp tổ chức và hướng dẫn học sinh thực hiện nghiên cứu khoa học kỹ thuật.'],
     ['Thực hành các chủ đề nghiên cứu KHKT', 'Thực hành xây dựng đề tài, dự án nghiên cứu khoa học kỹ thuật cùng học sinh.'],
   ];
-  const trainingPrograms = trainingDefaults.map((item, index) => [
-    (hero && hero['trainingProgram' + (index + 1) + 'Title']) || item[0],
-    (hero && hero['trainingProgram' + (index + 1) + 'Text']) || item[1],
-  ]);
+  // hero.trainingProgramNTitle/Text: cách cũ, giữ lại để không mất nội dung đã nhập trước đây.
+  const roadmapTitle = (i) => ed('roadmap.step' + (i + 1) + '.title',
+    (hero && hero['trainingProgram' + (i + 1) + 'Title']) || roadmapDefaults[i][0]);
+  const roadmapText = (i) => ed('roadmap.step' + (i + 1) + '.text',
+    (hero && hero['trainingProgram' + (i + 1) + 'Text']) || roadmapDefaults[i][1], { multiline: true });
+  const roadmapLink = 'roadmap.step.link';
 %>
 <% if (typeof showHeading === 'undefined' || showHeading !== false) { %>
-  <h2 class="section-title">CÁC CHƯƠNG TRÌNH TẬP HUẤN VÀ ĐÀO TẠO GIÁO VIÊN</h2>
-  <p class="section-subtitle">Lộ trình cơ bản đến chuyên sâu, từ kỹ thuật thiết bị đến hướng dẫn học sinh nghiên cứu khoa học.</p>
+  <h2 class="section-title"><%- ed('roadmap.heading', 'CÁC CHƯƠNG TRÌNH TẬP HUẤN VÀ ĐÀO TẠO GIÁO VIÊN') %></h2>
+  <p class="section-subtitle"><%- ed('roadmap.subheading', 'Lộ trình cơ bản đến chuyên sâu, từ kỹ thuật thiết bị đến hướng dẫn học sinh nghiên cứu khoa học.', { multiline: true }) %></p>
 <% } %>
 
 <div class="path">
@@ -21,7 +25,7 @@
 
   <div class="path-row">
     <div class="path-node left">
-      <a class="path-card reveal" href="#khoa-hoc-danh-sach">
+      <a class="path-card reveal" href="<%= lnk(roadmapLink, '#khoa-hoc-danh-sach') %>"<%- lnkAttr(roadmapLink) %>>
         <div class="path-icon tint-blue">
           <svg viewBox="0 0 24 24" fill="none">
             <rect x="4" y="3.6" width="2" height="3" rx="1" fill="#1a8fd1"/>
@@ -32,8 +36,8 @@
             <rect x="8" y="17.4" width="8" height="1.6" rx=".8" fill="#1a8fd1"/>
           </svg>
         </div>
-        <h3><%= trainingPrograms[0][0] %></h3>
-        <p><%= trainingPrograms[0][1] %></p>
+        <h3><%- roadmapTitle(0) %></h3>
+        <p><%- roadmapText(0) %></p>
       </a>
       <div class="path-num">1</div>
       <div></div>
@@ -44,7 +48,7 @@
     <div class="path-node right">
       <div></div>
       <div class="path-num">2</div>
-      <a class="path-card reveal" href="#khoa-hoc-danh-sach">
+      <a class="path-card reveal" href="<%= lnk(roadmapLink, '#khoa-hoc-danh-sach') %>"<%- lnkAttr(roadmapLink) %>>
         <div class="path-icon tint-gold">
           <svg viewBox="0 0 24 24" fill="none">
             <path d="M12 5C10 3.8 6.8 3.5 4 4.2v14c2.8-.7 6-.4 8 .8 2-1.2 5.2-1.5 8-.8V4.2c-2.8-.7-6-.4-8 .8Z" fill="#0a3d66"/>
@@ -52,15 +56,15 @@
             <path d="M18.2 2.2l.55 1.35 1.35.55-1.35.55-.55 1.35-.55-1.35-1.35-.55 1.35-.55.55-1.35Z" fill="#d8a13a"/>
           </svg>
         </div>
-        <h3><%= trainingPrograms[1][0] %></h3>
-        <p><%= trainingPrograms[1][1] %></p>
+        <h3><%- roadmapTitle(1) %></h3>
+        <p><%- roadmapText(1) %></p>
       </a>
     </div>
   </div>
 
   <div class="path-row">
     <div class="path-node left">
-      <a class="path-card reveal" href="#khoa-hoc-danh-sach">
+      <a class="path-card reveal" href="<%= lnk(roadmapLink, '#khoa-hoc-danh-sach') %>"<%- lnkAttr(roadmapLink) %>>
         <div class="path-icon tint-blue">
           <svg viewBox="0 0 24 24" fill="none">
             <rect x="2.2" y="4" width="14" height="10" rx="1.6" fill="#0a3d66"/>
@@ -71,8 +75,8 @@
             <rect x="18" y="15.2" width="3.6" height="1" rx=".5" fill="#fff"/>
           </svg>
         </div>
-        <h3><%= trainingPrograms[2][0] %></h3>
-        <p><%= trainingPrograms[2][1] %></p>
+        <h3><%- roadmapTitle(2) %></h3>
+        <p><%- roadmapText(2) %></p>
       </a>
       <div class="path-num">3</div>
       <div></div>
@@ -83,7 +87,7 @@
     <div class="path-node right">
       <div></div>
       <div class="path-num">4</div>
-      <a class="path-card reveal" href="#khoa-hoc-danh-sach">
+      <a class="path-card reveal" href="<%= lnk(roadmapLink, '#khoa-hoc-danh-sach') %>"<%- lnkAttr(roadmapLink) %>>
         <div class="path-icon tint-green">
           <svg viewBox="0 0 24 24" fill="none">
             <rect x="5" y="19" width="14" height="1.8" rx=".9" fill="#0a3d66"/>
@@ -93,15 +97,15 @@
             <rect x="6.5" y="14.5" width="9" height="2" rx="1" fill="#1a8f5a"/>
           </svg>
         </div>
-        <h3><%= trainingPrograms[3][0] %></h3>
-        <p><%= trainingPrograms[3][1] %></p>
+        <h3><%- roadmapTitle(3) %></h3>
+        <p><%- roadmapText(3) %></p>
       </a>
     </div>
   </div>
 
   <div class="path-row accent">
     <div class="path-node left">
-      <a class="path-card reveal" href="#khoa-hoc-danh-sach">
+      <a class="path-card reveal" href="<%= lnk(roadmapLink, '#khoa-hoc-danh-sach') %>"<%- lnkAttr(roadmapLink) %>>
         <div class="path-icon tint-gold">
           <svg viewBox="0 0 24 24" fill="none">
             <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" fill="#d8a13a"/>
@@ -112,8 +116,8 @@
             <rect x="9" y="17" width="6" height="2" rx="1" fill="#1a8fd1"/>
           </svg>
         </div>
-        <h3><%= trainingPrograms[4][0] %></h3>
-        <p><%= trainingPrograms[4][1] %></p>
+        <h3><%- roadmapTitle(4) %></h3>
+        <p><%- roadmapText(4) %></p>
       </a>
       <div class="path-num">5</div>
       <div></div>

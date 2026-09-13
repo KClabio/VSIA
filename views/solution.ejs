@@ -1,38 +1,48 @@
-<%- include('partials/header', { title: 'Giải pháp giáo dục STEM tổng thể - VSIA' }) %>
+<%- include('partials/header', { title: 'Giải pháp giáo dục STEM tổng thể - VSIA', pageId: 'giai-phap' }) %>
 
 <section class="page-hero">
   <div class="page-hero-bg">
-    <% if (solutionHeroImage) { %><img src="<%= solutionHeroImage %>" alt=""><% } %>
+    <% if (solutionHeroImage) { %>
+      <img src="<%= solutionHeroImage %>" alt=""<%- picAttr('settings.solutionHeroImage') %>>
+    <% } else if (editMode) { %>
+      <div class="ce-img-slot" style="min-height:220px;"<%- picAttr('settings.solutionHeroImage') %>></div>
+    <% } %>
   </div>
   <div class="page-hero-overlay"></div>
   <div class="page-hero-inner">
-    <span class="hero-pill"><%= hero.heroBadge %></span>
-    <h1><%= hero.heroTitleLine1 %><% if (hero.heroTitleLine2) { %> <%= hero.heroTitleLine2 %><% } %></h1>
-    <p class="lead"><%= hero.heroSubtitle %></p>
+    <%# Hero dùng khoá "page.<mã trang>.<field>" nên sửa tại chỗ hay sửa trong
+        /admin/trang/giai-phap đều ghi vào cùng một chỗ (PageContent). %>
+    <span class="hero-pill"><%- ed('page.giai-phap.heroBadge', hero.heroBadge) %></span>
+    <h1><%- ed('page.giai-phap.heroTitleLine1', hero.heroTitleLine1) %><% if (hero.heroTitleLine2 || editMode) { %> <%- ed('page.giai-phap.heroTitleLine2', hero.heroTitleLine2) %><% } %></h1>
+    <p class="lead"><%- ed('page.giai-phap.heroSubtitle', hero.heroSubtitle, { multiline: true }) %></p>
     <div class="page-hero-ctas">
-      <a class="btn btn-primary" href="#" data-open-contact><%= hero.heroCtaText %></a>
-      <a class="btn btn-ghost" href="#he-sinh-thai">Xem hệ sinh thái</a>
+      <a class="btn btn-primary" href="#" data-open-contact><%- ed('page.giai-phap.heroCtaText', hero.heroCtaText) %></a>
+      <a class="btn btn-ghost" href="<%= lnk('giaiphap.hero.cta2.link', '#he-sinh-thai') %>"<%- lnkAttr('giaiphap.hero.cta2.link') %>><%- ed('giaiphap.hero.cta2.label', 'Xem hệ sinh thái') %></a>
     </div>
     <div class="page-hero-badges">
-      <span class="badge-pill">Đồng bộ chương trình – thiết bị – con người</span>
-      <span class="badge-pill">Bám sát Chương trình GDPT 2018</span>
-      <span class="badge-pill">Triển khai từ trường đến tỉnh</span>
+      <span class="badge-pill"><%- ed('giaiphap.hero.badge1', 'Đồng bộ chương trình – thiết bị – con người') %></span>
+      <span class="badge-pill"><%- ed('giaiphap.hero.badge2', 'Bám sát Chương trình GDPT 2018') %></span>
+      <span class="badge-pill"><%- ed('giaiphap.hero.badge3', 'Triển khai từ trường đến tỉnh') %></span>
     </div>
   </div>
 </section>
 
 <section class="section" id="giai-phap-4-phan">
   <div class="container">
-    <h2 class="section-title">GIẢI PHÁP GIÁO DỤC STEM TỔNG THỂ, TOÀN DIỆN</h2>
+    <h2 class="section-title"><%- ed('giaiphap.overview.title', 'GIẢI PHÁP GIÁO DỤC STEM TỔNG THỂ, TOÀN DIỆN') %></h2>
 
     <div class="solution-showcase">
       <div class="visual-card">
         <div class="visual-card-bg">
-          <% if (solutionImage) { %><img src="<%= solutionImage %>" alt="Giải pháp giáo dục STEM tổng thể VSIA"><% } %>
+          <% if (solutionImage) { %>
+            <img src="<%= solutionImage %>" alt="Giải pháp giáo dục STEM tổng thể VSIA"<%- picAttr('settings.solutionImage') %>>
+          <% } else if (editMode) { %>
+            <div class="ce-img-slot" style="min-height:260px;"<%- picAttr('settings.solutionImage') %>></div>
+          <% } %>
         </div>
         <div class="visual-card-overlay"></div>
         <div class="visual-top">
-          <span class="visual-badge">STEM INNOVATION</span>
+          <span class="visual-badge"><%- ed('giaiphap.showcase.badge', 'STEM INNOVATION') %></span>
         </div>
         <div class="visual-icons">
           <div class="vi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 9h6M9 13h6"/></svg></div>
@@ -40,8 +50,8 @@
           <div class="vi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg></div>
         </div>
         <div class="visual-bottom">
-          <h3>Chương trình STEM Innovation</h3>
-          <p>Đào tạo giáo viên, chuyển giao chương trình và thiết bị theo mô hình đồng bộ trên toàn quốc.</p>
+          <h3><%- ed('giaiphap.showcase.title', 'Chương trình STEM Innovation') %></h3>
+          <p><%- ed('giaiphap.showcase.text', 'Đào tạo giáo viên, chuyển giao chương trình và thiết bị theo mô hình đồng bộ trên toàn quốc.', { multiline: true }) %></p>
         </div>
       </div>
 
@@ -49,29 +59,29 @@
         <div class="solution-timeline-item">
           <span class="solution-timeline-number">1</span>
           <div class="solution-timeline-content">
-            <h3>Chương trình giáo dục STEM phổ cập đại trà</h3>
-            <p>Bộ S3 STEM KIT — chương trình đóng gói đồng bộ, bám sát Chương trình GDPT 2018, có thể triển khai diện rộng.</p>
+            <h3><%- ed('giaiphap.step1.title', 'Chương trình giáo dục STEM phổ cập đại trà') %></h3>
+            <p><%- ed('giaiphap.step1.text', 'Bộ S3 STEM KIT — chương trình đóng gói đồng bộ, bám sát Chương trình GDPT 2018, có thể triển khai diện rộng.', { multiline: true }) %></p>
           </div>
         </div>
         <div class="solution-timeline-item">
           <span class="solution-timeline-number">2</span>
           <div class="solution-timeline-content">
-            <h3>Chương trình học STEM AI Robotics</h3>
-            <p>Ứng dụng hệ thống Robot VEX, phát triển tư duy thiết kế và lập trình cho học sinh.</p>
+            <h3><%- ed('giaiphap.step2.title', 'Chương trình học STEM AI Robotics') %></h3>
+            <p><%- ed('giaiphap.step2.text', 'Ứng dụng hệ thống Robot VEX, phát triển tư duy thiết kế và lập trình cho học sinh.', { multiline: true }) %></p>
           </div>
         </div>
         <div class="solution-timeline-item">
           <span class="solution-timeline-number">3</span>
           <div class="solution-timeline-content">
-            <h3>Tư vấn phòng thực hành STEM (STEM LAB)</h3>
-            <p>Tư vấn thiết kế, thi công lắp đặt và xây dựng chương trình vận hành phòng Lab. <a href="/tu-van-phong-lab">Xem chi tiết →</a></p>
+            <h3><%- ed('giaiphap.step3.title', 'Tư vấn phòng thực hành STEM (STEM LAB)') %></h3>
+            <p><%- ed('giaiphap.step3.text', 'Tư vấn thiết kế, thi công lắp đặt và xây dựng chương trình vận hành phòng Lab.', { multiline: true }) %> <a href="<%= lnk('giaiphap.step3.link', '/tu-van-phong-lab') %>"<%- lnkAttr('giaiphap.step3.link') %>><%- ed('giaiphap.step3.linkLabel', 'Xem chi tiết →') %></a></p>
           </div>
         </div>
         <div class="solution-timeline-item">
           <span class="solution-timeline-number">4</span>
           <div class="solution-timeline-content">
-            <h3>Đồng hành giáo dục STEM địa phương</h3>
-            <p>Hỗ trợ triển khai và tham gia các cuộc thi về STEM, KHKT tại địa phương. <a href="/ngay-hoi-cuoc-thi">Xem chi tiết →</a></p>
+            <h3><%- ed('giaiphap.step4.title', 'Đồng hành giáo dục STEM địa phương') %></h3>
+            <p><%- ed('giaiphap.step4.text', 'Hỗ trợ triển khai và tham gia các cuộc thi về STEM, KHKT tại địa phương.', { multiline: true }) %> <a href="<%= lnk('giaiphap.step4.link', '/ngay-hoi-cuoc-thi') %>"<%- lnkAttr('giaiphap.step4.link') %>><%- ed('giaiphap.step4.linkLabel', 'Xem chi tiết →') %></a></p>
           </div>
         </div>
       </div>
@@ -82,63 +92,69 @@
 <section class="section section-alt" id="he-sinh-thai" style="position:relative; overflow:hidden;">
   <%- include('partials/section-glow-divider') %>
   <div class="container">
-    <h2 class="section-title">HỆ SINH THÁI GIÁO DỤC STEM</h2>
-    <p class="section-subtitle">Bốn trụ cột vận hành song song, tạo thành một hệ sinh thái giáo dục STEM bền vững cho nhà trường.</p>
+    <h2 class="section-title"><%- ed('giaiphap.eco.title', 'HỆ SINH THÁI GIÁO DỤC STEM') %></h2>
+    <p class="section-subtitle"><%- ed('giaiphap.eco.subtitle', 'Bốn trụ cột vận hành song song, tạo thành một hệ sinh thái giáo dục STEM bền vững cho nhà trường.', { multiline: true }) %></p>
 
     <div class="eco-grid">
       <div class="eco-card">
         <% if (ecoMovementImage) { %>
-          <div class="eco-thumb"><img src="<%= ecoMovementImage %>" alt="Xây dựng phong trào"></div>
+          <div class="eco-thumb"><img src="<%= ecoMovementImage %>" alt="<%= txt('giaiphap.eco1.title', 'Xây dựng phong trào') %>"<%- picAttr('settings.ecoMovementImage') %>></div>
         <% } else { %>
-          <div class="eco-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0113 0"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15 20a5 5 0 018.5-3.6"/></svg></div>
+          <div class="eco-icon"<%- picAttr('settings.ecoMovementImage') %>><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0113 0"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15 20a5 5 0 018.5-3.6"/></svg></div>
         <% } %>
-        <h3>Xây dựng phong trào</h3>
-        <p>Giáo viên dạy, học sinh học tập - sáng tạo, phụ huynh đồng hành.</p>
+        <h3><%- ed('giaiphap.eco1.title', 'Xây dựng phong trào') %></h3>
+        <p><%- ed('giaiphap.eco1.text', 'Giáo viên dạy, học sinh học tập - sáng tạo, phụ huynh đồng hành.', { multiline: true }) %></p>
       </div>
       <div class="eco-card">
         <% if (ecoEquipmentImage) { %>
-          <div class="eco-thumb"><img src="<%= ecoEquipmentImage %>" alt="Đầu tư trang thiết bị"></div>
+          <div class="eco-thumb"><img src="<%= ecoEquipmentImage %>" alt="<%= txt('giaiphap.eco2.title', 'Đầu tư trang thiết bị') %>"<%- picAttr('settings.ecoEquipmentImage') %>></div>
         <% } else { %>
-          <div class="eco-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 10h16M10 10v10"/></svg></div>
+          <div class="eco-icon"<%- picAttr('settings.ecoEquipmentImage') %>><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 10h16M10 10v10"/></svg></div>
         <% } %>
-        <h3>Đầu tư trang thiết bị</h3>
-        <p>Phòng thực hành STEM (STEM LAB) đạt chuẩn, phù hợp từng cấp học.</p>
+        <h3><%- ed('giaiphap.eco2.title', 'Đầu tư trang thiết bị') %></h3>
+        <p><%- ed('giaiphap.eco2.text', 'Phòng thực hành STEM (STEM LAB) đạt chuẩn, phù hợp từng cấp học.', { multiline: true }) %></p>
       </div>
       <div class="eco-card">
         <% if (ecoCompetitionImage) { %>
-          <div class="eco-thumb"><img src="<%= ecoCompetitionImage %>" alt="Các cuộc thi"></div>
+          <div class="eco-thumb"><img src="<%= ecoCompetitionImage %>" alt="<%= txt('giaiphap.eco3.title', 'Các cuộc thi') %>"<%- picAttr('settings.ecoCompetitionImage') %>></div>
         <% } else { %>
-          <div class="eco-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 21h8M12 17v4M6 4h12l-1 6a5 5 0 01-10 0L6 4z"/><path d="M6 6H3a3 3 0 003 3M18 6h3a3 3 0 01-3 3"/></svg></div>
+          <div class="eco-icon"<%- picAttr('settings.ecoCompetitionImage') %>><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 21h8M12 17v4M6 4h12l-1 6a5 5 0 01-10 0L6 4z"/><path d="M6 6H3a3 3 0 003 3M18 6h3a3 3 0 01-3 3"/></svg></div>
         <% } %>
-        <h3>Các cuộc thi</h3>
-        <p>Tổ chức cuộc thi tại địa phương, tham gia cuộc thi quốc gia, quốc tế.</p>
+        <h3><%- ed('giaiphap.eco3.title', 'Các cuộc thi') %></h3>
+        <p><%- ed('giaiphap.eco3.text', 'Tổ chức cuộc thi tại địa phương, tham gia cuộc thi quốc gia, quốc tế.', { multiline: true }) %></p>
       </div>
       <div class="eco-card">
         <% if (ecoTrainingImage) { %>
-          <div class="eco-thumb"><img src="<%= ecoTrainingImage %>" alt="Tập huấn, đào tạo giáo viên"></div>
+          <div class="eco-thumb"><img src="<%= ecoTrainingImage %>" alt="<%= txt('giaiphap.eco4.title', 'Tập huấn, đào tạo giáo viên') %>"<%- picAttr('settings.ecoTrainingImage') %>></div>
         <% } else { %>
-          <div class="eco-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></div>
+          <div class="eco-icon"<%- picAttr('settings.ecoTrainingImage') %>><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg></div>
         <% } %>
-        <h3>Tập huấn, đào tạo giáo viên</h3>
-        <p>Nâng cao năng lực giảng dạy STEM, tinh thần đổi mới sáng tạo.</p>
+        <h3><%- ed('giaiphap.eco4.title', 'Tập huấn, đào tạo giáo viên') %></h3>
+        <p><%- ed('giaiphap.eco4.text', 'Nâng cao năng lực giảng dạy STEM, tinh thần đổi mới sáng tạo.', { multiline: true }) %></p>
       </div>
     </div>
   </div>
 </section>
 
-<% if (projectImages && projectImages.length > 0) { %>
+<% if ((projectImages && projectImages.length > 0) || editMode) { %>
 <section class="section project-highlight">
   <div class="container">
-    <h2 class="project-highlight-title">DỰ ÁN NỔI BẬT</h2>
-    <p class="project-highlight-lead">VSIA là đơn vị triển khai<br><strong>CHƯƠNG TRÌNH TẬP HUẤN STEM INNOVATION PETROVIETNAM</strong></p>
+    <h2 class="project-highlight-title"><%- ed('giaiphap.projects.title', 'DỰ ÁN NỔI BẬT') %></h2>
+    <p class="project-highlight-lead"><%- ed('giaiphap.projects.lead1', 'VSIA là đơn vị triển khai') %><br><strong><%- ed('giaiphap.projects.lead2', 'CHƯƠNG TRÌNH TẬP HUẤN STEM INNOVATION PETROVIETNAM') %></strong></p>
 
     <div class="project-gallery">
-      <% projectImages.forEach((img, i) => { %>
+      <% (projectImages || []).forEach((item, i) => { %>
         <div class="project-gallery-item reveal">
-          <img src="<%= img.url %>" alt="Dự án nổi bật VSIA <%= i + 1 %>" loading="lazy">
+          <img src="<%= item.url %>" alt="Dự án nổi bật VSIA <%= i + 1 %>" loading="lazy">
         </div>
       <% }) %>
     </div>
+    <% if (editMode) { %>
+      <p class="section-subtitle" style="margin-top:18px;">
+        Danh sách ảnh dự án là một bộ sưu tập nhiều ảnh nên thêm/bớt ở
+        <a href="/admin/cai-dat#project-images" data-ce-allow>Cài đặt &rsaquo; Ảnh dự án</a>.
+      </p>
+    <% } %>
   </div>
 </section>
 <% } %>
@@ -152,10 +168,10 @@
 <div class="cta-strip">
   <div class="cta-strip-inner">
     <div>
-      <h3>Địa phương hoặc nhà trường bạn muốn xây dựng giáo dục STEM?</h3>
-      <p>VSIA tư vấn mô hình triển khai phù hợp với điều kiện thực tế — từ chương trình, thiết bị đến con người.</p>
+      <h3><%- ed('giaiphap.cta.title', 'Địa phương hoặc nhà trường bạn muốn xây dựng giáo dục STEM?') %></h3>
+      <p><%- ed('giaiphap.cta.text', 'VSIA tư vấn mô hình triển khai phù hợp với điều kiện thực tế — từ chương trình, thiết bị đến con người.', { multiline: true }) %></p>
     </div>
-    <a class="btn btn-white" href="#" data-open-contact>Liên hệ hợp tác</a>
+    <a class="btn btn-white" href="#" data-open-contact><%- ed('giaiphap.cta.button', 'Liên hệ hợp tác') %></a>
   </div>
 </div>
 

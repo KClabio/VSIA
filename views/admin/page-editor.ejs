@@ -8,6 +8,8 @@
   <a class="btn btn-ghost" href="/<%= pageKey === 'tin-tuc' ? 'tin-tuc' : pageKey === 'hop-tac' ? 'hop-tac' : pageKey === 'giai-phap' ? 'giai-phap' : pageKey === 'lab' ? 'tu-van-phong-lab' : pageKey === 'su-kien' ? 'ngay-hoi-cuoc-thi' : pageKey === 'khoa-hoc' || pageKey === 'dao-tao' ? 'khoa-hoc' : '' %>" target="_blank" rel="noopener">Xem trang</a>
 </div>
 <% if (saved) { %><p class="form-success">Đã lưu nội dung thành công.</p><% } %>
+<% if (typeof contentSaved !== 'undefined' && contentSaved) { %><p class="form-success">Đã lưu nội dung phần vừa sửa.</p><% } %>
+<% if (typeof contentError !== 'undefined' && contentError) { %><p class="form-error">Không lưu được: <%= contentError %></p><% } %>
 <p class="admin-scope-note">Chỉ các nội dung thuộc trang này được hiển thị tại đây. Các danh sách như khóa học, video, bài viết và dự án có thể thêm, sửa, xóa ở các nút quản lý tương ứng.</p>
 
 <div class="admin-page-editor-grid">
@@ -41,6 +43,17 @@
       <div class="settings-page-form admin-editor-panel">
         <h2>Các khối nội dung trang chủ</h2>
         <%- include('partials/settings-home-form', { page, actionUrl: '/admin/trang/home/save' }) %>
+      </div>
+    <% } %>
+
+    <%# Nội dung chi tiết của trang, chia theo từng phần đúng thứ tự trên web.
+        typeof bảo vệ: nếu route chưa nạp (quên khởi động lại server) thì phần này lặng lẽ
+        không hiện chứ không làm lỗi cả trang quản trị. %>
+    <% if (typeof contentSections !== 'undefined' && contentSections && typeof contentValue === 'function') { %>
+      <div class="admin-editor-panel">
+        <h2>Nội dung các phần của trang</h2>
+        <p class="admin-scope-note">Sắp theo đúng thứ tự xuất hiện trên trang. Mỗi phần có nút lưu riêng.</p>
+        <%- include('partials/content-sections-form', { contentSections: contentSections, contentValue: contentValue, pageKey: pageKey }) %>
       </div>
     <% } %>
 

@@ -1,4 +1,4 @@
-<%- include('partials/header', { title: 'Khoá học - VSIA' }) %>
+<%- include('partials/header', { title: 'Khoá học - VSIA', pageId: 'khoa-hoc' }) %>
 
 <section class="page-hero">
   <div class="page-hero-bg">
@@ -6,17 +6,17 @@
   </div>
   <div class="page-hero-overlay"></div>
   <div class="page-hero-inner">
-    <span class="hero-pill">Chương trình đào tạo VSIA</span>
-    <h1>Đào tạo và bồi dưỡng chuyên môn STEM</h1>
-    <p class="lead">Tổ chức các khóa đào tạo, bồi dưỡng nâng cao năng lực sư phạm và làm chủ công nghệ cho đội ngũ cán bộ quản lý, giáo viên các cấp.</p>
+    <span class="hero-pill"><%- ed('khoahoc.hero.badge', 'Chương trình đào tạo VSIA') %></span>
+    <h1><%- ed('khoahoc.hero.title', 'Đào tạo và bồi dưỡng chuyên môn STEM') %></h1>
+    <p class="lead"><%- ed('khoahoc.hero.lead', 'Tổ chức các khóa đào tạo, bồi dưỡng nâng cao năng lực sư phạm và làm chủ công nghệ cho đội ngũ cán bộ quản lý, giáo viên các cấp.', { multiline: true }) %></p>
     <div class="page-hero-ctas">
-      <a class="btn btn-primary" href="#lo-trinh">Xem lộ trình đào tạo</a>
-      <a class="btn btn-ghost" href="#" data-open-contact>Đăng ký tư vấn</a>
+      <a class="btn btn-primary" href="<%= lnk('khoahoc.hero.cta1.link', '#lo-trinh') %>"<%- lnkAttr('khoahoc.hero.cta1.link') %>><%- ed('khoahoc.hero.cta1.label', 'Xem lộ trình đào tạo') %></a>
+      <a class="btn btn-ghost" href="#" data-open-contact><%- ed('khoahoc.hero.cta2.label', 'Đăng ký tư vấn') %></a>
     </div>
     <div class="page-hero-badges">
-      <span class="badge-pill">Bám sát Chương trình GDPT 2018</span>
-      <span class="badge-pill">Cơ bản đến chuyên sâu</span>
-      <span class="badge-pill">Đồng hành cùng Hội đồng Chuyên gia VSIA</span>
+      <span class="badge-pill"><%- ed('khoahoc.hero.badge1', 'Bám sát Chương trình GDPT 2018') %></span>
+      <span class="badge-pill"><%- ed('khoahoc.hero.badge2', 'Cơ bản đến chuyên sâu') %></span>
+      <span class="badge-pill"><%- ed('khoahoc.hero.badge3', 'Đồng hành cùng Hội đồng Chuyên gia VSIA') %></span>
     </div>
   </div>
 </section>
@@ -29,10 +29,10 @@
 
 <section class="section" id="khoa-hoc-danh-sach">
   <div class="container">
-    <h2 class="section-title">KHOÁ HỌC</h2>
-    <p class="section-subtitle">Danh sách các khoá đào tạo, tập huấn STEM hiện có tại VSIA.</p>
+    <h2 class="section-title"><%- ed('khoahoc.list.title', 'KHOÁ HỌC') %></h2>
+    <p class="section-subtitle"><%- ed('khoahoc.list.subtitle', 'Danh sách các khoá đào tạo, tập huấn STEM hiện có tại VSIA.', { multiline: true }) %></p>
     <% if (courses.length === 0) { %>
-      <p class="empty-state">Chưa có khoá học nào. Chạy <code>node seed.js</code> để thêm dữ liệu mẫu.</p>
+      <p class="empty-state"><%- ed('khoahoc.list.empty1', 'Chưa có khoá học nào. Chạy') %> <code>node seed.js</code> <%- ed('khoahoc.list.empty2', 'để thêm dữ liệu mẫu.') %></p>
     <% } else { %>
       <div class="course-grid">
         <% courses.forEach(course => { %>
@@ -47,8 +47,8 @@
 <section class="section section-alt" id="thu-vien" style="position:relative; overflow:hidden;">
   <%- include('partials/section-glow-divider') %>
   <div class="container">
-    <h2 class="section-title">VIDEO &amp; BÀI GIẢNG MẪU</h2>
-    <p class="section-subtitle">Tài nguyên tham khảo dành cho giáo viên đang triển khai chương trình STEM tại trường.</p>
+    <h2 class="section-title"><%- ed('khoahoc.video.title', 'VIDEO & BÀI GIẢNG MẪU') %></h2>
+    <p class="section-subtitle"><%- ed('khoahoc.video.subtitle', 'Tài nguyên tham khảo dành cho giáo viên đang triển khai chương trình STEM tại trường.', { multiline: true }) %></p>
 
     <div class="video-grid">
       <% courseVideos.forEach((v, i) => { %>

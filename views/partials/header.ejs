@@ -1,9 +1,31 @@
+<%
+  // pageId là "mã trang" dùng cho các nội dung riêng của từng trang (tiêu đề SEO, mô tả meta).
+  // View nào truyền pageId thì admin sửa được phần SEO của trang đó; view chưa truyền vẫn chạy
+  // bình thường với tiêu đề cứng như trước.
+  const cePageId = typeof pageId !== 'undefined' && pageId ? pageId : null;
+  const ceDefaultTitle = typeof title !== 'undefined' ? title : 'VSIA - Đào tạo giáo viên STEM';
+  const ceTitle = cePageId ? txt('seo.' + cePageId + '.title', ceDefaultTitle) : ceDefaultTitle;
+  const ceDescription = cePageId ? txt('seo.' + cePageId + '.description', '') : '';
+  const ceShareImage = cePageId ? pic('seo.' + cePageId + '.image', null) : null;
+
+%>
 <!doctype html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= typeof title !== 'undefined' ? title : 'VSIA - Đào tạo giáo viên STEM' %></title>
+  <title><%= ceTitle %></title>
+  <% if (ceDescription) { %>
+  <meta name="description" content="<%= ceDescription %>">
+  <% } %>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="<%= ceTitle %>">
+  <% if (ceDescription) { %>
+  <meta property="og:description" content="<%= ceDescription %>">
+  <% } %>
+  <% if (ceShareImage) { %>
+  <meta property="og:image" content="<%= ceShareImage %>">
+  <% } %>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -30,25 +52,25 @@
       <button class="nav-toggle" id="navToggle" aria-label="Mở menu"><span></span><span></span><span></span></button>
 
       <nav class="main-nav" id="mainNav">
-        <a href="/">TRANG CHỦ</a>
+        <a href="<%= lnk('nav.home.link', '/') %>"<%- lnkAttr('nav.home.link') %>><%- ed('nav.home.label', 'TRANG CHỦ') %></a>
         <div class="nav-dropdown">
-          <button type="button" class="nav-dropdown-trigger" aria-expanded="false">LĨNH VỰC HOẠT ĐỘNG <span class="nav-caret">▾</span></button>
+          <button type="button" class="nav-dropdown-trigger" aria-expanded="false"><%- ed('nav.fields.label', 'LĨNH VỰC HOẠT ĐỘNG') %> <span class="nav-caret">▾</span></button>
           <div class="nav-dropdown-menu">
             <div class="nav-subdropdown">
-              <a href="/khoa-hoc" class="nav-subdropdown-link">ĐÀO TẠO BỒI DƯỠNG CHUYÊN MÔN</a>
+              <a href="<%= lnk('nav.fields.training.link', '/khoa-hoc') %>" class="nav-subdropdown-link"<%- lnkAttr('nav.fields.training.link') %>><%- ed('nav.fields.training.label', 'ĐÀO TẠO BỒI DƯỠNG CHUYÊN MÔN') %></a>
               <button type="button" class="nav-subdropdown-toggle" aria-label="Mở danh mục con" aria-expanded="false"><span class="nav-caret nav-caret-right">▸</span></button>
               <div class="nav-subdropdown-menu">
-                <a href="/hoi-thao-truc-tuyen">Hội thảo STEM trực tuyến</a>
+                <a href="<%= lnk('nav.fields.webinar.link', '/hoi-thao-truc-tuyen') %>"<%- lnkAttr('nav.fields.webinar.link') %>><%- ed('nav.fields.webinar.label', 'Hội thảo STEM trực tuyến') %></a>
               </div>
             </div>
-            <a href="/tu-van-phong-lab">THIẾT KẾ VÀ CHUYỂN GIAO CHƯƠNG TRÌNH GIÁO DỤC</a>
-            <a href="/ngay-hoi-cuoc-thi">TỔ CHỨC NGÀY HỘI &amp; CUỘC THI STEM</a>
+            <a href="<%= lnk('nav.fields.transfer.link', '/tu-van-phong-lab') %>"<%- lnkAttr('nav.fields.transfer.link') %>><%- ed('nav.fields.transfer.label', 'THIẾT KẾ VÀ CHUYỂN GIAO CHƯƠNG TRÌNH GIÁO DỤC') %></a>
+            <a href="<%= lnk('nav.fields.events.link', '/ngay-hoi-cuoc-thi') %>"<%- lnkAttr('nav.fields.events.link') %>><%- ed('nav.fields.events.label', 'TỔ CHỨC NGÀY HỘI & CUỘC THI STEM') %></a>
           </div>
         </div>
-        <a href="/giai-phap">GIẢI PHÁP</a>
-        <a href="/khoa-hoc">KHOÁ HỌC</a>
-        <a href="/tin-tuc">TIN TỨC</a>
-        <a href="/hop-tac" class="nav-cta">Hợp tác</a>
+        <a href="<%= lnk('nav.solution.link', '/giai-phap') %>"<%- lnkAttr('nav.solution.link') %>><%- ed('nav.solution.label', 'GIẢI PHÁP') %></a>
+        <a href="<%= lnk('nav.courses.link', '/khoa-hoc') %>"<%- lnkAttr('nav.courses.link') %>><%- ed('nav.courses.label', 'KHOÁ HỌC') %></a>
+        <a href="<%= lnk('nav.news.link', '/tin-tuc') %>"<%- lnkAttr('nav.news.link') %>><%- ed('nav.news.label', 'TIN TỨC') %></a>
+        <a href="<%= lnk('nav.cta.link', '/hop-tac') %>" class="nav-cta"<%- lnkAttr('nav.cta.link') %>><%- ed('nav.cta.label', 'Hợp tác') %></a>
       </nav>
 
       <div class="auth-actions">
