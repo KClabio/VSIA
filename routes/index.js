@@ -36,7 +36,7 @@ router.get('/ngay-hoi-cuoc-thi', async (req, res) => {
   res.render('stem-events', { hero });
 });
 
-router.get('/lien-he', async (req, res) => {
+router.get('/hop-tac', async (req, res) => {
   const hero = await getPageContent('lien-he');
   res.render('contact', { hero });
 });
